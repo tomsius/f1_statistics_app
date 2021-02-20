@@ -8,78 +8,78 @@ export class Wins extends Component {
 
     render() {
         return (
-            <CardDeck style={{display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:"10px"}}>
-                <a href="/wins/drivers">
-                <Card style={{height:"250px", marginBottom:"15px"}}>
+            <CardDeck className="flex-container">
+                <a href="/wins/drivers" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex",height:"100%"}}>
                     <Card.Body>
-                        <Card.Title style={{fontWeight:"bold", height:"50px"}}>Lenktynininkų laimėjimai</Card.Title>
+                        <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimai</Card.Title>
                         <Card.Text>
                             Atvaizduojami lenktynininkai, kurie yra laimėję bent vieną kartą, ir jų laimėtų lenktynių skaičius.
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 </a>
-                <a href="/wins/driverspercent">
-                <Card style={{height:"250px", marginBottom:"15px"}}>
+                <a href="/wins/driverspercent" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex",height:"100%"}}>
                     <Card.Body>
-                        <Card.Title style={{fontWeight:"bold", height:"50px"}}>Lenktynininkų laimėjimų procentas</Card.Title>
+                        <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimų procentas</Card.Title>
                         <Card.Text>
                             Atvaizduojama, kokią dalį lenktynių yra laimėjęs lenktynininkas. Lenktynininko laimėtų lenktynių skaičius yra padalinamas iš jo startuotų lenktynių skaičiaus.
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 </a>
-                <a href="/wins/constructors">
-                <Card style={{height:"250px", marginBottom:"15px"}}>
+                <a href="/wins/constructors" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex",height:"100%"}}>
                     <Card.Body>
-                        <Card.Title style={{fontWeight:"bold", height:"50px"}}>Komandų laimėjimai</Card.Title>
+                        <Card.Title style={{fontWeight:"bold"}}>Komandų laimėjimai</Card.Title>
                         <Card.Text>
                             Atvaizduojamos komandos, kurios yra laimėjusios bent vieną kartą, ir jų laimėtų lenktynių skaičius.
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 </a>
-                <a href="/wins/constructorspercent">
-                <Card style={{height:"250px", marginBottom:"15px"}}>
+                <a href="/wins/constructorspercent" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex",height:"100%"}}>
                     <Card.Body>
-                        <Card.Title style={{fontWeight:"bold", height:"50px"}}>Komandų laimėjimų procentas</Card.Title>
+                        <Card.Title style={{fontWeight:"bold"}}>Komandų laimėjimų procentas</Card.Title>
                         <Card.Text>
                             Atvaizduojama, kokią dalį lenktynių yra laimėjusi komanda. Komandos laimėtų lenktynių skaičius yra padalinamas iš jos startuotų lenktynių skaičiaus.
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 </a>
-                <a href="/wins/driversunique">
-                <Card style={{height:"250px", marginBottom:"15px"}}>
+                <a href="/wins/driversunique" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex",height:"100%"}}>
                     <Card.Body>
-                        <Card.Title style={{fontWeight:"bold", height:"50px"}}>Skirtingų lenktynininkų, laimėjusių lenktynes, skaičius</Card.Title>
+                        <Card.Title style={{fontWeight:"bold"}}>Skirtingų lenktynininkų, laimėjusių lenktynes, skaičius</Card.Title>
                         <Card.Text>
                             Atvaizduojama, kiek skirtingų lenktynininkų yra laimėję lenktynes tam tikrą sezoną.
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 </a>
-                <a href="/wins/constructorsunique">
-                <Card style={{height:"250px", marginBottom:"15px"}}>
+                <a href="/wins/constructorsunique" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex",height:"100%"}}>
                     <Card.Body>
-                        <Card.Title style={{fontWeight:"bold", height:"50px"}}>Skirtingų komandų, laimėjusių lenktynes, skaičius</Card.Title>
+                        <Card.Title style={{fontWeight:"bold"}}>Skirtingų komandų, laimėjusių lenktynes, skaičius</Card.Title>
                         <Card.Text>
                             Atvaizduojama, kiek skirtingų komandų yra laimėjusios lenktynes tam tikrą sezoną.
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 </a>
-                <a href="/wins/driversbytrack">
-                <Card style={{height:"250px", marginBottom:"15px"}}>
+                <a href="/wins/driversbytrack" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex",height:"100%"}}>
                     <Card.Body>
-                        <Card.Title style={{fontWeight:"bold", height:"50px"}}>Lenktynininkų laimėjimai pagal lenktynių trasą</Card.Title>
+                        <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimai pagal lenktynių trasą</Card.Title>
                         <Card.Text>
                             Atvaizduojami lenktynininkų laimėjimų kartai tam tikroje lenktynių trasoje. Įtraukiami tik tie lenktynininkai, kurie yra laimėję bent kartą toje trasoje.
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 </a>
-            </CardDeck>
+        </CardDeck>
         );
     }
 }

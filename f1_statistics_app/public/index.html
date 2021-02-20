@@ -59,6 +59,30 @@
         text-decoration: none;
         color: #000000;
       }
+      .flex-container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .flex-container > a {
+        flex: 1 0 26%;
+      }
+      @media ( max-width: 768px) {
+        .flex-container > a {
+          flex-basis: 34%;
+        }
+      }
+      @media ( max-width: 320px) {
+        .flex-container > a {
+          flex-basis: 51%;
+        }
+      }
+      .flex-container > a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2em;
+      }
+
     </style>
   </head>
   <body>
