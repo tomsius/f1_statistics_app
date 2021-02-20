@@ -10,6 +10,8 @@ export class DataRangeForm extends Component {
     }
 
     handleSubmitByDate(event) {
+        event.preventDefault();
+
         fetch('http://localhost:55032/api/' + this.props.api, 
             {
                 method: 'POST',
@@ -25,11 +27,13 @@ export class DataRangeForm extends Component {
             })
             .then(response => response.json())
             .then(result => {
-                console.log(result);
+                this.props.callback(result);
             });
     }
 
     handleSubmitBySeason(event) {
+        event.preventDefault();
+
         fetch('http://localhost:55032/api/' + this.props.api, 
             {
                 method: 'POST',
@@ -45,7 +49,7 @@ export class DataRangeForm extends Component {
             })
             .then(response => response.json())
             .then(result => {
-                console.log(result);
+                this.props.callback(result);
             });
     }
 
