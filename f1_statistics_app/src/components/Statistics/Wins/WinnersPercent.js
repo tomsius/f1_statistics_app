@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
-import { Button } from 'react-bootstrap';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
