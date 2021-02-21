@@ -21,7 +21,7 @@ export class WinnersUnique extends Component {
     fillData(data) {
         this.setState({
             winnersUnique: data
-        }, () => console.log(this.state.winnersUnique));
+        });
     }
 
     handleClick() {
