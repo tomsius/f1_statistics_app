@@ -25,16 +25,16 @@ export class Winners extends Component {
         });
     }
 
-    handleClick(){
+    handleClick() {
         var newChart = !this.state.isBarChart;
 
         this.setState({
-                isBarChart: newChart
-            });
+            isBarChart: newChart
+        });
     }
 
     render() {
-        var data = this.state.winners.map(x => ({label: x.name, y: x.winCount}));
+        var data = this.state.winners.map(x => ({ label: x.name, y: x.winCount }));
         var options;
 
         if (this.state.isBarChart) {
@@ -68,14 +68,14 @@ export class Winners extends Component {
                 {
                     this.state.winners.length > 0 &&
                     <div>
-                    <Button variant="primary" onClick={this.handleClick} disabled={this.state.isVisible}>
-                        {this.state.isBarChart ? "Rodyti skritulinę diagramą" : "Rodyti stulpelinę diagramą"}
-                    </Button>
-                    <br />
-                    <br />
-                    <div style={{position:"relative", right:"6em"}}>
-                        <CanvasJSChart options={options} />
-                    </div>
+                        <Button variant="primary" onClick={this.handleClick} disabled={this.state.isVisible}>
+                            {this.state.isBarChart ? "Rodyti skritulinę diagramą" : "Rodyti stulpelinę diagramą"}
+                        </Button>
+                        <br />
+                        <br />
+                        <div style={{ position: "relative", right: "6em" }}>
+                            <CanvasJSChart options={options} />
+                        </div>
                     </div>
                 }
             </div>
