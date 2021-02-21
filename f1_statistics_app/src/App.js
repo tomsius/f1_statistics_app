@@ -4,7 +4,7 @@ import './App.css';
 import { Navigation } from './components/Navigation';
 import { Home } from './components/Home';
 import { Wins } from './components/Statistics/Wins/Wins';
-import {DriverWins} from './components/Statistics/Wins/DriverWins';
+import {Winners} from './components/Statistics/Wins/Winners';
 import { NotFound } from './components/NotFound';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -23,9 +23,8 @@ export default class App extends Component {
 
           <Route path='/wins' component={Wins} exact />
           
-          <Route path='/wins/drivers' exact render={(props) => (<DriverWins {...props} api={"wins/drivers"} pageTitle={"Lenktynininkų laimėjimai"} />)} />
-
-          <Route path='/wins/constructors' component={Wins} exact />
+          <Route path='/wins/drivers' exact render={(props) => (<Winners {...props} api={"wins/drivers"} pageTitle={"Lenktynininkų laimėjimai"} />)} />
+          <Route path='/wins/constructors' exact render={(props) => (<Winners {...props} api={"wins/constructors"} pageTitle={"Komandų laimėjimai"} />)} />
           <Route path='/wins/driverspercent' component={Wins} exact />
           <Route path='/wins/constructorspercent' component={Wins} exact />
           <Route path='/wins/driversunique' component={Wins} exact />

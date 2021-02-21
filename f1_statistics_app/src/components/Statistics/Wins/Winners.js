@@ -5,7 +5,7 @@ import CanvasJSReact from '../../../canvasjs.react';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-export class DriverWins extends Component {
+export class Winners extends Component {
     constructor(props) {
         super(props);
         this.state = {
