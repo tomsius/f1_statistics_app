@@ -12,6 +12,9 @@ import { Poles } from './components/Statistics/Poles/Poles';
 import { PoleSitters } from './components/Statistics/Poles/PoleSitters';
 import { PoleSittersUnique } from './components/Statistics/Poles/PoleSittersUnique';
 import { WinnersFromPole } from './components/Statistics/Poles/WinnersFromPole';
+import { FastestLaps } from './components/Statistics/FastestLaps/FastestLaps';
+import { FastestLappers } from './components/Statistics/FastestLaps/FastestLappers';
+import { FastestLappersUnique } from './components/Statistics/FastestLaps/FastestLappersUnique';
 import { NotFound } from './components/NotFound';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -43,6 +46,12 @@ export default class App extends Component {
           <Route path='/poles/driversunique' exact render={(props) => (<PoleSittersUnique {...props} api={"poles/drivers/uniqueperseason"} pageTitle={"Skirtingų lenktynininkų, laimėjusių pole poziciją, skaičius"} />)} />
           <Route path='/poles/constructorsunique' exact render={(props) => (<PoleSittersUnique {...props} api={"poles/constructors/uniqueperseason"} pageTitle={"Skirtingų komandų, laimėjusių pole poziciją, skaičius"} />)} />
           <Route path='/poles/winners' exact render={(props) => (<WinnersFromPole {...props} api={"poles/winners"} pageTitle={"Lenktynių skaičius, kurios buvo laimėtos iš pole pozicijos"} />)} />
+
+          <Route path='/fastestlaps' component={FastestLaps} exact />
+          <Route path='/fastestlaps/drivers' exact render={(props) => (<FastestLappers {...props} api={"fastestlaps/drivers"} pageTitle={"Greičiausiai lenktynių ratą apvažiavę lenktynininkai"} />)} />
+          <Route path='/fastestlaps/constructors' exact render={(props) => (<FastestLappers {...props} api={"fastestlaps/constructors"} pageTitle={"Greičiausiai lenktynių ratą apvažiavusios komandos"} />)} />
+          <Route path='/fastestlaps/driversunique' exact render={(props) => (<FastestLappersUnique {...props} api={"fastestlaps/drivers/uniqueperseason"} pageTitle={"Skirtingų lenktynininkų, greičiausiai apvažiavusių ratą, skaičius"} />)} />
+          <Route path='/fastestlaps/constructorsunique' exact render={(props) => (<FastestLappersUnique {...props} api={"fastestlaps/constructors/uniqueperseason"} pageTitle={"Skirtingų komandų, greičiausiai apvažiavusių ratą, skaičius"} />)} />
 
           <Route path="*" component={NotFound} />
         </Switch>
