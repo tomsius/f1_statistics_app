@@ -34,7 +34,7 @@ export class Poles extends Component {
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų lenktynininkų, laimėjusių pole poziciją, skaičius</Card.Title>
                         <Card.Text>
-                            Atvaizduojama, kiek skirtingų lenktynininkų yra laimėję pole poziciją (kvalifikacijoje buvo greičiausi) tam tikrą sezoną.
+                            Atvaizduojama, kiek skirtingų lenktynininkų yra laimėję pole poziciją (kvalifikacijoje buvo greičiausi) tam tikrą sezoną. Užvedus ant grafiko, galima pamatyti lenktynininkus, kurie laimėjo pole poziciją.
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -44,7 +44,7 @@ export class Poles extends Component {
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų komandų, laimėjusių pole poziciją, skaičius</Card.Title>
                         <Card.Text>
-                            Atvaizduojama, kiek skirtingų komandų yra laimėjusios pole poziciją (kvalifikacijoje komandos lenktynininkas buvo greičiausias) tam tikrą sezoną.
+                            Atvaizduojama, kiek skirtingų komandų yra laimėjusios pole poziciją (kvalifikacijoje komandos lenktynininkas buvo greičiausias) tam tikrą sezoną. Užvedus ant grafiko, galima pamatyti komandas, kurios laimėjo pole poziciją.
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -52,9 +52,9 @@ export class Poles extends Component {
                 <a href="/poles/winners" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex",height:"100%"}}>
                     <Card.Body>
-                        <Card.Title style={{fontWeight:"bold"}}>Lenktynininkai, kurie laimėjo lenktynes iš pole pozicijos</Card.Title>
+                        <Card.Title style={{fontWeight:"bold"}}>Lenktynių skaičius, kurios buvo laimėtos iš pole pozicijos</Card.Title>
                         <Card.Text>
-                            Atvaizduojami lenktynininkų laimėjimų kartai iš pole pozicijos kiekvieną sezoną.
+                            Atvaizduojama, kiek kartų buvo laimėta iš pole pozicijos. Užvedus ant grafiko, galima pamatyti lenktynininkus, kurie laimėjo iš pole pozicijos.
                         </Card.Text>
                     </Card.Body>
                 </Card>

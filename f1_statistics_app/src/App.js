@@ -42,7 +42,7 @@ export default class App extends Component {
           <Route path='/poles/constructors' exact render={(props) => (<PoleSitters {...props} api={"poles/constructors"} pageTitle={"Komandų pole pozicijos"} />)} />
           <Route path='/poles/driversunique' exact render={(props) => (<PoleSittersUnique {...props} api={"poles/drivers/uniqueperseason"} pageTitle={"Skirtingų lenktynininkų, laimėjusių pole poziciją, skaičius"} />)} />
           <Route path='/poles/constructorsunique' exact render={(props) => (<PoleSittersUnique {...props} api={"poles/constructors/uniqueperseason"} pageTitle={"Skirtingų komandų, laimėjusių pole poziciją, skaičius"} />)} />
-          <Route path='/poles/winners' exact render={(props) => (<WinnersFromPole {...props} api={"poles/winners"} pageTitle={"Lenktynininkai, kurie laimėjo lenktynes iš pole pozicijos"} />)} />
+          <Route path='/poles/winners' exact render={(props) => (<WinnersFromPole {...props} api={"poles/winners"} pageTitle={"Lenktynių skaičius, kurios buvo laimėtos iš pole pozicijos"} />)} />
 
           <Route path="*" component={NotFound} />
         </Switch>
