@@ -16,6 +16,7 @@ export class Navigation extends Component {
                     <Nav className="mr-auto">
                         <NavLink className="d-inline p-2 text-light" to="/wins">Laimėjimai</NavLink>
                         <NavLink className="d-inline p-2 text-light" to="/poles">Pole pozicijos</NavLink>
+                        <NavLink className="d-inline p-2 text-light" to="/fastestlaps">Greičiausi ratai</NavLink>
                     </Nav>
                 </Navbar.Collapse>
         </Navbar>
