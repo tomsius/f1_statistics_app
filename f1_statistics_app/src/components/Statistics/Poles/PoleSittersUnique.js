@@ -75,6 +75,8 @@ export class PoleSittersUnique extends Component {
             <div>
                 <h2>{this.props.pageTitle}</h2>
                 <br />
+                <p style={{color:"red", textAlign:"center"}}>*Pilni kvalifikacijos duomenys prieinami nuo 2003 metų.</p>
+                <br />
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
                 {
