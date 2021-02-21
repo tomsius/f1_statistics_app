@@ -76,7 +76,7 @@ export class DataRangeForm extends Component {
 
             <Container>
                 <Row className="justify-content-md-center">
-                    <Col sm={6}>
+                    <Col sm={5}>
                         <Form onSubmit={this.handleSubmitByDate}>
                             <Form.Group controlId="From">
                                 <Form.Label>Nuo</Form.Label>
@@ -93,7 +93,7 @@ export class DataRangeForm extends Component {
                             </Form.Group>
                         </Form>
                     </Col>
-                    <Col sm={6}>
+                    <Col sm={5}>
                         <Form onSubmit={this.handleSubmitBySeason}>
                             <Form.Group controlId="Season">
                                 <Form.Label>Sezonas</Form.Label>
