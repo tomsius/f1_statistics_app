@@ -18,7 +18,7 @@ export class WinnersPercent extends Component {
     fillData(data) {
         this.setState({
             winnersPercent: data
-        }, () => console.log(this.state.winnersPercent));
+        });
     }
 
     render() {
