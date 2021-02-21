@@ -5,12 +5,20 @@ export class DataRangeForm extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            isLoading: false
+        };
+
         this.handleSubmitByDate = this.handleSubmitByDate.bind(this);
         this.handleSubmitBySeason = this.handleSubmitBySeason.bind(this);
     }
 
     handleSubmitByDate(event) {
         event.preventDefault();
+
+        this.setState({
+            isLoading: true
+        });
 
         fetch('http://localhost:55032/api/' + this.props.api, 
             {
@@ -27,12 +35,19 @@ export class DataRangeForm extends Component {
             })
             .then(response => response.json())
             .then(result => {
+                this.setState({
+                    isLoading: false
+                });
                 this.props.callback(result);
             });
     }
 
     handleSubmitBySeason(event) {
         event.preventDefault();
+
+        this.setState({
+            isLoading: true
+        });
 
         fetch('http://localhost:55032/api/' + this.props.api, 
             {
@@ -49,6 +64,9 @@ export class DataRangeForm extends Component {
             })
             .then(response => response.json())
             .then(result => {
+                this.setState({
+                    isLoading: false
+                });
                 this.props.callback(result);
             });
     }
@@ -69,8 +87,8 @@ export class DataRangeForm extends Component {
                                 <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="To" required placeholder="Iki..." />
                             </Form.Group>
                             <Form.Group>
-                                <Button variant="primary" type="submit">
-                                    Rodyti statistiką pagal metus
+                                <Button variant="primary" type="submit" disabled={this.state.isLoading}>
+                                    {this.state.isLoading ? "Palaukite..." : "Rodyti statistiką pagal metus"}
                                 </Button>
                             </Form.Group>
                         </Form>
@@ -82,8 +100,8 @@ export class DataRangeForm extends Component {
                                 <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="Season" required placeholder="Sezonas..." />
                             </Form.Group>
                             <Form.Group>
-                                <Button variant="primary" type="submit">
-                                    Rodyti statistiką pagal sezoną
+                                <Button variant="primary" type="submit" disabled={this.state.isLoading}>
+                                    {this.state.isLoading ? "Palaukite..." : "Rodyti statistiką pagal sezoną"}
                                 </Button>
                             </Form.Group>
                         </Form>
