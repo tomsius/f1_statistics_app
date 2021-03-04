@@ -11,7 +11,7 @@ import { WinnersByTrack } from './components/Statistics/Wins/WinnersByTrack';
 import { Poles } from './components/Statistics/Poles/Poles';
 import { PoleSitters } from './components/Statistics/Poles/PoleSitters';
 import { PoleSittersUnique } from './components/Statistics/Poles/PoleSittersUnique';
-import { WinnersFromPole } from './components/Statistics/Poles/WinnersFromPole';
+import { WinnersFromPole } from './components/Statistics/Wins/WinnersFromPole';
 import { FastestLaps } from './components/Statistics/FastestLaps/FastestLaps';
 import { FastestLappers } from './components/Statistics/FastestLaps/FastestLappers';
 import { FastestLappersUnique } from './components/Statistics/FastestLaps/FastestLappersUnique';
