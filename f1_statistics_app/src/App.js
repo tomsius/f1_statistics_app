@@ -39,13 +39,13 @@ export default class App extends Component {
           <Route path='/wins/driversunique' exact render={(props) => (<WinnersUnique {...props} api={"wins/drivers/uniqueperseason"} pageTitle={"Skirtingų lenktynininkų, laimėjusių lenktynes, skaičius"} />)} />
           <Route path='/wins/constructorsunique' exact render={(props) => (<WinnersUnique {...props} api={"wins/constructors/uniqueperseason"} pageTitle={"Skirtingų komandų, laimėjusių lenktynes, skaičius"} />)} />
           <Route path='/wins/driversbytrack' exact render={(props) => (<WinnersByTrack {...props} api={"wins/drivers/tracks"} pageTitle={"Lenktynininkų laimėjimai pagal trasą"} />)} />
+          <Route path='/wins/frompole' exact render={(props) => (<WinnersFromPole {...props} api={"wins/frompole"} pageTitle={"Lenktynių skaičius, kurios buvo laimėtos iš pole pozicijos"} />)} />
 
           <Route path='/poles' component={Poles} exact />
           <Route path='/poles/drivers' exact render={(props) => (<PoleSitters {...props} api={"poles/drivers"} pageTitle={"Lenktynininkų pole pozicijos"} />)} />
           <Route path='/poles/constructors' exact render={(props) => (<PoleSitters {...props} api={"poles/constructors"} pageTitle={"Komandų pole pozicijos"} />)} />
           <Route path='/poles/driversunique' exact render={(props) => (<PoleSittersUnique {...props} api={"poles/drivers/uniqueperseason"} pageTitle={"Skirtingų lenktynininkų, laimėjusių pole poziciją, skaičius"} />)} />
           <Route path='/poles/constructorsunique' exact render={(props) => (<PoleSittersUnique {...props} api={"poles/constructors/uniqueperseason"} pageTitle={"Skirtingų komandų, laimėjusių pole poziciją, skaičius"} />)} />
-          <Route path='/poles/winners' exact render={(props) => (<WinnersFromPole {...props} api={"poles/winners"} pageTitle={"Lenktynių skaičius, kurios buvo laimėtos iš pole pozicijos"} />)} />
 
           <Route path='/fastestlaps' component={FastestLaps} exact />
           <Route path='/fastestlaps/drivers' exact render={(props) => (<FastestLappers {...props} api={"fastestlaps/drivers"} pageTitle={"Greičiausiai lenktynių ratą apvažiavę lenktynininkai"} />)} />

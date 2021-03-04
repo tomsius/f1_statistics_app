@@ -49,16 +49,6 @@ export class Poles extends Component {
                     </Card.Body>
                 </Card>
                 </a>
-                <a href="/poles/winners" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
-                    <Card.Body>
-                        <Card.Title style={{fontWeight:"bold"}}>Lenktynių skaičius, kurios buvo laimėtos iš pole pozicijos</Card.Title>
-                        <Card.Text>
-                            Atvaizduojama, kiek kartų buvo laimėta iš pole pozicijos. Užvedus ant grafiko, galima pamatyti lenktynininkus, kurie laimėjo iš pole pozicijos.
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                </a>
         </CardDeck>
         );
     }
