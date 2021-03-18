@@ -82,9 +82,19 @@ export class Wins extends Component {
                 <a href="/wins/frompole" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex",height:"100%"}}>
                     <Card.Body>
-                        <Card.Title style={{fontWeight:"bold"}}>Lenktynių skaičius, kurios buvo laimėtos iš pole pozicijos</Card.Title>
+                        <Card.Title style={{fontWeight:"bold"}}>Lenktynių, kurios buvo laimėtos iš „pole“ pozicijos, skaičius</Card.Title>
                         <Card.Text>
-                            Atvaizduojama, kiek kartų buvo laimėta iš pole pozicijos. Užvedus ant grafiko, galima pamatyti lenktynininkus, kurie laimėjo iš pole pozicijos.
+                            Atvaizduojama, kiek kartų buvo laimėta iš „pole“ pozicijos. Užvedus ant grafiko, galima pamatyti lenktynininkus, kurie laimėjo iš „pole“ pozicijos.
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                </a>
+                <a href="/wins/bygrid" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex",height:"100%"}}>
+                    <Card.Body>
+                        <Card.Title style={{fontWeight:"bold"}}>Laimėjimai iš tam tikros starto pozicijos</Card.Title>
+                        <Card.Text>
+                            Atvaizduojama, kiek kartų buvo laimėta iš tam tikros starto pozicijos. Užvedus ant grafiko, galima pamatyti lenktynininkus, kurie laimėjo iš tos starto pozicijos.
                         </Card.Text>
                     </Card.Body>
                 </Card>
