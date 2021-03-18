@@ -20,7 +20,8 @@ export class WinnersByTrack extends Component {
 
     fillData(data) {
         this.setState({
-            winnersByTrack: data
+            winnersByTrack: data,
+            selectedTrack: ""
         });
     }
 
@@ -41,8 +42,15 @@ export class WinnersByTrack extends Component {
                     text: "„" + this.state.selectedTrack + "“ trasoje laimėję lenktynininkai"
                 },
                 axisY: {
+                    title: "Laimėjimų skaičius, vnt.",
                     interval: 1,
                     minimum: 0
+                },
+                axisX: {
+                    title: "Lenktynininkas",
+                    labelAngle: 30,
+                    interval: 1,
+                    valueFormatString: " "
                 },
                 data: [
                     {

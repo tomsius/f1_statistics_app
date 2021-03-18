@@ -24,6 +24,9 @@ export class WinnersPercent extends Component {
     render() {
         var data = this.state.winnersPercent.filter(x => x.averageWins > 0).map(x => ({ label: x.name, y: x.averageWins }));
         const options = {
+            title: {
+                text: this.props.pageTitle
+            },
             toolTip: {
                 content: "{label}: {y}%"
             },
@@ -32,7 +35,15 @@ export class WinnersPercent extends Component {
                     type: "column",
                     dataPoints: data
                 }
-            ]
+            ],
+            axisX: {
+                title: this.props.axisName,
+                labelAngle: 30,
+                interval: 1
+            },
+            axisY: {
+                title: "Laimėjimų procentas, %"
+            },
         };
 
         return (

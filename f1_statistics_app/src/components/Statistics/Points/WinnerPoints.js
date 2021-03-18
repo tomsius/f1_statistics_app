@@ -6,23 +6,23 @@ import { Button } from 'react-bootstrap';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-export class Winners extends Component {
+export class WinnerPoints extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            winners: [],
+            winnerPoints: [],
             isBarChart: true,
             isVisible: false
         };
 
         this.fillData = this.fillData.bind(this);
         this.handleClick = this.handleClick.bind(this);
-        this.calculateTotalWins = this.calculateTotalWins.bind(this);
     }
 
     fillData(data) {
+        console.log(data);
         this.setState({
-            winners: data
+            winnerPoints: data
         });
     }
 
@@ -34,21 +34,10 @@ export class Winners extends Component {
         });
     }
 
-    calculateTotalWins(winners) {
-        var totalWins = 0;
-
-        winners.forEach(winner => {
-            totalWins += winner.winCount
-        });
-        
-        return totalWins;
-    }
-
     render() {
-        var options;
-        if (this.state.winners.length > 0) {
-            var totalWins = this.calculateTotalWins(this.state.winners);
-            var data = this.state.winners.map(x => ({ label: x.name, y: x.winCount, percentage: Math.round((x.winCount / totalWins * 100) * 100) / 100 }));
+        if (this.state.winnerPoints.length > 0) {
+            var data = this.state.winnerPoints.map(x => ({ label: x.season, y: x.points, winner: x.winner }));
+            var options;
 
             if (this.state.isBarChart) {
                 options = {
@@ -61,16 +50,17 @@ export class Winners extends Component {
                             dataPoints: data
                         }
                     ],
-                    axisX: {
-                        title: this.props.axisName,
+                    axisX:{
+                        title: "Metai",
                         labelAngle: 30,
-                        interval: 1
+                        interval: 1,
+                        valueFormatString: " "
                     },
                     axisY: {
-                        title: "Laimėjimų skaičius, vnt."
+                        title: "Taškų skaičius, vnt."
                     },
                     toolTip:{   
-                        content: "{label}: {y}"      
+                        content: "Laimėtojas: {winner} ({y} taškų)"      
                     }
                 };
             }
@@ -81,13 +71,21 @@ export class Winners extends Component {
                     },
                     data: [
                         {
-                            type: "pie",
-                            indexLabel: "{label} {y}",
+                            type: "line",
                             dataPoints: data
                         }
                     ],
+                    axisX:{
+                        title: "Metai",
+                        labelAngle: 30,
+                        interval: 1,
+                        valueFormatString: " "
+                    },
+                    axisY: {
+                        title: "Taškų skaičius, vnt."
+                    },
                     toolTip:{   
-                        content: "{label}: {percentage}%"      
+                        content: "Laimėtojas: {winner} ({y} taškų)"      
                     }
                 };
             }
@@ -100,10 +98,10 @@ export class Winners extends Component {
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
                 {
-                    this.state.winners.length > 0 &&
+                    this.state.winnerPoints.length > 0 &&
                     <div>
                         <Button variant="primary" onClick={this.handleClick} disabled={this.state.isVisible}>
-                            {this.state.isBarChart ? "Rodyti skritulinę diagramą" : "Rodyti stulpelinę diagramą"}
+                            {this.state.isBarChart ? "Rodyti linijinę diagramą" : "Rodyti stulpelinę diagramą"}
                         </Button>
                         <br />
                         <br />

@@ -17,6 +17,7 @@ export class FastestLappers extends Component {
 
         this.fillData = this.fillData.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.calculateTotalFastest = this.calculateTotalFastest.bind(this);
     }
 
     fillData(data) {
@@ -33,30 +34,60 @@ export class FastestLappers extends Component {
         });
     }
 
-    render() {
-        var data = this.state.fastestLappers.map(x => ({ label: x.name, y: x.fastestLapsCount }));
-        var options;
+    calculateTotalFastest(fastestLappers) {
+        var totalFastest = 0;
 
-        if (this.state.isBarChart) {
-            options = {
-                data: [
-                    {
-                        type: "column",
-                        dataPoints: data
+        fastestLappers.forEach(fastestLapper => {
+            totalFastest += fastestLapper.fastestLapsCount
+        });
+
+        return totalFastest;
+    }
+
+    render() {
+        if (this.state.fastestLappers.length > 0) {
+            var totalFastest = this.calculateTotalFastest(this.state.fastestLappers);
+            var data = this.state.fastestLappers.map(x => ({ label: x.name, y: x.fastestLapsCount, percentage: Math.round((x.fastestLapsCount / totalFastest * 100) * 100) / 100 }));
+            var options;
+
+            if (this.state.isBarChart) {
+                options = {
+                    title: {
+                        text: this.props.pageTitle
+                    },
+                    data: [
+                        {
+                            type: "column",
+                            dataPoints: data
+                        }
+                    ],
+                    axisX:{
+                        title: this.props.axisName,
+                        labelAngle: 30,
+                        interval: 1
+                    },
+                    axisY: {
+                        title: "Greičiausių lenktynių ratų skaičius, vnt."
                     }
-                ]
-            };
-        }
-        else {
-            options = {
-                data: [
-                    {
-                        type: "pie",
-                        indexLabel: "{label} {y}",
-                        dataPoints: data
+                };
+            }
+            else {
+                options = {
+                    title: {
+                        text: this.props.pageTitle
+                    },
+                    data: [
+                        {
+                            type: "pie",
+                            indexLabel: "{label} {y}",
+                            dataPoints: data
+                        }
+                    ],
+                    toolTip:{   
+                        content: "{label}: {percentage}%"      
                     }
-                ]
-            };
+                };
+            }
         }
 
         return (

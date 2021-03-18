@@ -38,12 +38,19 @@ export class WinnersFromPole extends Component {
 
         if (this.state.isBarChart) {
             options = {
+                title: {
+                    text: this.props.pageTitle
+                },
                 toolTip: {
-                    content: "Winners from pole: {winnersWithPole}"
+                    content: "Laimėtojai iš „pole“ pozicijos {label} metais (laimėjimų skaičius: {y}): {winnersWithPole}"
                 },
                 axisY: {
+                    title: "Laimėjimų iš „pole“ pozicijos skaičius, vnt.",
                     interval: 1,
                     minimum: 0
+                },
+                axisX: {
+                    title: "Metai"
                 },
                 data: [
                     {
@@ -55,12 +62,19 @@ export class WinnersFromPole extends Component {
         }
         else {
             options = {
+                title: {
+                    text: this.props.pageTitle
+                },
                 toolTip: {
-                    content: "Winners from pole: {winnersWithPole}"
+                    content: "Laimėtojai iš „pole“ pozicijos {label} metais (laimėjimų skaičius: {y}): {winnersWithPole}"
                 },
                 axisY: {
+                    title: "Laimėjimų iš „pole“ pozicijos skaičius, vnt.",
                     interval: 1,
                     minimum: 0
+                },
+                axisX: {
+                    title: "Metai"
                 },
                 data: [
                     {

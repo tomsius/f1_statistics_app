@@ -33,42 +33,64 @@ export class FastestLappersUnique extends Component {
     }
 
     render() {
-        var data = this.state.fastestLappersUnique.map(x => ({ label: x.season, y: x.uniqueFastestLapsCount, fastest: x.fastestLapAchievers.join(", ") }));
-        var options;
+        if (this.state.fastestLappersUnique.length > 0) {
+            var data = this.state.fastestLappersUnique.map(x => ({ label: x.season, y: x.uniqueFastestLapsCount, fastest: x.fastestLapAchievers.join(", ") }));
+            var options;
 
-        if (this.state.isBarChart) {
-            options = {
-                toolTip: {
-                    content: "Fastest: {fastest}"
-                },
-                axisY: {
-                    interval: 1,
-                    minimum: 0
-                },
-                data: [
-                    {
-                        type: "column",
-                        dataPoints: data
-                    }
-                ]
-            };
-        }
-        else {
-            options = {
-                toolTip: {
-                    content: "Fastest: {fastest}"
-                },
-                axisY: {
-                    interval: 1,
-                    minimum: 0
-                },
-                data: [
-                    {
-                        type: "line",
-                        dataPoints: data
-                    }
-                ]
-            };
+            if (this.state.isBarChart) {
+                options = {
+                    title: {
+                        text: this.props.pageTitle
+                    },
+                    toolTip: {
+                        content: "Skirtingi greičiausiai apvažiavę lenktynių ratą ({y}): {fastest}"
+                    },
+                    axisY: {
+                        title: "Skirtingų greičiausiai apvažiavusių lenktynių ratą skaičius, vnt.",
+                        interval: 1,
+                        minimum: 0
+                    },
+                    axisX:{
+                        title: "Metai",
+                        labelAngle: 30,
+                        interval: 1,
+                        valueFormatString: " "
+                    },
+                    data: [
+                        {
+                            type: "column",
+                            dataPoints: data
+                        }
+                    ]
+                };
+            }
+            else {
+                options = {
+                    title: {
+                        text: this.props.pageTitle
+                    },
+                    toolTip: {
+                        content: "Skirtingi greičiausiai apvažiavę lenktynių ratą ({y}): {fastest}"
+                    },
+                    axisY: {
+                        title: "Skirtingų greičiausiai apvažiavusių lenktynių ratą skaičius, vnt.",
+                        interval: 1,
+                        minimum: 0
+                    },
+                    axisX:{
+                        title: "Metai",
+                        labelAngle: 30,
+                        interval: 1,
+                        valueFormatString: " "
+                    },
+                    data: [
+                        {
+                            type: "line",
+                            dataPoints: data
+                        }
+                    ]
+                };
+            }
         }
 
         return (

@@ -17,6 +17,7 @@ export class PoleSitters extends Component {
 
         this.fillData = this.fillData.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.calculateTotalPoles = this.calculateTotalPoles.bind(this);
     }
 
     fillData(data) {
@@ -33,30 +34,64 @@ export class PoleSitters extends Component {
         });
     }
 
-    render() {
-        var data = this.state.poleSitters.map(x => ({ label: x.name, y: x.poleCount }));
-        var options;
+    calculateTotalPoles(poleSitters) {
+        var totalPoles = 0;
 
-        if (this.state.isBarChart) {
-            options = {
-                data: [
-                    {
-                        type: "column",
-                        dataPoints: data
+        poleSitters.forEach(poleSitter => {
+            totalPoles += poleSitter.poleCount
+        });
+
+        return totalPoles;
+    }
+
+    render() {
+        if (this.state.poleSitters.length > 0) {
+            var totalPoles = this.calculateTotalPoles(this.state.poleSitters);
+            var data = this.state.poleSitters.map(x => ({ label: x.name, y: x.poleCount, percentage: Math.round((x.poleCount / totalPoles * 100) * 100) / 100 }));
+            
+            var options;
+
+            if (this.state.isBarChart) {
+                options = {
+                    title: {
+                        text: this.props.pageTitle
+                    },
+                    data: [
+                        {
+                            type: "column",
+                            dataPoints: data
+                        }
+                    ],
+                    axisX:{
+                        title: this.props.axisName,
+                        labelAngle: 30,
+                        interval: 1
+                    },
+                    axisY: {
+                        title: "„Pole“ pozicijų skaičius, vnt."
+                    },
+                    toolTip:{   
+                        content: "{label}: {y}"      
                     }
-                ]
-            };
-        }
-        else {
-            options = {
-                data: [
-                    {
-                        type: "pie",
-                        indexLabel: "{label} {y}",
-                        dataPoints: data
+                };
+            }
+            else {
+                options = {
+                    title: {
+                        text: this.props.pageTitle
+                    },
+                    data: [
+                        {
+                            type: "pie",
+                            indexLabel: "{label} {y}",
+                            dataPoints: data
+                        }
+                    ],
+                    toolTip:{   
+                        content: "{label}: {percentage}%"      
                     }
-                ]
-            };
+                };
+            }
         }
 
         return (

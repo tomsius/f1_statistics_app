@@ -38,10 +38,14 @@ export class WinnersUnique extends Component {
 
         if (this.state.isBarChart) {
             options = {
+                title: {
+                    text: this.props.pageTitle
+                },
                 toolTip: {
-                    content: "Winners: {winners}"
+                    content: "Skirtingi laimėtojai {label} metais ({y}): {winners}"
                 },
                 axisY: {
+                    title: "Skirtingų laimėtojų skaičius, vnt.",
                     interval: 1,
                     minimum: 0
                 },
@@ -50,15 +54,25 @@ export class WinnersUnique extends Component {
                         type: "column",
                         dataPoints: data
                     }
-                ]
+                ],
+                axisX: {
+                    title: "Metai",
+                    labelAngle: 30,
+                    interval: 1,
+                    valueFormatString: " "
+                }
             };
         }
         else {
             options = {
+                title: {
+                    text: this.props.pageTitle
+                },
                 toolTip: {
-                    content: "Winners: {winners}"
+                    content: "Skirtingi laimėtojai {label} metais ({y}): {winners}"
                 },
                 axisY: {
+                    title: "Skirtingų laimėtojų skaičius, vnt.",
                     interval: 1,
                     minimum: 0
                 },
@@ -67,7 +81,13 @@ export class WinnersUnique extends Component {
                         type: "line",
                         dataPoints: data
                     }
-                ]
+                ],
+                axisX:{
+                    title: "Metai",
+                    labelAngle: 30,
+                    interval: 1,
+                    valueFormatString: " "
+                }
             };
         }
 

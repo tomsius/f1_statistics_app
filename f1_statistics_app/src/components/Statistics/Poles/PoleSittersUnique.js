@@ -33,42 +33,66 @@ export class PoleSittersUnique extends Component {
     }
 
     render() {
-        var data = this.state.poleSittersUnique.map(x => ({ label: x.season, y: x.uniquePoleSittersCount, poleSitters: x.poleSitters.join(", ") }));
-        var options;
+        if (this.state.poleSittersUnique.length > 0) {
+            var data = this.state.poleSittersUnique.map(x => ({ label: x.season, y: x.uniquePoleSittersCount, poleSitters: x.poleSitters.join(", ") }));
+            var options;
 
-        if (this.state.isBarChart) {
-            options = {
-                toolTip: {
-                    content: "Polesitters: {poleSitters}"
-                },
-                axisY: {
-                    interval: 1,
-                    minimum: 0
-                },
-                data: [
-                    {
-                        type: "column",
-                        dataPoints: data
+            if (this.state.isBarChart) {
+                options = {
+                    title: {
+                        text: this.props.pageTitle
+                    },
+                    toolTip: {
+                        content: "Skirtingi „pole“ pozicijos laimėtojai ({y}): {poleSitters}"
+                    },
+                    axisY: {
+                        title: "Skirtingų „pole“ pozicijos laimėtojų skaičius, vnt.",
+                        interval: 1,
+                        minimum: 0
+                    },
+                    axisX:{
+                        title: "Metai",
+                        labelAngle: 30,
+                        interval: 1,
+                        valueFormatString: " "
+                        
+                    },
+                    data: [
+                        {
+                            type: "column",
+                            dataPoints: data
+                        }
+                    ]
+                };
+            }
+            else {
+                options = {
+                    title: {
+                        text: this.props.pageTitle
+                    },
+                    toolTip: {
+                        content: "Skirtingi „pole“ pozicijos laimėtojai ({y}): {poleSitters}"
+                    },
+                    axisY: {
+                        title: "Skirtingų „pole“ pozicijos laimėtojų skaičius, vnt.",
+                        interval: 1,
+                        minimum: 0
+                    },
+                    data: [
+                        {
+                            type: "line",
+                            dataPoints: data
+                        }
+                    ],
+                    axisX:{
+                        title: "Metai",
+                        labelAngle: 30,
+                        interval: 1,
+                        valueFormatString: " "
+                        
                     }
-                ]
-            };
-        }
-        else {
-            options = {
-                toolTip: {
-                    content: "Polesitters: {poleSitters}"
-                },
-                axisY: {
-                    interval: 1,
-                    minimum: 0
-                },
-                data: [
-                    {
-                        type: "line",
-                        dataPoints: data
-                    }
-                ]
-            };
+                };
+            }
         }
 
         return (
