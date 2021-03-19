@@ -10,7 +10,7 @@ export class Wins extends Component {
         return (
             <CardDeck className="flex-container">
                 <a href="/wins/drivers" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimai</Card.Title>
                         <Card.Text>
@@ -20,7 +20,7 @@ export class Wins extends Component {
                 </Card>
                 </a>
                 <a href="/wins/driverspercent" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimų procentas</Card.Title>
                         <Card.Text>
@@ -30,7 +30,7 @@ export class Wins extends Component {
                 </Card>
                 </a>
                 <a href="/wins/constructors" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų laimėjimai</Card.Title>
                         <Card.Text>
@@ -40,7 +40,7 @@ export class Wins extends Component {
                 </Card>
                 </a>
                 <a href="/wins/constructorspercent" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų laimėjimų procentas</Card.Title>
                         <Card.Text>
@@ -50,7 +50,7 @@ export class Wins extends Component {
                 </Card>
                 </a>
                 <a href="/wins/driversunique" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų lenktynininkų, laimėjusių lenktynes, skaičius</Card.Title>
                         <Card.Text>
@@ -60,7 +60,7 @@ export class Wins extends Component {
                 </Card>
                 </a>
                 <a href="/wins/constructorsunique" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų komandų, laimėjusių lenktynes, skaičius</Card.Title>
                         <Card.Text>
@@ -70,7 +70,7 @@ export class Wins extends Component {
                 </Card>
                 </a>
                 <a href="/wins/driversbytrack" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimai pagal lenktynių trasą</Card.Title>
                         <Card.Text>
@@ -80,7 +80,7 @@ export class Wins extends Component {
                 </Card>
                 </a>
                 <a href="/wins/frompole" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynių, kurios buvo laimėtos iš „pole“ pozicijos, skaičius</Card.Title>
                         <Card.Text>
@@ -90,7 +90,7 @@ export class Wins extends Component {
                 </Card>
                 </a>
                 <a href="/wins/bygrid" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Laimėjimai iš tam tikros starto pozicijos</Card.Title>
                         <Card.Text>

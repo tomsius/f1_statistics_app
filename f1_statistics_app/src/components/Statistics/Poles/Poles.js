@@ -10,7 +10,7 @@ export class Poles extends Component {
         return (
             <CardDeck className="flex-container">
                 <a href="/poles/drivers" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų pole pozicijos</Card.Title>
                         <Card.Text>
@@ -20,7 +20,7 @@ export class Poles extends Component {
                 </Card>
                 </a>
                 <a href="/poles/constructors" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų pole pozicijos</Card.Title>
                         <Card.Text>
@@ -30,7 +30,7 @@ export class Poles extends Component {
                 </Card>
                 </a>
                 <a href="/poles/driversunique" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų lenktynininkų, laimėjusių pole poziciją, skaičius</Card.Title>
                         <Card.Text>
@@ -40,7 +40,7 @@ export class Poles extends Component {
                 </Card>
                 </a>
                 <a href="/poles/constructorsunique" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų komandų, laimėjusių pole poziciją, skaičius</Card.Title>
                         <Card.Text>

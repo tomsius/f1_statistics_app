@@ -10,7 +10,7 @@ export class FastestLaps extends Component {
         return (
             <CardDeck className="flex-container">
                 <a href="/fastestlaps/drivers" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Greičiausiai lenktynių ratą apvažiavę lenktynininkai</Card.Title>
                         <Card.Text>
@@ -20,7 +20,7 @@ export class FastestLaps extends Component {
                 </Card>
                 </a>
                 <a href="/fastestlaps/constructors" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Greičiausiai lenktynių ratą apvažiavusios komandos</Card.Title>
                         <Card.Text>
@@ -30,7 +30,7 @@ export class FastestLaps extends Component {
                 </Card>
                 </a>
                 <a href="/fastestlaps/driversunique" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų lenktynininkų, greičiausiai apvažiavusių ratą, skaičius</Card.Title>
                         <Card.Text>
@@ -40,7 +40,7 @@ export class FastestLaps extends Component {
                 </Card>
                 </a>
                 <a href="/fastestlaps/constructorsunique" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex",height:"100%"}}>
+                <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų komandų, greičiausiai apvažiavusių ratą, skaičius</Card.Title>
                         <Card.Text>
