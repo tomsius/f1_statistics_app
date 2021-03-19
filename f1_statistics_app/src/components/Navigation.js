@@ -18,6 +18,8 @@ export class Navigation extends Component {
                         <NavLink className="d-inline p-2 text-light" to="/poles">„Pole“ pozicijos</NavLink>
                         <NavLink className="d-inline p-2 text-light" to="/fastestlaps">Greičiausi ratai</NavLink>
                         <NavLink className="d-inline p-2 text-light" to="/points">Taškai</NavLink>
+                        <NavLink className="d-inline p-2 text-light" to="/podiums">Podiumai</NavLink>
+                        <NavLink className="d-inline p-2 text-light" to="/leadings">Pirmavimai</NavLink>
                     </Nav>
                 </Navbar.Collapse>
         </Navbar>

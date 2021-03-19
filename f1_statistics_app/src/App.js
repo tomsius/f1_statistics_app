@@ -19,6 +19,11 @@ import { FastestLappersUnique } from './components/Statistics/FastestLaps/Fastes
 import { Points } from './components/Statistics/Points/Points';
 import { SeasonPoints } from './components/Statistics/Points/SeasonPoints';
 import { WinnerPoints } from './components/Statistics/Points/WinnerPoints';
+import { Podiums } from './components/Statistics/Podiums/Podiums';
+import { PodiumFinishers } from './components/Statistics/Podiums/PodiumFinishers';
+import { PodiumThree } from './components/Statistics/Podiums/PodiumThree';
+import { Leadings } from './components/Statistics/Leadings/Leadings';
+import { Leaders } from './components/Statistics/Leadings/Leaders';
 import { NotFound } from './components/NotFound';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -63,6 +68,16 @@ export default class App extends Component {
           <Route path='/points/constructors' exact render={(props) => (<SeasonPoints {...props} api={"points/constructors"} pageTitle={"Komandų pelnyti taškai"} axisName={"Komanda"} />)} />
           <Route path='/points/winnerdrivers' exact render={(props) => (<WinnerPoints {...props} api={"points/drivers/winners"} pageTitle={"Čempionatą laimėjusių lenktynininkų taškai"} />)} />
           <Route path='/points/winnerconstructors' exact render={(props) => (<WinnerPoints {...props} api={"points/constructors/winners"} pageTitle={"Čempionatą laimėjusių komandų taškai"} />)} />
+
+          <Route path='/podiums' component={Podiums} exact />
+          <Route path='/podiums/drivers' exact render={(props) => (<PodiumFinishers {...props} api={"podiums/drivers"} pageTitle={"Lenktynininkų podiumai"} axisName={"Lenktynininkas"} />)} />
+          <Route path='/podiums/constructors' exact render={(props) => (<PodiumFinishers {...props} api={"podiums/constructors"} pageTitle={"Komandų podiumai"} axisName={"Komanda"} />)} />
+          <Route path='/podiums/driversthree' exact render={(props) => (<PodiumThree {...props} api={"podiums/drivers/same"} pageTitle={"Lenktynininkų trejetukai"} axisName={"Lenktynininkų trejetukas"} />)} />
+          <Route path='/podiums/constructorsthree' exact render={(props) => (<PodiumThree {...props} api={"podiums/constructors/same"} pageTitle={"Komandų trejetukai"} axisName={"Komandų trejetukas"} />)} />
+
+          <Route path='/leadings' component={Leadings} exact />
+          <Route path='/leadings/drivers' exact render={(props) => (<Leaders {...props} api={"leadinglaps/drivers"} pageTitle={"Lenktynininkų pirmavimai"} axisName={"Lenktynininkas"} />)} />
+          <Route path='/leadings/constructors' exact render={(props) => (<Leaders {...props} api={"leadinglaps/constructors"} pageTitle={"Komandų pirmavimai"} axisName={"Komanda"} />)} />
 
           <Route path="*" component={NotFound} />
         </Switch>
