@@ -24,15 +24,19 @@ import { PodiumFinishers } from './components/Statistics/Podiums/PodiumFinishers
 import { PodiumThree } from './components/Statistics/Podiums/PodiumThree';
 import { Leadings } from './components/Statistics/Leadings/Leadings';
 import { Leaders } from './components/Statistics/Leadings/Leaders';
+import { Nationalities } from './components/Statistics/Nationalities/Nationalities';
+import { DriverNationalities } from './components/Statistics/Nationalities/DriverNationalities';
+import { WinnersNationalities } from './components/Statistics/Nationalities/WinnersNationalities';
 import { Misc } from './components/Statistics/Misc/Misc';
 import { RaceCount } from './components/Statistics/Misc/RaceCount';
 import { HatTricks } from './components/Statistics/Misc/HatTricks';
 import { GrandSlams } from './components/Statistics/Misc/GrandSlams';
 import { NonFinishers } from './components/Statistics/Misc/NonFinishers';
 import { PositionDifferences } from './components/Statistics/Misc/PositionDifferences';
-import { Nationalities } from './components/Statistics/Nationalities/Nationalities';
-import { DriverNationalities } from './components/Statistics/Nationalities/DriverNationalities';
-import { WinnersNationalities } from './components/Statistics/Nationalities/WinnersNationalities';
+import { FrontRows } from './components/Statistics/Misc/FrontRows';
+import { DriversFinishingPositions } from './components/Statistics/Misc/DriversFinishingPositions';
+import { StandingsChanges } from './components/Statistics/Misc/StandingsChanges';
+import { RacePositionsChanges } from './components/Statistics/Misc/RacePositionsChanges';
 import { NotFound } from './components/NotFound';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -88,17 +92,22 @@ export default class App extends Component {
           <Route path='/leadings/drivers' exact render={(props) => (<Leaders {...props} api={"leadinglaps/drivers"} pageTitle={"Lenktynininkų pirmavimai"} axisName={"Lenktynininkas"} />)} />
           <Route path='/leadings/constructors' exact render={(props) => (<Leaders {...props} api={"leadinglaps/constructors"} pageTitle={"Komandų pirmavimai"} axisName={"Komanda"} />)} />
 
+          <Route path='/nationalities' component={Nationalities} exact />
+          <Route path='/nationalities/drivers' exact render={(props) => (<DriverNationalities {...props} api={"nationalities/drivers"} pageTitle={"Lenktynininkų pilietybės"} />)} />
+          <Route path='/nationalities/racewinners' exact render={(props) => (<WinnersNationalities {...props} api={"nationalities/racewins"} pageTitle={"Lenktynes laimėjusių lenktynininkų pilietybės"} />)} />
+          <Route path='/nationalities/seasonwinners' exact render={(props) => (<WinnersNationalities {...props} api={"nationalities/seasonwins"} pageTitle={"Čempionatą laimėjusių lenktynininkų pilietybės"} />)} />
+
           <Route path='/misc' component={Misc} exact />
           <Route path='/misc/racecount' exact render={(props) => (<RaceCount {...props} api={"misc/racesperseason"} pageTitle={"Lenktynių skaičius"} />)} />
           <Route path='/misc/hattricks' exact render={(props) => (<HatTricks {...props} api={"misc/hattricks"} pageTitle={"„Hat Tricks“"} />)} />
           <Route path='/misc/grandslams' exact render={(props) => (<GrandSlams {...props} api={"misc/grandslams"} pageTitle={"„Grand Slams“"} />)} />
           <Route path='/misc/dnfs' exact render={(props) => (<NonFinishers {...props} api={"misc/dnfs"} pageTitle={"Nebaigę lenktynių"} />)} />
           <Route path='/misc/positiondifferences' exact render={(props) => (<PositionDifferences {...props} api={"misc/positionchanges"} pageTitle={"Pozicijų pokytis"} />)} />
-
-          <Route path='/nationalities' component={Nationalities} exact />
-          <Route path='/nationalities/drivers' exact render={(props) => (<DriverNationalities {...props} api={"nationalities/drivers"} pageTitle={"Lenktynininkų pilietybės"} />)} />
-          <Route path='/nationalities/racewinners' exact render={(props) => (<WinnersNationalities {...props} api={"nationalities/racewins"} pageTitle={"Lenktynes laimėjusių lenktynininkų pilietybės"} />)} />
-          <Route path='/nationalities/seasonwinners' exact render={(props) => (<WinnersNationalities {...props} api={"nationalities/seasonwins"} pageTitle={"Čempionatą laimėjusių lenktynininkų pilietybės"} />)} />
+          <Route path='/misc/frontrows' exact render={(props) => (<FrontRows {...props} api={"misc/frontrows"} pageTitle={"Komandų „front rows“"} />)} />
+          <Route path='/misc/driverpositionsinrace' exact render={(props) => (<DriversFinishingPositions {...props} api={"misc/finishingpositions"} pageTitle={"Lenktynininkų finišavimo pozicijos"} />)} />
+          <Route path='/misc/driverstandingschanges' exact render={(props) => (<StandingsChanges {...props} api={"misc/drivers/standingschanges"} pageTitle={"Lenktynininkų čempionato pozicijų pokyčiai"} />)} />
+          <Route path='/misc/constructorstandingschanges' exact render={(props) => (<StandingsChanges {...props} api={"misc/constructors/standingschanges"} pageTitle={"Komandų čempionato pozicijų pokyčiai"} />)} />
+          <Route path='/misc/racepositionschanges' exact render={(props) => (<RacePositionsChanges {...props} api={"seasons/races"} pageTitle={"Lenktynininkų pozicijų pokyčiai lenktynių metu"} />)} />
 
           <Route path="*" component={NotFound} />
         </Switch>
