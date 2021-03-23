@@ -19,6 +19,7 @@ import { FastestLappersUnique } from './components/Statistics/FastestLaps/Fastes
 import { Points } from './components/Statistics/Points/Points';
 import { SeasonPoints } from './components/Statistics/Points/SeasonPoints';
 import { WinnerPoints } from './components/Statistics/Points/WinnerPoints';
+import { PointsChanges } from './components/Statistics/Points/PointsChanges';
 import { Podiums } from './components/Statistics/Podiums/Podiums';
 import { PodiumFinishers } from './components/Statistics/Podiums/PodiumFinishers';
 import { PodiumThree } from './components/Statistics/Podiums/PodiumThree';
@@ -81,6 +82,8 @@ export default class App extends Component {
           <Route path='/points/constructors' exact render={(props) => (<SeasonPoints {...props} api={"points/constructors"} pageTitle={"Komandų pelnyti taškai"} axisName={"Komanda"} />)} />
           <Route path='/points/winnerdrivers' exact render={(props) => (<WinnerPoints {...props} api={"points/drivers/winners"} pageTitle={"Čempionatą laimėjusių lenktynininkų taškai"} />)} />
           <Route path='/points/winnerconstructors' exact render={(props) => (<WinnerPoints {...props} api={"points/constructors/winners"} pageTitle={"Čempionatą laimėjusių komandų taškai"} />)} />
+          <Route path='/points/driverpointschanges' exact render={(props) => (<PointsChanges {...props} api={"points/drivers/pointschanges"} pageTitle={"Lenktynininkų taškų pokyčiai"} />)} />
+          <Route path='/points/constructorpointschanges' exact render={(props) => (<PointsChanges {...props} api={"points/constructors/pointschanges"} pageTitle={"Komandų taškų pokyčiai"} />)} />
 
           <Route path='/podiums' component={Podiums} exact />
           <Route path='/podiums/drivers' exact render={(props) => (<PodiumFinishers {...props} api={"podiums/drivers"} pageTitle={"Lenktynininkų podiumai"} axisName={"Lenktynininkas"} />)} />

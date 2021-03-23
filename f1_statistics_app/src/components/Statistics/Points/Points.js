@@ -44,7 +44,27 @@ export class Points extends Component {
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Čempionatą laimėjusių komandų taškai</Card.Title>
                         <Card.Text>
-                        Atvaizduojama, kiek taškų pelnė komanda, laimėjusi čempionatą, kiekvieną sezoną.
+                            Atvaizduojama, kiek taškų pelnė komanda, laimėjusi čempionatą, kiekvieną sezoną.
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                </a>
+                <a href="/points/driverpointschanges" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex", height:"100%"}}>
+                    <Card.Body>
+                        <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų taškų pokyčiai</Card.Title>
+                        <Card.Text>
+                            Atvaizduojama, kaip kito kiekvieno lenktynininko pelnyti taškai po kiekvienų lenktynių. Paspaudus ant lenktynininko vardo legendoje, galima paslėpti jo duomenis.
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                </a>
+                <a href="/points/constructorpointschanges" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex", height:"100%"}}>
+                    <Card.Body>
+                        <Card.Title style={{fontWeight:"bold"}}>Komandų taškų pokyčiai</Card.Title>
+                        <Card.Text>
+                            Atvaizduojama, kaip kito kiekvienos komandos pelnyti taškai po kiekvienų lenktynių. Paspaudus ant komandos pavadinimo legendoje, galima paslėpti jos duomenis.
                         </Card.Text>
                     </Card.Body>
                 </Card>
