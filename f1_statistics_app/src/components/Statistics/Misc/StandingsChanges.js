@@ -35,7 +35,7 @@ export class StandingsChanges extends Component {
 
     render() {
         if (this.state.standings.length > 0 && this.state.selectedSeason !== 0) {
-            var data = this.state.standings.filter(x => x.season == this.state.selectedSeason)[0].standings.map(x => ({ type: "line", name: x.name, markerType: "none", showInLegend: true, dataPoints: x.rounds.map(round => ({ x: round.round, y: round.position })) }));
+            var data = this.state.standings.filter(x => x.season == this.state.selectedSeason)[0].standings.map(x => ({ type: "line", name: x.name, markerType: "none", showInLegend: true, dataPoints: x.rounds.map(round => ({ x: round.round, y: round.position, points: round.points })) }));
 
             var options = {
                 title: {
@@ -57,7 +57,7 @@ export class StandingsChanges extends Component {
                     gridThickness: 0
                 },
                 toolTip:{   
-                    content: "{name}: {y}"      
+                    content: "{name} (taškų skaičius - {points}): {y}"      
                 },
                 legend: {
                     cursor: "pointer",

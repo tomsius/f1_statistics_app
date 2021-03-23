@@ -94,7 +94,7 @@ export class Misc extends Component {
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų čempionato pozicijų pokyčiai</Card.Title>
                         <Card.Text>
-                            Atvaizduojama, kaip kito kiekvienos komandos pozicija komandų čempionato lentelėje po kiekvienų lenktynių. Paspaudus ant komandos vardo legendoje, galima paslėpti jos duomenis.
+                            Atvaizduojama, kaip kito kiekvienos komandos pozicija komandų čempionato lentelėje po kiekvienų lenktynių. Paspaudus ant komandos pavadinimo legendoje, galima paslėpti jos duomenis.
                         </Card.Text>
                     </Card.Body>
                 </Card>
