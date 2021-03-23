@@ -35,7 +35,7 @@ export class StandingsChanges extends Component {
 
     render() {
         if (this.state.standings.length > 0 && this.state.selectedSeason !== 0) {
-            var data = this.state.standings.filter(x => x.season == this.state.selectedSeason)[0].standings.map(x => ({ type: "line", name: x.name, showInLegend: true, dataPoints: x.rounds.map(round => ({ x: round.round, y: round.position })) }));
+            var data = this.state.standings.filter(x => x.season == this.state.selectedSeason)[0].standings.map(x => ({ type: "line", name: x.name, markerType: "none", showInLegend: true, dataPoints: x.rounds.map(round => ({ x: round.round, y: round.position })) }));
 
             var options = {
                 title: {
@@ -45,14 +45,16 @@ export class StandingsChanges extends Component {
                 axisX:{
                     title: "Lenktynių numeris sezone",
                     interval: 1,
-                    minimum: 1
+                    minimum: 1,
+                    gridThickness: 0
                 },
                 axisY: {
                     title: "Vieta čempionate",
                     interval: 1,
                     minimum: 1,
                     maximum: data.length,
-                    reversed: true
+                    reversed: true,
+                    gridThickness: 0
                 },
                 toolTip:{   
                     content: "{name}: {y}"      
