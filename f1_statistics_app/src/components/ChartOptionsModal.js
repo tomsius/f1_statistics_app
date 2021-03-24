@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Button, Form, Row, Col, Container } from 'react-bootstrap';
+import { Export } from './Export';
 
 export class ChartOptionsModal extends Component {
     constructor(props) {
@@ -166,11 +167,19 @@ export class ChartOptionsModal extends Component {
                                     <Form.Label>Intervalas tarp verčių</Form.Label>
                                 </Col>
                                 <Col>
-                                    <Form.Control type="number" name="axisYInterval" placeholder="Intervalas tarp verčių..." defaultValue={this.props.axisyinterval} onChange={this.props.handleoptionschange} />
+                                    <Form.Control type="number" min={1} name="axisYInterval" placeholder="Intervalas tarp verčių..." defaultValue={this.props.axisyinterval} onChange={this.props.handleoptionschange} />
                                 </Col>
                             </Row>
                         </Container>
                     </Form>
+                    <br />
+                    <Container fluid style={{paddingLeft: 0, paddingRight: 0}}>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            <Col>
+                                Kopijuoti diagramos duomenis <Export />
+                            </Col>
+                        </Row>
+                    </Container>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.onHide}>Uždaryti</Button>
