@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
+import { Export } from '../../Export';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -40,8 +41,8 @@ export class RaceCount extends Component {
                 ],
                 axisX:{
                     title: "Metai",
-                    labelAngle: 30,
-                    interval: 1
+                    interval: 1,
+                    valueFormatString: " "
                 },
                 axisY: {
                     title: "Lenktynių skaičius, vnt.",
