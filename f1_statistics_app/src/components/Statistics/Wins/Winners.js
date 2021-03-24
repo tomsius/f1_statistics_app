@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
+import { ChartOptionsModal } from '../../ChartOptionsModal';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -12,12 +13,34 @@ export class Winners extends Component {
         this.state = {
             winners: [],
             isBarChart: true,
-            isVisible: false
+            isVisible: false,
+            modalShow: false,
+
+            interactivityEnabled: true,
+            exportFileName: this.props.pageTitle,
+            zoomEnabled: false,
+            theme: "light1",
+            title: this.props.pageTitle,
+            type: "column",
+
+            // axis x
+            axisXTitle: this.props.axisName,
+            axisXLabelAngle: 30,
+            axisXGridThickness: 0,
+
+            //axis y
+            axisYTitle: "Laimėjimų skaičius, vnt.",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 1,
+            axisYMinimum: 0,
+            axisYMaximum: '',
+            axisYInterval: 5
         };
 
         this.fillData = this.fillData.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.calculateTotalWins = this.calculateTotalWins.bind(this);
+        this.handleOptionsChange = this.handleOptionsChange.bind(this);
     }
 
     fillData(data) {
@@ -44,53 +67,66 @@ export class Winners extends Component {
         return totalWins;
     }
 
+    handleOptionsChange(event) {
+        const { name, value, checked, type } = event.target;
+        const valueToUpdate = type === 'checkbox' ? checked : value;
+        console.log(name + ': ' + valueToUpdate);
+        this.setState({
+            [name]: valueToUpdate
+        });
+    }
+
     render() {
-        var options;
         if (this.state.winners.length > 0) {
             var totalWins = this.calculateTotalWins(this.state.winners);
             var data = this.state.winners.map(x => ({ label: x.name, y: x.winCount, percentage: Math.round((x.winCount / totalWins * 100) * 100) / 100 }));
 
-            if (this.state.isBarChart) {
-                options = {
-                    title: {
-                        text: this.props.pageTitle
-                    },
-                    data: [
-                        {
-                            type: "column",
-                            dataPoints: data
-                        }
-                    ],
-                    axisX: {
-                        title: this.props.axisName,
-                        labelAngle: 30,
-                        interval: 1
-                    },
-                    axisY: {
-                        title: "Laimėjimų skaičius, vnt."
-                    },
-                    toolTip:{   
-                        content: "{label}: {y}"      
+            if (this.state.axisYMaximum === '') {
+                var defaultMaximum = -1;
+                for (let i = 0; i < this.state.winners.length; i++) {
+                    if (defaultMaximum < this.state.winners[i].winCount) {
+                        defaultMaximum = this.state.winners[i].winCount;
                     }
-                };
+                }
+    
+                defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
             }
-            else {
-                options = {
-                    title: {
-                        text: this.props.pageTitle
-                    },
-                    data: [
-                        {
-                            type: "pie",
-                            indexLabel: "{label} {y}",
-                            dataPoints: data
-                        }
-                    ],
-                    toolTip:{   
-                        content: "{label}: {percentage}%"      
+
+            var options = {
+                interactivityEnabled: this.state.interactivityEnabled,
+                exportFileName: this.state.exportFileName,
+                exportEnabled: true,
+                zoomEnabled: this.state.zoomEnabled,
+                zoomType: "x",
+                theme: this.state.theme,
+                title: {
+                    text: this.state.title
+                },
+                data: [
+                    {
+                        type: this.state.type,
+                        dataPoints: data,
+                        indexLabel: this.state.type === 'column' ? "" : "{label} {y}"
                     }
-                };
-            }
+                ],
+                axisX: {
+                    title: this.state.axisXTitle,
+                    labelAngle: this.state.axisXLabelAngle,
+                    interval: 1,
+                    gridThickness: this.state.axisXGridThickness
+                },
+                axisY: {
+                    title: this.state.axisYTitle,
+                    minimum: this.state.axisYMinimum,
+                    maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum,
+                    interval: this.state.axisYInterval,
+                    labelAngle: this.state.axisYLabelAngle,
+                    gridThickness: this.state.axisYGridThickness
+                },
+                toolTip:{   
+                    content: this.state.type === 'column' ? "{label}: {y}" : "{label}: {percentage}%"
+                }
+            };
         }
 
         return (
@@ -102,9 +138,34 @@ export class Winners extends Component {
                 {
                     this.state.winners.length > 0 &&
                     <div>
-                        <Button variant="primary" onClick={this.handleClick} disabled={this.state.isVisible}>
+                        {/*<Button variant="primary" onClick={this.handleClick} disabled={this.state.isVisible}>
                             {this.state.isBarChart ? "Rodyti skritulinę diagramą" : "Rodyti stulpelinę diagramą"}
+                        </Button>*/}
+                        <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                            Keisti grafiko parinktis
                         </Button>
+                        <ChartOptionsModal 
+                            size="lg"
+                            show={this.state.modalShow} 
+                            onHide={() => this.setState({modalShow: false})} 
+                            handleoptionschange={this.handleOptionsChange} 
+                            title={this.state.title}
+                            exportfilename={this.state.exportFileName}
+                            interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
+                            theme={this.state.theme}
+                            types={[{type: "column", name: "Stulpelinė"}, {type: "pie", name: "Skritulinė"}]}
+                            currenttype={this.state.type}
+                            //zoomenabled={this.state.zoomEnabled ? 1 : 0}
+                            axisxtitle={this.state.axisXTitle}
+                            axisxlabelangle={this.state.axisXLabelAngle}
+                            axisxgridthickness={this.state.axisXGridThickness}
+                            axisytitle={this.state.axisYTitle}
+                            axisylabelangle={this.state.axisYLabelAngle}
+                            axisygridthickness={this.state.axisYGridThickness}
+                            axisyminimum={this.state.axisYMinimum}
+                            axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
+                            axisyinterval={this.state.axisYInterval}
+                        />
                         <br />
                         <br />
                         <div style={{ position: "relative", right: "6em" }}>
