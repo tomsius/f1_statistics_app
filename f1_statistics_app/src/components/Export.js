@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
+import clipboard from '../clipboard.png';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css'
 
 export class Export extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            show: false
-        };
 
         this.handleClick = this.handleClick.bind(this);
     }
@@ -26,18 +25,31 @@ export class Export extends Component {
         document.execCommand('copy');
         document.body.removeChild(dummy);
 
-        this.setState({
-            show: true
-        });
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "positionClass": "toast-bottom-full-width",
+            "preventDuplicates": true,
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+          };
+
+        toastr["info"]("", "Diagramos duomenys nukopijuoti į iškarpinę");
     }
 
     render() {
+
         return (
-            <div>
-                <Button variant="primary" onClick={this.handleClick}>
-                    Kopijuoti diagramos duomenis
-                </Button>
-            </div>
+            <>
+                <button style={{border: "none", width: "50px"}} onClick={this.handleClick}>
+                    <img width="75%" height="75%" src={clipboard} />
+                </button>
+            </>
         );
     }
 }
