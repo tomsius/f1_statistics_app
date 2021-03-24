@@ -80,11 +80,11 @@ export class DataRangeForm extends Component {
                         <Form onSubmit={this.handleSubmitByDate}>
                             <Form.Group controlId="From">
                                 <Form.Label>Nuo</Form.Label>
-                                <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="From" required placeholder="Nuo..." />
+                                <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="From" required placeholder="Nuo..." defaultValue="2014" />
                             </Form.Group>
                             <Form.Group controlId="To">
                                 <Form.Label>Iki</Form.Label>
-                                <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="To" required placeholder="Iki..." />
+                                <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="To" required placeholder="Iki..." defaultValue="2020" />
                             </Form.Group>
                             <Form.Group>
                                 <Button variant="primary" type="submit" disabled={this.state.isLoading}>
@@ -97,7 +97,7 @@ export class DataRangeForm extends Component {
                         <Form onSubmit={this.handleSubmitBySeason}>
                             <Form.Group controlId="Season">
                                 <Form.Label>Sezonas</Form.Label>
-                                <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="Season" required placeholder="Sezonas..." />
+                                <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="Season" required placeholder="Sezonas..." defaultValue="2020" />
                             </Form.Group>
                             <Form.Group>
                                 <Button variant="primary" type="submit" disabled={this.state.isLoading}>
