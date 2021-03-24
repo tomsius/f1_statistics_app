@@ -23,12 +23,10 @@ export class Winners extends Component {
             title: this.props.pageTitle,
             type: "column",
 
-            // axis x
             axisXTitle: this.props.axisName,
             axisXLabelAngle: 30,
             axisXGridThickness: 0,
 
-            //axis y
             axisYTitle: "Laimėjimų skaičius, vnt.",
             axisYLabelAngle: 0,
             axisYGridThickness: 1,
@@ -69,8 +67,12 @@ export class Winners extends Component {
 
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
-        const valueToUpdate = type === 'checkbox' ? checked : value;
-        console.log(name + ': ' + valueToUpdate);
+        var valueToUpdate = type === 'checkbox' ? checked : value;
+        
+        if (name === 'axisYInterval') {
+            valueToUpdate = parseInt(value);
+        }
+
         this.setState({
             [name]: valueToUpdate
         });
@@ -138,13 +140,11 @@ export class Winners extends Component {
                 {
                     this.state.winners.length > 0 &&
                     <div>
-                        {/*<Button variant="primary" onClick={this.handleClick} disabled={this.state.isVisible}>
-                            {this.state.isBarChart ? "Rodyti skritulinę diagramą" : "Rodyti stulpelinę diagramą"}
-                        </Button>*/}
                         <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
                             Keisti grafiko parinktis
                         </Button>
                         <ChartOptionsModal 
+                            animation={false}
                             size="lg"
                             show={this.state.modalShow} 
                             onHide={() => this.setState({modalShow: false})} 
