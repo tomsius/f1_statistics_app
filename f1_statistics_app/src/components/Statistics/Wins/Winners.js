@@ -36,7 +36,6 @@ export class Winners extends Component {
         };
 
         this.fillData = this.fillData.bind(this);
-        this.handleClick = this.handleClick.bind(this);
         this.calculateTotalWins = this.calculateTotalWins.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
     }
@@ -44,14 +43,6 @@ export class Winners extends Component {
     fillData(data) {
         this.setState({
             winners: data
-        });
-    }
-
-    handleClick() {
-        var newChart = !this.state.isBarChart;
-
-        this.setState({
-            isBarChart: newChart
         });
     }
 
@@ -152,7 +143,8 @@ export class Winners extends Component {
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                            theme={this.state.theme}
+                            themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                            currenttheme={this.state.theme}
                             types={[{type: "column", name: "Stulpelinė"}, {type: "pie", name: "Skritulinė"}]}
                             currenttype={this.state.type}
                             //zoomenabled={this.state.zoomEnabled ? 1 : 0}
