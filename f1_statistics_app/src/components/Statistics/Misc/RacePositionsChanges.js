@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { ChartOptionsModal } from '../../ChartOptionsModal';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -15,12 +16,35 @@ export class RacePositionsChanges extends Component {
             season: 0,
             round: 0,
             raceName: "",
-            isLoading: false
+            isLoading: false,
+            modalShow: false,
+
+            interactivityEnabled: true,
+            exportFileName: this.props.pageTitle,
+            zoomEnabled: false,
+            theme: "light1",
+            title: this.props.pageTitle,
+            type: "column",
+
+            axisXTitle: "Lenktynių ratas",
+            axisXLabelAngle: 0,
+            axisXGridThickness: 0,
+            axisXMinimum: 1,
+            axisXMaximum: '',
+            axisXInterval: 5,
+
+            axisYTitle: "Lenktynininko pozicija",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 1,
+            axisYMinimum: 1,
+            axisYMaximum: '',
+            axisYInterval: 1
         };
 
         this.fillData = this.fillData.bind(this);
         this.fillSeasons = this.fillSeasons.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleOptionsChange = this.handleOptionsChange.bind(this);
     }
 
     fillData() {
@@ -40,7 +64,8 @@ export class RacePositionsChanges extends Component {
         .then(result => {
             this.setState({
                 positions: result,
-                isLoading: false
+                isLoading: false,
+                title: "Lenktynininkų pozicijų pokyčiai " + this.state.raceName + " metu"
             });
         });
     }
@@ -50,7 +75,8 @@ export class RacePositionsChanges extends Component {
             seasons: data,
         }, () => {
             this.setState({
-                positions: []
+                positions: [],
+                title: ""
             })
         });
     }
@@ -72,32 +98,61 @@ export class RacePositionsChanges extends Component {
         });
     }
 
+    handleOptionsChange(event) {
+        const { name, value, checked, type } = event.target;
+        var valueToUpdate = type === 'checkbox' ? checked : value;
+        
+        if (name === 'axisYInterval' || name === 'axisXInterval') {
+            valueToUpdate = parseInt(value);
+        }
+
+        this.setState({
+            [name]: valueToUpdate
+        });
+    }
+
     render() {
         if (this.state.positions.length > 0) {
-            console.log(this.state.positions);
             var data = this.state.positions.map(x => ({ type: "line", name: x.name, showInLegend: true, markerType: "none", dataPoints: x.laps.map(lap => ({ x: lap.lapNumber, y: lap.position })) }));
 
+            if (this.state.axisYMaximum === '') {
+                var defaultYMaximum = data.length;
+            }
+
+            if (this.state.axisXMaximum === '') {
+                var defaultXMaximum = this.state.positions[0].laps.length;
+            }     
+
             var options = {
+                interactivityEnabled: this.state.interactivityEnabled,
+                exportFileName: this.state.exportFileName,
+                exportEnabled: true,
+                zoomEnabled: this.state.zoomEnabled,
+                zoomType: "x",
+                theme: this.state.theme,
                 title: {
-                    text: "Lenktynininkų pozicijų pokyčiai " + this.state.raceName + " metu"
+                    text: this.state.title
                 },
                 data: data,
-                axisX:{
-                    title: "Lenktynių ratas",
-                    interval: 5,
-                    minimum: 1,
-                    gridThickness: 0
+                axisX: {
+                    title: this.state.axisXTitle,
+                    labelAngle: this.state.axisXLabelAngle,
+                    minimum: this.state.axisXMinimum,
+                    maximum: this.state.axisXMaximum !== '' ? this.state.axisXMaximum : defaultXMaximum,
+                    interval: this.state.axisXInterval,
+                    gridThickness: this.state.axisXGridThickness
                 },
                 axisY: {
-                    title: "Lenktynininko pozicija",
-                    interval: 1,
-                    minimum: 1,
-                    maximum: data.length,
+                    title: this.state.axisYTitle,
+                    minimum: this.state.axisYMinimum,
+                    maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum,
+                    interval: this.state.axisYInterval,
+                    labelAngle: this.state.axisYLabelAngle,
+                    gridThickness: this.state.axisYGridThickness,
                     reversed: true,
-                    gridThickness: 0
                 },
                 toolTip:{   
-                    content: "{name} pozicija {x}-ame rate: {y}"      
+                    content: "{name} pozicija {x}-ame rate: {y}" 
                 },
                 legend: {
                     cursor: "pointer",
@@ -112,7 +167,7 @@ export class RacePositionsChanges extends Component {
                     },
                     horizontalAlign: "center",
                      verticalAlign: "top"
-                },
+                }
             };
         }
 
@@ -138,7 +193,7 @@ export class RacePositionsChanges extends Component {
                                             disabled={this.state.isLoading}
 
                                         >
-                                            {this.state.isLoading ? "Palaukite..." : race.raceName}
+                                            {race.raceName}
                                         </Button>
                                     ))}
                                 </ButtonGroup>
@@ -147,10 +202,43 @@ export class RacePositionsChanges extends Component {
                         <br/>
                         <br/>
                         {this.state.positions.length > 0 &&
+                        <div>
+                            <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                                Keisti grafiko parinktis
+                            </Button>
+                            <ChartOptionsModal 
+                                animation={false}
+                                size="lg"
+                                show={this.state.modalShow} 
+                                onHide={() => this.setState({modalShow: false})} 
+                                handleoptionschange={this.handleOptionsChange} 
+                                title={this.state.title}
+                                exportfilename={this.state.exportFileName}
+                                interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
+                                themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                                currenttheme={this.state.theme}
+                                types={[{type: "column", name: "Stulpelinė"}, {type: "pie", name: "Skritulinė"}]}
+                                currenttype={this.state.type}
+                                //zoomenabled={this.state.zoomEnabled ? 1 : 0}
+                                axisxtitle={this.state.axisXTitle}
+                                axisxlabelangle={this.state.axisXLabelAngle}
+                                axisxgridthickness={this.state.axisXGridThickness}
+                                axisxminimum={this.state.axisXMinimum}
+                                axisxmaximum={this.state.axisXMaximum !== '' ? this.state.axisXMaximum : defaultXMaximum}
+                                axisxinterval={this.state.axisXInterval}
+                                axisytitle={this.state.axisYTitle}
+                                axisylabelangle={this.state.axisYLabelAngle}
+                                axisygridthickness={this.state.axisYGridThickness}
+                                axisyminimum={this.state.axisYMinimum}
+                                axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum}
+                                axisyinterval={this.state.axisYInterval}
+                            />
+                            <br />
+                            <br />
                             <div style={{ position: "relative", right: "6em" }}>
                                 <CanvasJSChart options={options} />
                             </div>
-                        }
+                        </div>}
                     </div>
                 }
             </div>

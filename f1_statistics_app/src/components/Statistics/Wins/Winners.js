@@ -12,8 +12,6 @@ export class Winners extends Component {
         super(props);
         this.state = {
             winners: [],
-            isBarChart: true,
-            isVisible: false,
             modalShow: false,
 
             interactivityEnabled: true,
