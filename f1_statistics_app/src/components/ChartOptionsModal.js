@@ -49,7 +49,7 @@ export class ChartOptionsModal extends Component {
                                     <Col>
                                         <Form.Control as="select" custom name="type" onChange={this.props.handleoptionschange}>
                                             {this.props.types.map(x => 
-                                                x.name === this.props.currenttype ? <option key={x.type} value={x.type} selected>{x.name}</option> : <option key={x.type} value={x.type}>{x.name}</option>
+                                                x.type === this.props.currenttype ? <option key={x.type} value={x.type} selected>{x.name}</option> : <option key={x.type} value={x.type}>{x.name}</option>
                                             )}
                                         </Form.Control>
                                     </Col>
@@ -61,10 +61,9 @@ export class ChartOptionsModal extends Component {
                                     </Col>
                                     <Col>
                                         <Form.Control as="select" custom name="theme" onChange={this.props.handleoptionschange}>
-                                            <option key="light1" value="light1">Light1</option>
-                                            <option key="light2" value="light2">Light2</option>
-                                            <option key="dark1" value="dark1">Dark1</option>
-                                            <option key="dark2" value="dark2">Dark2</option>
+                                            {this.props.themes.map(x => 
+                                                x.value === this.props.currenttheme ? <option key={x.value} value={x.value} selected>{x.content}</option> : <option key={x.value} value={x.value}>{x.content}</option>
+                                            )}
                                         </Form.Control>
                                     </Col>
                             </Row>
@@ -86,90 +85,92 @@ export class ChartOptionsModal extends Component {
                                     <Form.Check type="switch" id="custom-switch" name="zoomEnabled" checked={this.props.zoomenabled} onChange={this.props.handleoptionschange} />
                                 </Col>
                             </Row>}
+                            {this.props.currenttype === "column" &&
+                            <>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            <Col>
+                                <Form.Label><b>X ašies parinktys</b></Form.Label>
+                            </Col>
+                        </Row>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            
                                 <Col>
-                                    <Form.Label><b>X ašies parinktys</b></Form.Label>
-                                </Col>
-                            </Row>
-                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                
-                                    <Col>
-                                        <Form.Label>Pavadinimas</Form.Label>
-                                    </Col>
-                                    <Col>
-                                        <Form.Control type="text" name="axisXTitle" placeholder="Įveskite ašies pavadinimą..." defaultValue={this.props.axisxtitle} onChange={this.props.handleoptionschange} />
-                                    </Col>
-                            </Row>
-                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                <Col>
-                                    <Form.Label>Žymeklio pasukimo kampas (<span>&#176;</span>)</Form.Label>
+                                    <Form.Label>Pavadinimas</Form.Label>
                                 </Col>
                                 <Col>
-                                    <Form.Control type="number" name="axisXLabelAngle" placeholder="Žymeklio pasukimo kampas..." defaultValue={this.props.axisxlabelangle} onChange={this.props.handleoptionschange} />
+                                    <Form.Control type="text" name="axisXTitle" placeholder="Įveskite ašies pavadinimą..." defaultValue={this.props.axisxtitle} onChange={this.props.handleoptionschange} />
                                 </Col>
-                            </Row>
-                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                        </Row>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            <Col>
+                                <Form.Label>Žymeklio pasukimo kampas (<span>&#176;</span>)</Form.Label>
+                            </Col>
+                            <Col>
+                                <Form.Control type="number" name="axisXLabelAngle" placeholder="Žymeklio pasukimo kampas..." defaultValue={this.props.axisxlabelangle} onChange={this.props.handleoptionschange} />
+                            </Col>
+                        </Row>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            <Col>
+                                <Form.Label>Linijų storis (px)</Form.Label>
+                            </Col>
+                            <Col>
+                                <Form.Control type="number" min={0} name="axisXGridThickness" placeholder="Linijų storis..." defaultValue={this.props.axisxgridthickness} onChange={this.props.handleoptionschange} />
+                            </Col>
+                        </Row>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            <Col>
+                                <Form.Label><b>Y ašies parinktys</b></Form.Label>
+                            </Col>
+                        </Row>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            
                                 <Col>
-                                    <Form.Label>Linijų storis (px)</Form.Label>
-                                </Col>
-                                <Col>
-                                    <Form.Control type="number" min={0} name="axisXGridThickness" placeholder="Linijų storis..." defaultValue={this.props.axisxgridthickness} onChange={this.props.handleoptionschange} />
-                                </Col>
-                            </Row>
-                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                <Col>
-                                    <Form.Label><b>Y ašies parinktys</b></Form.Label>
-                                </Col>
-                            </Row>
-                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                
-                                    <Col>
-                                        <Form.Label>Pavadinimas</Form.Label>
-                                    </Col>
-                                    <Col>
-                                        <Form.Control type="text" name="axisYTitle" placeholder="Įveskite ašies pavadinimą..." defaultValue={this.props.axisytitle} onChange={this.props.handleoptionschange} />
-                                    </Col>
-                            </Row>
-                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                <Col>
-                                    <Form.Label>Žymeklio pasukimo kampas (<span>&#176;</span>)</Form.Label>
-                                </Col>
-                                <Col>
-                                    <Form.Control type="number" name="axisYLabelAngle" placeholder="Žymeklio pasukimo kampas..." defaultValue={this.props.axisylabelangle} onChange={this.props.handleoptionschange} />
-                                </Col>
-                            </Row>
-                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                <Col>
-                                    <Form.Label>Linijų storis (px)</Form.Label>
+                                    <Form.Label>Pavadinimas</Form.Label>
                                 </Col>
                                 <Col>
-                                    <Form.Control type="number" min={0} name="axisYGridThickness" placeholder="Linijų storis..." defaultValue={this.props.axisygridthickness} onChange={this.props.handleoptionschange} />
+                                    <Form.Control type="text" name="axisYTitle" placeholder="Įveskite ašies pavadinimą..." defaultValue={this.props.axisytitle} onChange={this.props.handleoptionschange} />
                                 </Col>
-                            </Row>
-                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                <Col>
-                                    <Form.Label>Mažiausia vertė</Form.Label>
-                                </Col>
-                                <Col>
-                                    <Form.Control type="number" name="axisYMinimum" placeholder="Mažiausia vertė..." defaultValue={this.props.axisyminimum} onChange={this.props.handleoptionschange} />
-                                </Col>
-                            </Row>
-                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                <Col>
-                                    <Form.Label>Didžiausia vertė</Form.Label>
-                                </Col>
-                                <Col>
-                                    <Form.Control type="number" name="axisYMaximum" placeholder="Didžiausia vertė..." defaultValue={this.props.axisymaximum} onChange={this.props.handleoptionschange} />
-                                </Col>
-                            </Row>
-                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                <Col>
-                                    <Form.Label>Intervalas tarp verčių</Form.Label>
-                                </Col>
-                                <Col>
-                                    <Form.Control type="number" min={1} name="axisYInterval" placeholder="Intervalas tarp verčių..." defaultValue={this.props.axisyinterval} onChange={this.props.handleoptionschange} />
-                                </Col>
-                            </Row>
+                        </Row>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            <Col>
+                                <Form.Label>Žymeklio pasukimo kampas (<span>&#176;</span>)</Form.Label>
+                            </Col>
+                            <Col>
+                                <Form.Control type="number" name="axisYLabelAngle" placeholder="Žymeklio pasukimo kampas..." defaultValue={this.props.axisylabelangle} onChange={this.props.handleoptionschange} />
+                            </Col>
+                        </Row>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            <Col>
+                                <Form.Label>Linijų storis (px)</Form.Label>
+                            </Col>
+                            <Col>
+                                <Form.Control type="number" min={0} name="axisYGridThickness" placeholder="Linijų storis..." defaultValue={this.props.axisygridthickness} onChange={this.props.handleoptionschange} />
+                            </Col>
+                        </Row>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            <Col>
+                                <Form.Label>Mažiausia vertė</Form.Label>
+                            </Col>
+                            <Col>
+                                <Form.Control type="number" name="axisYMinimum" placeholder="Mažiausia vertė..." defaultValue={this.props.axisyminimum} onChange={this.props.handleoptionschange} />
+                            </Col>
+                        </Row>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            <Col>
+                                <Form.Label>Didžiausia vertė</Form.Label>
+                            </Col>
+                            <Col>
+                                <Form.Control type="number" name="axisYMaximum" placeholder="Didžiausia vertė..." defaultValue={this.props.axisymaximum} onChange={this.props.handleoptionschange} />
+                            </Col>
+                        </Row>
+                        <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                            <Col>
+                                <Form.Label>Intervalas tarp verčių</Form.Label>
+                            </Col>
+                            <Col>
+                                <Form.Control type="number" min={1} name="axisYInterval" placeholder="Intervalas tarp verčių..." defaultValue={this.props.axisyinterval} onChange={this.props.handleoptionschange} />
+                            </Col>
+                        </Row></>}
                         </Container>
                     </Form>
                     <br />
