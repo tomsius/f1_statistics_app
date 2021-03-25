@@ -22,7 +22,7 @@ export class WinnersNationalities extends Component {
             type: "column",
 
             axisXTitle: "Pilietybė",
-            axisXLabelAngle: 30,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Laimėtojų skaičius, vnt.",
@@ -67,6 +67,15 @@ export class WinnersNationalities extends Component {
         });
     }
 
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        var context = canvas.getContext("2d");
+        context.fillStyle = "grey";
+        context.font = "12px verdana";
+        var text = "Lenktynių rezultatų portalas";
+        context.fillText(text, 10, canvas.height - 15);
+    }
+
     render() {
         if (this.state.winnersNationalities.length > 0) {
             var totalWinners = this.calculateTotalWinners(this.state.winnersNationalities);
@@ -105,7 +114,7 @@ export class WinnersNationalities extends Component {
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
                     gridThickness: this.state.axisXGridThickness,
-                    labelMaxWidth: 70,
+                    labelMaxWidth: 80,
                     labelWrap: true,
                     valueFormatString: " "
                 },

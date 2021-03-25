@@ -24,7 +24,7 @@ export class WinnersByTrack extends Component {
             type: "column",
 
             axisXTitle: "Lenktynininkas",
-            axisXLabelAngle: 30,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Laimėjimų skaičius, vnt.",
@@ -68,6 +68,18 @@ export class WinnersByTrack extends Component {
         this.setState({
             [name]: valueToUpdate
         });
+    }
+
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "12px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
     }
 
     render() {
@@ -145,40 +157,41 @@ export class WinnersByTrack extends Component {
                         </ButtonGroup>
                         <br />
                         <br />
-                        <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
-                            Keisti grafiko parinktis
-                        </Button>
-                        <ChartOptionsModal 
-                            animation={false}
-                            size="lg"
-                            show={this.state.modalShow} 
-                            onHide={() => this.setState({modalShow: false})} 
-                            handleoptionschange={this.handleOptionsChange} 
-                            title={this.state.title}
-                            exportfilename={this.state.exportFileName}
-                            interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                            themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
-                            currenttheme={this.state.theme}
-                            types={[{type: "column", name: "Stulpelinė"}]}
-                            currenttype={this.state.type}
-                            //zoomenabled={this.state.zoomEnabled ? 1 : 0}
-                            axisxtitle={this.state.axisXTitle}
-                            axisxlabelangle={this.state.axisXLabelAngle}
-                            axisxgridthickness={this.state.axisXGridThickness}
-                            axisytitle={this.state.axisYTitle}
-                            axisylabelangle={this.state.axisYLabelAngle}
-                            axisygridthickness={this.state.axisYGridThickness}
-                            axisyminimum={this.state.axisYMinimum}
-                            axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
-                            axisyinterval={this.state.axisYInterval}
-                        />
-                        <br />
-                        <br />
                         {this.state.selectedTrack !== "" &&
+                        <div>
+                            <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                                Keisti grafiko parinktis
+                            </Button>
+                            <ChartOptionsModal 
+                                animation={false}
+                                size="lg"
+                                show={this.state.modalShow} 
+                                onHide={() => this.setState({modalShow: false})} 
+                                handleoptionschange={this.handleOptionsChange} 
+                                title={this.state.title}
+                                exportfilename={this.state.exportFileName}
+                                interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
+                                themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                                currenttheme={this.state.theme}
+                                types={[{type: "column", name: "Stulpelinė"}]}
+                                currenttype={this.state.type}
+                                //zoomenabled={this.state.zoomEnabled ? 1 : 0}
+                                axisxtitle={this.state.axisXTitle}
+                                axisxlabelangle={this.state.axisXLabelAngle}
+                                axisxgridthickness={this.state.axisXGridThickness}
+                                axisytitle={this.state.axisYTitle}
+                                axisylabelangle={this.state.axisYLabelAngle}
+                                axisygridthickness={this.state.axisYGridThickness}
+                                axisyminimum={this.state.axisYMinimum}
+                                axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
+                                axisyinterval={this.state.axisYInterval}
+                            />
+                            <br />
+                            <br />
                             <div style={{ position: "relative", right: "6em" }}>
                                 <CanvasJSChart options={options} />
                             </div>
-                        }
+                        </div>}
                     </div>
                 }
             </div>

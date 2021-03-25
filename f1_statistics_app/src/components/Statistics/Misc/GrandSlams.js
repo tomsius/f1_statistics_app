@@ -11,7 +11,7 @@ export class GrandSlams extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            grandSlams: [],
+            grandSlams: null,
             modalShow: false,
 
             interactivityEnabled: true,
@@ -67,8 +67,20 @@ export class GrandSlams extends Component {
         });
     }
 
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "12px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
     render() {
-        if (this.state.grandSlams.length > 0) {
+        if (this.state.grandSlams !== null) {
             var totalGrandSlams = this.calculateTotalGrandslams(this.state.grandSlams);
             var data = this.state.grandSlams.map(x => ({ label: x.name, y: x.grandSlamCount, percentage: Math.round((x.grandSlamCount / totalGrandSlams * 100) * 100) / 100 }));
             
@@ -105,7 +117,9 @@ export class GrandSlams extends Component {
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
                     gridThickness: this.state.axisXGridThickness,
-                    valueFormatString: " "
+                    valueFormatString: " ",
+                    labelMaxWidth: 80,
+                    labelWrap: true
                 },
                 axisY: {
                     title: this.state.axisYTitle,
@@ -128,7 +142,7 @@ export class GrandSlams extends Component {
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
                 {
-                    this.state.grandSlams.length > 0 &&
+                    this.state.grandSlams !== null &&
                     <div>
                         <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
                             Keisti grafiko parinktis

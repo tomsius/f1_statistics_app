@@ -22,7 +22,7 @@ export class WinnersFromPole extends Component {
             type: "column",
 
             axisXTitle: "Metai",
-            axisXLabelAngle: 30,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Laimėjimų iš „pole“ pozicijos skaičius, vnt.",
@@ -54,6 +54,15 @@ export class WinnersFromPole extends Component {
         this.setState({
             [name]: valueToUpdate
         });
+    }
+
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        var context = canvas.getContext("2d");
+        context.fillStyle = "grey";
+        context.font = "12px verdana";
+        var text = "Lenktynių rezultatų portalas";
+        context.fillText(text, 10, canvas.height - 15);
     }
 
     render() {
@@ -91,7 +100,8 @@ export class WinnersFromPole extends Component {
                     title: this.state.axisXTitle,
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
-                    gridThickness: this.state.axisXGridThickness
+                    gridThickness: this.state.axisXGridThickness,
+                    valueFormatString: " "
                 },
                 axisY: {
                     title: this.state.axisYTitle,

@@ -23,7 +23,7 @@ export class PointsChanges extends Component {
             type: "line",
 
             axisXTitle: "Lenktynės",
-            axisXLabelAngle: 30,
+            axisXLabelAngle: -90,
             axisXGridThickness: 1,
 
             axisYTitle: "Pelnyti taškai",
@@ -69,6 +69,18 @@ export class PointsChanges extends Component {
         });
     }
 
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "12px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
     render() {
         if (this.state.standings.length > 0 && this.state.selectedSeason !== 0) {
             var data = this.state.standings.filter(x => x.season == this.state.selectedSeason)[0].standings.map(x => ({ type: this.state.type, name: x.name, markerType: "none", showInLegend: true, dataPoints: x.rounds.map(round => ({ x: round.round, label: round.roundName, y: round.points, position: round.position })) }));
@@ -99,7 +111,9 @@ export class PointsChanges extends Component {
                     title: this.state.axisXTitle,
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
-                    gridThickness: this.state.axisXGridThickness
+                    gridThickness: this.state.axisXGridThickness,
+                    labelMaxWidth: 80,
+                    labelWrap: true
                 },
                 axisY: {
                     title: this.state.axisYTitle,

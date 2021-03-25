@@ -56,6 +56,15 @@ export class WinnersByGrid extends Component {
         });
     }
 
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        var context = canvas.getContext("2d");
+        context.fillStyle = "grey";
+        context.font = "12px verdana";
+        var text = "Lenktynių rezultatų portalas";
+        context.fillText(text, 10, canvas.height - 15);
+    }
+
     render() {
         if (this.state.winnersByGrid.length > 0) {
             var data = this.state.winnersByGrid.map(x => ({ label: x.gridPosition, y: x.winCount, winnersFromGrid: x.winners.filter((value, index, element) => element.indexOf(value) === index).join(", ") }));

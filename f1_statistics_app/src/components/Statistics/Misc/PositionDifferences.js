@@ -69,6 +69,18 @@ export class PositionDifferences extends Component {
         });
     }
 
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "12px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
     render() {
         if (this.state.seasonDifferences.length > 0 && this.state.selectedSeason !== 0) {
             var data = this.state.seasonDifferences.filter(x => x.season == this.state.selectedSeason).map(x => x.positionChanges)[0].map(x => ({ label: x.name, y: x.positionChange }));
@@ -104,7 +116,9 @@ export class PositionDifferences extends Component {
                     title: this.state.axisXTitle,
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
-                    gridThickness: this.state.axisXGridThickness
+                    gridThickness: this.state.axisXGridThickness,
+                    labelMaxWidth: 80,
+                    labelWrap: true
                 },
                 axisY: {
                     title: this.state.axisYTitle,

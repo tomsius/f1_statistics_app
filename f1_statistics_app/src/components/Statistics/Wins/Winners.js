@@ -22,7 +22,7 @@ export class Winners extends Component {
             type: "column",
 
             axisXTitle: this.props.axisName,
-            axisXLabelAngle: 30,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Laimėjimų skaičius, vnt.",
@@ -65,6 +65,15 @@ export class Winners extends Component {
         this.setState({
             [name]: valueToUpdate
         });
+    }
+
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        var context = canvas.getContext("2d");
+        context.fillStyle = "grey";
+        context.font = "12px verdana";
+        var text = "Lenktynių rezultatų portalas";
+        context.fillText(text, 10, canvas.height - 15);
     }
 
     render() {

@@ -22,7 +22,7 @@ export class FastestLappersUnique extends Component {
             type: "column",
 
             axisXTitle: "Metai",
-            axisXLabelAngle: 30,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Skirtingų greičiausiai apvažiavusių lenktynių ratą skaičius, vnt.",
@@ -54,6 +54,15 @@ export class FastestLappersUnique extends Component {
         this.setState({
             [name]: valueToUpdate
         });
+    }
+
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        var context = canvas.getContext("2d");
+        context.fillStyle = "grey";
+        context.font = "12px verdana";
+        var text = "Lenktynių rezultatų portalas";
+        context.fillText(text, 10, canvas.height - 15);
     }
 
     render() {
@@ -92,7 +101,9 @@ export class FastestLappersUnique extends Component {
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
                     gridThickness: this.state.axisXGridThickness,
-                    valueFormatString: " "
+                    valueFormatString: " ",
+                    labelMaxWidth: 80,
+                    labelWrap: true
                 },
                 axisY: {
                     title: this.state.axisYTitle,

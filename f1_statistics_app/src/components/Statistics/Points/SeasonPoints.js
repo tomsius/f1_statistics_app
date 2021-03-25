@@ -23,7 +23,7 @@ export class SeasonPoints extends Component {
             type: "column",
 
             axisXTitle: this.props.axisName,
-            axisXLabelAngle: 30,
+            axisXLabelAngle: -90,
             axisXGridThickness: 0,
 
             axisYTitle: "Taškų skaičius, vnt.",
@@ -69,6 +69,18 @@ export class SeasonPoints extends Component {
         });
     }
 
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "12px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
     render() {
         if (this.state.seasonPoints.length > 0 && this.state.selectedSeason !== 0) {
             var data = this.state.seasonPoints.filter(x => x.season == this.state.selectedSeason).map(x => x.scoredPoints)[0].map(x => ({ label: x.name, y: x.points }));
@@ -106,7 +118,10 @@ export class SeasonPoints extends Component {
                     title: this.state.axisXTitle,
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
-                    gridThickness: this.state.axisXGridThickness
+                    gridThickness: this.state.axisXGridThickness,
+                    valueFormatString: " ",
+                    labelMaxWidth: 80,
+                    labelWrap: true
                 },
                 axisY: {
                     title: this.state.axisYTitle,

@@ -22,7 +22,7 @@ export class Leaders extends Component {
             type: "column",
 
             axisXTitle: this.props.axisName,
-            axisXLabelAngle: 30,
+            axisXLabelAngle: -90,
             axisXGridThickness: 0,
 
             axisYTitle: "Pirmavimų skaičius, vnt.",
@@ -67,6 +67,15 @@ export class Leaders extends Component {
         });
     }
 
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        var context = canvas.getContext("2d");
+        context.fillStyle = "grey";
+        context.font = "12px verdana";
+        var text = "Lenktynių rezultatų portalas";
+        context.fillText(text, 10, canvas.height - 15);
+    }
+
     render() {
         if (this.state.leaders.length > 0) {
             var totalLaps = this.calculateTotalLaps(this.state.leaders);
@@ -104,7 +113,9 @@ export class Leaders extends Component {
                     title: this.state.axisXTitle,
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
-                    gridThickness: this.state.axisXGridThickness
+                    gridThickness: this.state.axisXGridThickness,
+                    labelMaxWidth: 80,
+                    labelWrap: true
                 },
                 axisY: {
                     title: this.state.axisYTitle,

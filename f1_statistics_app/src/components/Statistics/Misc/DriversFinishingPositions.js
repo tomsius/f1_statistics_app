@@ -69,6 +69,18 @@ export class DriversFinishingPositions extends Component {
         });
     }
 
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "12px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
     render() {
         if (this.state.finishingPositions.length > 0 && this.state.selectedDriver !== "") {
             var data = this.state.finishingPositions.filter(x => x.name == this.state.selectedDriver).map(x => x.finishingPositions)[0].map(x => ({ label: x.finishingPosition, y: x.count }));

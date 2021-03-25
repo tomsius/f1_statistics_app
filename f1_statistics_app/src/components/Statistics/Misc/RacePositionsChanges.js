@@ -65,7 +65,7 @@ export class RacePositionsChanges extends Component {
             this.setState({
                 positions: result,
                 isLoading: false,
-                title: "Lenktynininkų pozicijų pokyčiai " + this.state.raceName + " metu"
+                title: "Lenktynininkų pozicijų pokyčiai " + this.state.season + " " + this.state.raceName + " metu"
             });
         });
     }
@@ -109,6 +109,18 @@ export class RacePositionsChanges extends Component {
         this.setState({
             [name]: valueToUpdate
         });
+    }
+
+    componentDidUpdate() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "12px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
     }
 
     render() {
