@@ -35,6 +35,7 @@ export class PoleSittersUnique extends Component {
 
         this.fillData = this.fillData.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
+        this.setDefaultValues = this.setDefaultValues.bind(this);
     }
 
     fillData(data) {
@@ -53,6 +54,30 @@ export class PoleSittersUnique extends Component {
 
         this.setState({
             [name]: valueToUpdate
+        });
+    }
+
+    setDefaultValues(callback) {
+        this.setState({
+            interactivityEnabled: true,
+            exportFileName: this.props.pageTitle,
+            zoomEnabled: false,
+            theme: "light1",
+            title: this.props.pageTitle,
+            type: "column",
+
+            axisXTitle: "Metai",
+            axisXLabelAngle: 0,
+            axisXGridThickness: 0,
+
+            axisYTitle: "Skirtingų „pole“ pozicijos laimėtojų skaičius, vnt.",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 1,
+            axisYMinimum: 0,
+            axisYMaximum: '',
+            axisYInterval: 1
+        }, () => {
+            callback();
         });
     }
 
@@ -119,7 +144,7 @@ export class PoleSittersUnique extends Component {
 
         return (
             <div>
-                <h2>{this.props.pageTitle}</h2>
+                <h1>{this.props.pageTitle}</h1>
                 <br />
                 <p style={{color:"red", textAlign:"center"}}>*Pilni kvalifikacijos duomenys prieinami nuo 2003 metų.</p>
                 <br />
@@ -137,6 +162,7 @@ export class PoleSittersUnique extends Component {
                             show={this.state.modalShow} 
                             onHide={() => this.setState({modalShow: false})} 
                             handleoptionschange={this.handleOptionsChange} 
+                            setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
@@ -144,7 +170,6 @@ export class PoleSittersUnique extends Component {
                             currenttheme={this.state.theme}
                             types={[{type: "column", name: "Stulpelinė"}, {type: "line", name: "Linijinė"}]}
                             currenttype={this.state.type}
-                            //zoomenabled={this.state.zoomEnabled ? 1 : 0}
                             axisxtitle={this.state.axisXTitle}
                             axisxlabelangle={this.state.axisXLabelAngle}
                             axisxgridthickness={this.state.axisXGridThickness}

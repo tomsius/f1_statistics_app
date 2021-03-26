@@ -24,7 +24,7 @@ export class RacePositionsChanges extends Component {
             zoomEnabled: false,
             theme: "light1",
             title: this.props.pageTitle,
-            type: "column",
+            type: "line",
 
             axisXTitle: "Lenktynių ratas",
             axisXLabelAngle: 0,
@@ -37,14 +37,14 @@ export class RacePositionsChanges extends Component {
             axisYLabelAngle: 0,
             axisYGridThickness: 1,
             axisYMinimum: 1,
-            axisYMaximum: '',
-            axisYInterval: 1
+            axisYMaximum: ''
         };
 
         this.fillData = this.fillData.bind(this);
         this.fillSeasons = this.fillSeasons.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
+        this.setDefaultValues = this.setDefaultValues.bind(this);
     }
 
     fillData() {
@@ -65,7 +65,8 @@ export class RacePositionsChanges extends Component {
             this.setState({
                 positions: result,
                 isLoading: false,
-                title: "Lenktynininkų pozicijų pokyčiai " + this.state.season + " " + this.state.raceName + " metu"
+                title: "Lenktynininkų pozicijų pokyčiai " + this.state.season + " " + this.state.raceName + " metu",
+                exportFileName: "Lenktynininkų pozicijų pokyčiai " + this.state.season + " " + this.state.raceName + " metu"
             });
         });
     }
@@ -76,7 +77,8 @@ export class RacePositionsChanges extends Component {
         }, () => {
             this.setState({
                 positions: [],
-                title: ""
+                title: "",
+                exportFileName: ""
             })
         });
     }
@@ -108,6 +110,32 @@ export class RacePositionsChanges extends Component {
 
         this.setState({
             [name]: valueToUpdate
+        });
+    }
+
+    setDefaultValues(callback) {
+        this.setState({
+            interactivityEnabled: true,
+            exportFileName: "Lenktynininkų pozicijų pokyčiai " + this.state.season + " " + this.state.raceName + " metu",
+            zoomEnabled: false,
+            theme: "light1",
+            title: "Lenktynininkų pozicijų pokyčiai " + this.state.season + " " + this.state.raceName + " metu",
+            type: "line",
+
+            axisXTitle: "Lenktynių ratas",
+            axisXLabelAngle: 0,
+            axisXGridThickness: 0,
+            axisXMinimum: 1,
+            axisXMaximum: '',
+            axisXInterval: 5,
+
+            axisYTitle: "Lenktynininko pozicija",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 1,
+            axisYMinimum: 1,
+            axisYMaximum: ''
+        }, () => {
+            callback();
         });
     }
 
@@ -158,7 +186,7 @@ export class RacePositionsChanges extends Component {
                     title: this.state.axisYTitle,
                     minimum: this.state.axisYMinimum,
                     maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum,
-                    interval: this.state.axisYInterval,
+                    interval: 1,
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness,
                     reversed: true,
@@ -185,7 +213,7 @@ export class RacePositionsChanges extends Component {
 
         return (
             <div>
-                <h2>{this.props.pageTitle}</h2>
+                <h1>{this.props.pageTitle}</h1>
                 <br />
                 <DataRangeForm api={this.props.api} callback={this.fillSeasons} />
                 <br />
@@ -224,14 +252,14 @@ export class RacePositionsChanges extends Component {
                                 show={this.state.modalShow} 
                                 onHide={() => this.setState({modalShow: false})} 
                                 handleoptionschange={this.handleOptionsChange} 
+                                setdefaultvalues={this.setDefaultValues}
                                 title={this.state.title}
                                 exportfilename={this.state.exportFileName}
                                 interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
                                 themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
                                 currenttheme={this.state.theme}
-                                types={[{type: "column", name: "Stulpelinė"}, {type: "pie", name: "Skritulinė"}]}
+                                types={[{type: "line", name: "Linijinė"}]}
                                 currenttype={this.state.type}
-                                //zoomenabled={this.state.zoomEnabled ? 1 : 0}
                                 axisxtitle={this.state.axisXTitle}
                                 axisxlabelangle={this.state.axisXLabelAngle}
                                 axisxgridthickness={this.state.axisXGridThickness}
@@ -243,7 +271,6 @@ export class RacePositionsChanges extends Component {
                                 axisygridthickness={this.state.axisYGridThickness}
                                 axisyminimum={this.state.axisYMinimum}
                                 axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum}
-                                axisyinterval={this.state.axisYInterval}
                             />
                             <br />
                             <br />

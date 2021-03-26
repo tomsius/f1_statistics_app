@@ -16,10 +16,10 @@ export class SeasonPoints extends Component {
             modalShow: false,
 
             interactivityEnabled: true,
-            exportFileName: this.props.pageTitle,
+            exportFileName: "",
             zoomEnabled: false,
             theme: "light1",
-            title: this.props.pageTitle,
+            title: "",
             type: "column",
 
             axisXTitle: this.props.axisName,
@@ -37,13 +37,15 @@ export class SeasonPoints extends Component {
         this.fillData = this.fillData.bind(this);
         this.handleSeasonChangeClick = this.handleSeasonChangeClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
+        this.setDefaultValues = this.setDefaultValues.bind(this);
     }
 
     fillData(data) {
         this.setState({
             seasonPoints: data,
             selectedSeason: 0,
-            title: ""
+            title: "",
+            exportFileName: ""
         });
     }
 
@@ -52,7 +54,8 @@ export class SeasonPoints extends Component {
 
         this.setState({
             selectedSeason: event.currentTarget.value,
-            title: this.props.pageTitle + " " + event.currentTarget.value + " metais"
+            title: this.props.pageTitle + " " + event.currentTarget.value + " metais",
+            exportFileName: this.props.pageTitle + " " + event.currentTarget.value + " metais"
         });
     }
 
@@ -66,6 +69,30 @@ export class SeasonPoints extends Component {
 
         this.setState({
             [name]: valueToUpdate
+        });
+    }
+
+    setDefaultValues(callback) {
+        this.setState({
+            interactivityEnabled: true,
+            exportFileName: this.props.pageTitle + " " + this.state.selectedSeason + " metais",
+            title: this.props.pageTitle + " " + this.state.selectedSeason + " metais",
+            zoomEnabled: false,
+            theme: "light1",
+            type: "column",
+
+            axisXTitle: this.props.axisName,
+            axisXLabelAngle: -90,
+            axisXGridThickness: 0,
+
+            axisYTitle: "Taškų skaičius, vnt.",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 1,
+            axisYMinimum: 0,
+            axisYMaximum: '',
+            axisYInterval: 50
+        }, () => {
+            callback();
         });
     }
 
@@ -139,7 +166,7 @@ export class SeasonPoints extends Component {
 
         return (
             <div>
-                <h2>{this.props.pageTitle}</h2>
+                <h1>{this.props.pageTitle}</h1>
                 <br />
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
@@ -174,6 +201,7 @@ export class SeasonPoints extends Component {
                                     show={this.state.modalShow} 
                                     onHide={() => this.setState({modalShow: false})} 
                                     handleoptionschange={this.handleOptionsChange} 
+                                    setdefaultvalues={this.setDefaultValues}
                                     title={this.state.title}
                                     exportfilename={this.state.exportFileName}
                                     interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
@@ -181,7 +209,6 @@ export class SeasonPoints extends Component {
                                     currenttheme={this.state.theme}
                                     types={[{type: "column", name: "Stulpelinė"}, {type: "pie", name: "Skritulinė"}]}
                                     currenttype={this.state.type}
-                                    //zoomenabled={this.state.zoomEnabled ? 1 : 0}
                                     axisxtitle={this.state.axisXTitle}
                                     axisxlabelangle={this.state.axisXLabelAngle}
                                     axisxgridthickness={this.state.axisXGridThickness}

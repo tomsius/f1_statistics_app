@@ -35,6 +35,7 @@ export class WinnersUnique extends Component {
 
         this.fillData = this.fillData.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
+        this.setDefaultValues = this.setDefaultValues.bind(this);
     }
 
     fillData(data) {
@@ -53,6 +54,30 @@ export class WinnersUnique extends Component {
 
         this.setState({
             [name]: valueToUpdate
+        });
+    }
+
+    setDefaultValues(callback) {
+        this.setState({
+            interactivityEnabled: true,
+            exportFileName: this.props.pageTitle,
+            zoomEnabled: false,
+            theme: "light1",
+            title: this.props.pageTitle,
+            type: "column",
+
+            axisXTitle: "Metai",
+            axisXLabelAngle: 0,
+            axisXGridThickness: 0,
+
+            axisYTitle: "Skirtingų laimėtojų skaičius, vnt.",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 1,
+            axisYMinimum: 0,
+            axisYMaximum: '',
+            axisYInterval: 1
+        }, () => {
+            callback();
         });
     }
 
@@ -119,7 +144,7 @@ export class WinnersUnique extends Component {
 
         return (
             <div>
-                <h2>{this.props.pageTitle}</h2>
+                <h1>{this.props.pageTitle}</h1>
                 <br />
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
@@ -135,6 +160,7 @@ export class WinnersUnique extends Component {
                             show={this.state.modalShow} 
                             onHide={() => this.setState({modalShow: false})} 
                             handleoptionschange={this.handleOptionsChange} 
+                            setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}

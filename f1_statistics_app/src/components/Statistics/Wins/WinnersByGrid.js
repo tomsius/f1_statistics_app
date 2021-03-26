@@ -30,11 +30,12 @@ export class WinnersByGrid extends Component {
             axisYGridThickness: 1,
             axisYMinimum: 0,
             axisYMaximum: '',
-            axisYInterval: -1
+            axisYInterval: ''
         };
 
         this.fillData = this.fillData.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
+        this.setDefaultValues = this.setDefaultValues.bind(this);
     }
 
     fillData(data) {
@@ -53,6 +54,30 @@ export class WinnersByGrid extends Component {
 
         this.setState({
             [name]: valueToUpdate
+        });
+    }
+
+    setDefaultValues(callback) {
+        this.setState({
+            interactivityEnabled: true,
+            exportFileName: this.props.pageTitle,
+            zoomEnabled: false,
+            theme: "light1",
+            title: this.props.pageTitle,
+            type: "column",
+
+            axisXTitle: "Starto pozicija",
+            axisXLabelAngle: 0,
+            axisXGridThickness: 0,
+
+            axisYTitle: "Laimėjimų skaičius, vnt.",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 1,
+            axisYMinimum: 0,
+            axisYMaximum: '',
+            axisYInterval: ''
+        }, () => {
+            callback();
         });
     }
 
@@ -79,7 +104,7 @@ export class WinnersByGrid extends Component {
                     }
                 }
     
-                var interval = this.state.axisYInterval !== -1 ? this.state.axisYInterval : defaultInterval;
+                var interval = this.state.axisYInterval !== '' ? this.state.axisYInterval : defaultInterval;
                 defaultMaximum = defaultMaximum % interval === 0 ? defaultMaximum : (defaultMaximum + (interval - (defaultMaximum % interval)));
             }
 
@@ -121,7 +146,7 @@ export class WinnersByGrid extends Component {
 
         return (
             <div>
-                <h2>{this.props.pageTitle}</h2>
+                <h1>{this.props.pageTitle}</h1>
                 <br />
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
@@ -137,6 +162,7 @@ export class WinnersByGrid extends Component {
                             show={this.state.modalShow} 
                             onHide={() => this.setState({modalShow: false})} 
                             handleoptionschange={this.handleOptionsChange} 
+                            setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
@@ -144,7 +170,6 @@ export class WinnersByGrid extends Component {
                             currenttheme={this.state.theme}
                             types={[{type: "column", name: "Stulpelinė"}]}
                             currenttype={this.state.type}
-                            //zoomenabled={this.state.zoomEnabled ? 1 : 0}
                             axisxtitle={this.state.axisXTitle}
                             axisxlabelangle={this.state.axisXLabelAngle}
                             axisxgridthickness={this.state.axisXGridThickness}
@@ -153,7 +178,7 @@ export class WinnersByGrid extends Component {
                             axisygridthickness={this.state.axisYGridThickness}
                             axisyminimum={this.state.axisYMinimum}
                             axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
-                            axisyinterval={this.state.axisYInterval !== -1 ? this.state.axisYInterval : defaultInterval}
+                            axisyinterval={this.state.axisYInterval !== '' ? this.state.axisYInterval : defaultInterval}
                         />
                         <br />
                         <br />

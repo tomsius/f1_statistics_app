@@ -5,12 +5,80 @@ import { Export } from './Export';
 export class ChartOptionsModal extends Component {
     constructor(props) {
         super(props);
+
+        this.resetValues = this.resetValues.bind(this);
+    }
+
+    resetValues() {
+        var inputelement = document.getElementsByName("title")[0];
+        inputelement.value = this.props.title;
+
+        inputelement = document.getElementsByName("exportFileName")[0];
+        inputelement.value = this.props.exportfilename;
+
+        inputelement = document.getElementsByName("type")[0];
+        inputelement.value = this.props.currenttype;
+
+        inputelement = document.getElementsByName("theme")[0];
+        inputelement.value = this.props.currenttheme;
+
+        inputelement = document.getElementsByName("interactivityEnabled")[0];
+        inputelement.value = this.props.interactivityenabled;
+
+        inputelement = document.getElementsByName("zoomEnabled")[0];
+        if (inputelement) {
+            inputelement.value = this.props.zoomenabled;
+        }
+
+        inputelement = document.getElementsByName("axisXTitle")[0];
+        inputelement.value = this.props.axisxtitle;
+
+        inputelement = document.getElementsByName("axisXLabelAngle")[0];
+        inputelement.value = this.props.axisxlabelangle;
+
+        inputelement = document.getElementsByName("axisXGridThickness")[0];
+        inputelement.value = this.props.axisxgridthickness;
+
+        inputelement = document.getElementsByName("axisXMinimum")[0];
+        if (inputelement) {
+            inputelement.value = this.props.axisxminimum;
+        }
+
+        inputelement = document.getElementsByName("axisXMaximum")[0];
+        if (inputelement) {
+            inputelement.value = this.props.axisxmaximum;
+        }
+
+        inputelement = document.getElementsByName("axisXInterval")[0];
+        if (inputelement) {
+            inputelement.value = this.props.axisxinterval;
+        }
+
+        inputelement = document.getElementsByName("axisYTitle")[0];
+        inputelement.value = this.props.axisytitle;
+
+        inputelement = document.getElementsByName("axisYLabelAngle")[0];
+        inputelement.value = this.props.axisylabelangle;
+
+        inputelement = document.getElementsByName("axisYGridThickness")[0];
+        inputelement.value = this.props.axisygridthickness;
+
+        inputelement = document.getElementsByName("axisYMinimum")[0];
+        inputelement.value = this.props.axisyminimum;
+
+        inputelement = document.getElementsByName("axisYMaximum")[0];
+        inputelement.value = this.props.axisymaximum;
+
+        inputelement = document.getElementsByName("axisYInterval")[0];
+        if (inputelement) {
+            inputelement.value = this.props.axisyinterval;
+        }
     }
 
     render() {
         return (
             <Modal {...this.props} size="lg" aria-labelledby="contained-modal-title-vcenter">
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">
                         Grafiko parinktys
                     </Modal.Title>
@@ -214,6 +282,7 @@ export class ChartOptionsModal extends Component {
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
+                    <Button variant="secondary" onClick={() => {this.props.setdefaultvalues(this.resetValues)}}>Atstatyti reikšmes</Button>
                     <Button onClick={this.props.onHide}>Uždaryti</Button>
                 </Modal.Footer>
             </Modal>

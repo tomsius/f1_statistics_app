@@ -38,13 +38,15 @@ export class WinnersByTrack extends Component {
         this.fillData = this.fillData.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
+        this.setDefaultValues = this.setDefaultValues.bind(this);
     }
 
     fillData(data) {
         this.setState({
             winnersByTrack: data,
             selectedTrack: "",
-            title: ""
+            title: "",
+            exportFileName: ""
         });
     }
 
@@ -53,7 +55,8 @@ export class WinnersByTrack extends Component {
 
         this.setState({
             selectedTrack: event.currentTarget.value,
-            title: "„" + event.currentTarget.value + "“ trasoje laimėję lenktynininkai"
+            title: "„" + event.currentTarget.value + "“ trasoje laimėję lenktynininkai",
+            exportFileName: "„" + event.currentTarget.value + "“ trasoje laimėję lenktynininkai"
         });
     }
 
@@ -67,6 +70,30 @@ export class WinnersByTrack extends Component {
 
         this.setState({
             [name]: valueToUpdate
+        });
+    }
+
+    setDefaultValues(callback) {
+        this.setState({
+            interactivityEnabled: true,
+            exportFileName: "„" + this.state.selectedTrack + "“ trasoje laimėję lenktynininkai",
+            zoomEnabled: false,
+            theme: "light1",
+            title: "„" + this.state.selectedTrack + "“ trasoje laimėję lenktynininkai",
+            type: "column",
+
+            axisXTitle: "Lenktynininkas",
+            axisXLabelAngle: 0,
+            axisXGridThickness: 0,
+
+            axisYTitle: "Laimėjimų skaičius, vnt.",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 1,
+            axisYMinimum: 0,
+            axisYMaximum: '',
+            axisYInterval: 1
+        }, () => {
+            callback();
         });
     }
 
@@ -133,7 +160,7 @@ export class WinnersByTrack extends Component {
 
         return (
             <div>
-                <h2>{this.props.pageTitle}</h2>
+                <h1>{this.props.pageTitle}</h1>
                 <br />
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
@@ -168,6 +195,7 @@ export class WinnersByTrack extends Component {
                                 show={this.state.modalShow} 
                                 onHide={() => this.setState({modalShow: false})} 
                                 handleoptionschange={this.handleOptionsChange} 
+                                setdefaultvalues={this.setDefaultValues}
                                 title={this.state.title}
                                 exportfilename={this.state.exportFileName}
                                 interactivityenabled={this.state.interactivityEnabled ? 1 : 0}

@@ -37,13 +37,15 @@ export class DriversFinishingPositions extends Component {
         this.fillData = this.fillData.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
+        this.setDefaultValues = this.setDefaultValues.bind(this);
     }
 
     fillData(data) {
         this.setState({
             finishingPositions: data,
             selectedDriver: "",
-            title: ""
+            title: "",
+            exportFileName: ""
         });
     }
 
@@ -52,7 +54,8 @@ export class DriversFinishingPositions extends Component {
 
         this.setState({
             selectedDriver: event.currentTarget.value,
-            title: event.currentTarget.value + " finišavimo pozicijos"
+            title: event.currentTarget.value + " finišavimo pozicijos",
+            exportFileName: event.currentTarget.value + " finišavimo pozicijos"
         });
     }
 
@@ -66,6 +69,30 @@ export class DriversFinishingPositions extends Component {
 
         this.setState({
             [name]: valueToUpdate
+        });
+    }
+
+    setDefaultValues(callback) {
+        this.setState({
+            interactivityEnabled: true,
+            exportFileName: this.state.selectedDriver + " finišavimo pozicijos",
+            zoomEnabled: false,
+            theme: "light1",
+            title: this.state.selectedDriver + " finišavimo pozicijos",
+            type: "column",
+
+            axisXTitle: "Finišavimo pozicija",
+            axisXLabelAngle: 0,
+            axisXGridThickness: 0,
+
+            axisYTitle: "Finišavimo skaičius, vnt.",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 1,
+            axisYMinimum: 0,
+            axisYMaximum: '',
+            axisYInterval: ''
+        }, () => {
+            callback();
         });
     }
 
@@ -142,7 +169,7 @@ export class DriversFinishingPositions extends Component {
 
         return (
             <div>
-                <h2>{this.props.pageTitle}</h2>
+                <h1>{this.props.pageTitle}</h1>
                 <br />
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
@@ -177,6 +204,7 @@ export class DriversFinishingPositions extends Component {
                                 show={this.state.modalShow} 
                                 onHide={() => this.setState({modalShow: false})} 
                                 handleoptionschange={this.handleOptionsChange} 
+                                setdefaultvalues={this.setDefaultValues}
                                 title={this.state.title}
                                 exportfilename={this.state.exportFileName}
                                 interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
@@ -184,7 +212,6 @@ export class DriversFinishingPositions extends Component {
                                 currenttheme={this.state.theme}
                                 types={[{type: "column", name: "Stulpelinė"}]}
                                 currenttype={this.state.type}
-                                //zoomenabled={this.state.zoomEnabled ? 1 : 0}
                                 axisxtitle={this.state.axisXTitle}
                                 axisxlabelangle={this.state.axisXLabelAngle}
                                 axisxgridthickness={this.state.axisXGridThickness}

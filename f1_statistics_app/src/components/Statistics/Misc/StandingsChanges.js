@@ -30,20 +30,21 @@ export class StandingsChanges extends Component {
             axisYLabelAngle: 0,
             axisYGridThickness: 0,
             axisYMinimum: 1,
-            axisYMaximum: '',
-            axisYInterval: 1
+            axisYMaximum: ''
         };
 
         this.fillData = this.fillData.bind(this);
         this.handleSeasonChangeClick = this.handleSeasonChangeClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
+        this.setDefaultValues = this.setDefaultValues.bind(this);
     }
 
     fillData(data) {
         this.setState({
             standings: data,
             selectedSeason: 0,
-            title: ""
+            title: "",
+            exportFileName: ""
         });
     }
 
@@ -52,7 +53,8 @@ export class StandingsChanges extends Component {
 
         this.setState({
             selectedSeason: event.currentTarget.value,
-            title: this.props.pageTitle + " " + event.currentTarget.value + " metais"
+            title: this.props.pageTitle + " " + event.currentTarget.value + " metais",
+            exportFileName: this.props.pageTitle + " " + event.currentTarget.value + " metais"
         });
     }
 
@@ -66,6 +68,30 @@ export class StandingsChanges extends Component {
 
         this.setState({
             [name]: valueToUpdate
+        });
+    }
+
+    setDefaultValues(callback) {
+        this.setState({
+            interactivityEnabled: true,
+            exportFileName: this.props.pageTitle + " " + this.state.selectedSeason + " metais",
+            zoomEnabled: false,
+            theme: "light1",
+            title: this.props.pageTitle + " " + this.state.selectedSeason + " metais",
+            type: "line",
+
+            axisXTitle: "Lenktynės",
+            axisXLabelAngle: -90,
+            axisXGridThickness: 1,
+
+            axisYTitle: "Vieta čempionate",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 0,
+            axisYMinimum: 1,
+            axisYMaximum: '',
+            axisYInterval: 1
+        }, () => {
+            callback();
         });
     }
 
@@ -86,7 +112,7 @@ export class StandingsChanges extends Component {
             var data = this.state.standings.filter(x => x.season == this.state.selectedSeason)[0].standings.map(x => ({ type: this.state.type, name: x.name, markerType: "none", showInLegend: true, dataPoints: x.rounds.map(round => ({ x: round.round, label: round.roundName, y: round.position, points: round.points })) }));
 
             if (this.state.axisYMaximum === '') {
-                var defaultMaximum = data.length;
+                var defaultYMaximum = data.length;
             }
 
             var options = {
@@ -111,8 +137,8 @@ export class StandingsChanges extends Component {
                 axisY: {
                     title: this.state.axisYTitle,
                     minimum: this.state.axisYMinimum,
-                    maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum,
-                    interval: this.state.axisYInterval,
+                    maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum,
+                    interval: 1,
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness,
                     reversed: true
@@ -139,7 +165,7 @@ export class StandingsChanges extends Component {
 
         return (
             <div>
-                <h2>{this.props.pageTitle}</h2>
+                <h1>{this.props.pageTitle}</h1>
                 <br />
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
@@ -174,6 +200,7 @@ export class StandingsChanges extends Component {
                                 show={this.state.modalShow} 
                                 onHide={() => this.setState({modalShow: false})} 
                                 handleoptionschange={this.handleOptionsChange} 
+                                setdefaultvalues={this.setDefaultValues}
                                 title={this.state.title}
                                 exportfilename={this.state.exportFileName}
                                 interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
@@ -181,16 +208,14 @@ export class StandingsChanges extends Component {
                                 currenttheme={this.state.theme}
                                 types={[{type: "line", name: "Linijinė"}]}
                                 currenttype={this.state.type}
-                                //zoomenabled={this.state.zoomEnabled ? 1 : 0}
                                 axisxtitle={this.state.axisXTitle}
                                 axisxlabelangle={this.state.axisXLabelAngle}
                                 axisxgridthickness={this.state.axisXGridThickness}
                                 axisytitle={this.state.axisYTitle}
                                 axisylabelangle={this.state.axisYLabelAngle}
                                 axisygridthickness={this.state.axisYGridThickness}
-                                //axisyminimum={this.state.axisYMinimum}
-                                //axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
-                                //axisyinterval={this.state.axisYInterval}
+                                axisyminimum={this.state.axisYMinimum}
+                                axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum}
                             />
                             <br />
                             <br />

@@ -37,13 +37,15 @@ export class PositionDifferences extends Component {
         this.fillData = this.fillData.bind(this);
         this.handleSeasonChangeClick = this.handleSeasonChangeClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
+        this.setDefaultValues = this.setDefaultValues.bind(this);
     }
 
     fillData(data) {
         this.setState({
             seasonDifferences: data,
             selectedSeason: 0,
-            title: ""
+            title: "",
+            exportFileName: ""
         });
     }
 
@@ -52,7 +54,8 @@ export class PositionDifferences extends Component {
 
         this.setState({
             selectedSeason: event.currentTarget.value,
-            title: this.props.pageTitle + " " + event.currentTarget.value + " metais"
+            title: this.props.pageTitle + " " + event.currentTarget.value + " metais",
+            exportFileName: this.props.pageTitle + " " + event.currentTarget.value + " metais"
         });
     }
 
@@ -66,6 +69,30 @@ export class PositionDifferences extends Component {
 
         this.setState({
             [name]: valueToUpdate
+        });
+    }
+
+    setDefaultValues(callback) {
+        this.setState({
+            interactivityEnabled: true,
+            exportFileName: this.props.pageTitle + " " + this.state.selectedSeason + " metais",
+            zoomEnabled: false,
+            theme: "light1",
+            title: this.props.pageTitle + " " + this.state.selectedSeason + " metais",
+            type: "column",
+
+            axisXTitle: "Lenktynininkas",
+            axisXLabelAngle: -90,
+            axisXGridThickness: 0,
+
+            axisYTitle: "Pozicijų pokytis, vnt.",
+            axisYLabelAngle: 0,
+            axisYGridThickness: 1,
+            axisYMinimum: '',
+            axisYMaximum: '',
+            axisYInterval: 10
+        }, () => {
+            callback();
         });
     }
 
@@ -136,7 +163,7 @@ export class PositionDifferences extends Component {
 
         return (
             <div>
-                <h2>{this.props.pageTitle}</h2>
+                <h1>{this.props.pageTitle}</h1>
                 <br />
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
@@ -171,6 +198,7 @@ export class PositionDifferences extends Component {
                                 show={this.state.modalShow} 
                                 onHide={() => this.setState({modalShow: false})} 
                                 handleoptionschange={this.handleOptionsChange} 
+                                setdefaultvalues={this.setDefaultValues}
                                 title={this.state.title}
                                 exportfilename={this.state.exportFileName}
                                 interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
