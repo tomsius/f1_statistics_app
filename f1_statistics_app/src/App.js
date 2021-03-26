@@ -3,6 +3,7 @@ import './App.css';
 
 import { Navigation } from './components/Navigation';
 import { Home } from './components/Home';
+import { Footer } from './components/Footer';
 import { Wins } from './components/Statistics/Wins/Wins';
 import { Winners } from './components/Statistics/Wins/Winners';
 import { WinnersPercent } from './components/Statistics/Wins/WinnersPercent';
@@ -45,12 +46,10 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 export default class App extends Component {
 
   render() {
-
     return (
       <BrowserRouter>
-        <div className="container" style={{ marginBottom: "50px" }}>
-          <Navigation />
-        </div>
+        <Navigation />
+
         <Switch>
           <Route path='/' component={Home} exact />
 
@@ -114,6 +113,8 @@ export default class App extends Component {
 
           <Route path="*" component={NotFound} />
         </Switch>
+
+        <Footer />
       </BrowserRouter>
     );
   }
