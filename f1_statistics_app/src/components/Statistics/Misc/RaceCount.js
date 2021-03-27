@@ -22,7 +22,7 @@ export class RaceCount extends Component {
             type: "line",
 
             axisXTitle: "Metai",
-            axisXLabelAngle: 30,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Lenktynių skaičius, vnt.",
@@ -36,6 +36,7 @@ export class RaceCount extends Component {
         this.fillData = this.fillData.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -67,7 +68,7 @@ export class RaceCount extends Component {
             type: "line",
 
             axisXTitle: "Metai",
-            axisXLabelAngle: 30,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Lenktynių skaičius, vnt.",
@@ -81,18 +82,36 @@ export class RaceCount extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
-        var context = canvas.getContext("2d");
-        context.fillStyle = "grey";
-        context.font = "12px verdana";
-        var text = "Lenktynių rezultatų portalas";
-        context.fillText(text, 10, canvas.height - 15);
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "10px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
     }
 
     render() {
         if (this.state.races.length > 0) {
-            var data = this.state.races.map(x => ({ label: x.season, y: x.raceCount }));
+            var data = this.state.races.map(x => ({ label: x.season, x: x.season, y: x.raceCount }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;

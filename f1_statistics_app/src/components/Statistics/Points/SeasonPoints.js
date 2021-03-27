@@ -38,6 +38,7 @@ export class SeasonPoints extends Component {
         this.handleSeasonChangeClick = this.handleSeasonChangeClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -96,21 +97,36 @@ export class SeasonPoints extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
         
         if (canvas) {
             var context = canvas.getContext("2d");
             context.fillStyle = "grey";
-            context.font = "12px verdana";
+            context.font = "10px verdana";
             var text = "Lenktynių rezultatų portalas";
             context.fillText(text, 10, canvas.height - 15);
         }
     }
 
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
+    }
+
     render() {
         if (this.state.seasonPoints.length > 0 && this.state.selectedSeason !== 0) {
-            var data = this.state.seasonPoints.filter(x => x.season == this.state.selectedSeason).map(x => x.scoredPoints)[0].map(x => ({ label: x.name, y: x.points }));
+            var data = this.state.seasonPoints.filter(x => x.season == this.state.selectedSeason).map(x => x.scoredPoints)[0].map((x, index) => ({ label: x.name, x: index + 1, y: x.points }));
             data = data.map(x => ({ label: x.label, y: x.y, percentage: Math.round((x.y / this.state.seasonPoints.filter(x => x.season == this.state.selectedSeason)[0].totalPoints * 100) * 100) / 100 }));
 
             if (this.state.axisYMaximum === '') {

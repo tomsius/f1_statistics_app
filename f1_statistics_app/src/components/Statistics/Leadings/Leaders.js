@@ -37,6 +37,7 @@ export class Leaders extends Component {
         this.calculateTotalLaps = this.calculateTotalLaps.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -92,13 +93,31 @@ export class Leaders extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
-        var context = canvas.getContext("2d");
-        context.fillStyle = "grey";
-        context.font = "12px verdana";
-        var text = "Lenktynių rezultatų portalas";
-        context.fillText(text, 10, canvas.height - 15);
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "10px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
     }
 
     render() {

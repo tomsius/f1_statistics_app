@@ -37,6 +37,7 @@ export class PodiumThree extends Component {
         this.calculateTotalSamePodiums = this.calculateTotalSamePodiums.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -92,19 +93,37 @@ export class PodiumThree extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
-        var context = canvas.getContext("2d");
-        context.fillStyle = "grey";
-        context.font = "12px verdana";
-        var text = "Lenktynių rezultatų portalas";
-        context.fillText(text, 10, canvas.height - 15);
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "10px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
     }
 
     render() {
         if (this.state.podiumThree.length > 0) {
             var totalSamePodiums = this.calculateTotalSamePodiums(this.state.podiumThree);
-            var data = this.state.podiumThree.map(x => ({ label: x.podiumFinishers.join(", "), y: x.samePodiumCount, percentage: Math.round((x.samePodiumCount / totalSamePodiums * 100) * 100) / 100 }));
+            var data = this.state.podiumThree.map((x, index) => ({ label: x.podiumFinishers.join(", "), x: index + 1, y: x.samePodiumCount, percentage: Math.round((x.samePodiumCount / totalSamePodiums * 100) * 100) / 100 }));
             
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;

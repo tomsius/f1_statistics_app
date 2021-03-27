@@ -37,6 +37,7 @@ export class WinnersNationalities extends Component {
         this.calculateTotalWinners = this.calculateTotalWinners.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -92,19 +93,37 @@ export class WinnersNationalities extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
-        var context = canvas.getContext("2d");
-        context.fillStyle = "grey";
-        context.font = "12px verdana";
-        var text = "Lenktynių rezultatų portalas";
-        context.fillText(text, 10, canvas.height - 15);
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "10px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
     }
 
     render() {
         if (this.state.winnersNationalities.length > 0) {
             var totalWinners = this.calculateTotalWinners(this.state.winnersNationalities);
-            var data = this.state.winnersNationalities.map(x => ({ label: x.nationality, y: x.winnersCount, percentage: Math.round((x.winnersCount / totalWinners * 100) * 100) / 100, drivers: x.winners.filter((value, index, element) => element.indexOf(value) === index).join(", ") }));
+            var data = this.state.winnersNationalities.map((x, index) => ({ label: x.nationality, x: index + 1, y: x.winnersCount, percentage: Math.round((x.winnersCount / totalWinners * 100) * 100) / 100, drivers: x.winners.filter((value, index, element) => element.indexOf(value) === index).join(", ") }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;

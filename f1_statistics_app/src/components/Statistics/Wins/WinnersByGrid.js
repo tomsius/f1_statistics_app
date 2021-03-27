@@ -36,6 +36,7 @@ export class WinnersByGrid extends Component {
         this.fillData = this.fillData.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -81,18 +82,36 @@ export class WinnersByGrid extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
-        var context = canvas.getContext("2d");
-        context.fillStyle = "grey";
-        context.font = "12px verdana";
-        var text = "Lenktynių rezultatų portalas";
-        context.fillText(text, 10, canvas.height - 15);
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "10px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
     }
 
     render() {
         if (this.state.winnersByGrid.length > 0) {
-            var data = this.state.winnersByGrid.map(x => ({ label: x.gridPosition, y: x.winCount, winnersFromGrid: x.winners.filter((value, index, element) => element.indexOf(value) === index).join(", ") }));
+            var data = this.state.winnersByGrid.map(x => ({ label: x.gridPosition, x: x.gridPosition, y: x.winCount, winnersFromGrid: x.winners.filter((value, index, element) => element.indexOf(value) === index).join(", ") }));
 
             var defaultInterval = data[0].y <= 20 ? 1 : data[0].y <= 100 ? 5 : 20;
 

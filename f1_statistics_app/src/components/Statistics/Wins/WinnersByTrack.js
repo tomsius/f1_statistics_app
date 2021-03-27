@@ -39,6 +39,7 @@ export class WinnersByTrack extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -97,21 +98,36 @@ export class WinnersByTrack extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
         
         if (canvas) {
             var context = canvas.getContext("2d");
             context.fillStyle = "grey";
-            context.font = "12px verdana";
+            context.font = "10px verdana";
             var text = "Lenktynių rezultatų portalas";
             context.fillText(text, 10, canvas.height - 15);
         }
     }
 
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
+    }
+
     render() {
         if (this.state.winnersByTrack.length > 0 && this.state.selectedTrack !== "") {
-            var data = this.state.winnersByTrack.filter(x => x.name == this.state.selectedTrack).map(x => x.winners)[0].map(x => ({ label: x.name, y: x.winCount }));
+            var data = this.state.winnersByTrack.filter(x => x.name == this.state.selectedTrack).map(x => x.winners)[0].map((x, index) => ({ label: x.name, x: index + 1, y: x.winCount }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
@@ -203,7 +219,6 @@ export class WinnersByTrack extends Component {
                                 currenttheme={this.state.theme}
                                 types={[{type: "column", name: "Stulpelinė"}]}
                                 currenttype={this.state.type}
-                                //zoomenabled={this.state.zoomEnabled ? 1 : 0}
                                 axisxtitle={this.state.axisXTitle}
                                 axisxlabelangle={this.state.axisXLabelAngle}
                                 axisxgridthickness={this.state.axisXGridThickness}

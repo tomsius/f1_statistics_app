@@ -37,6 +37,7 @@ export class FastestLappers extends Component {
         this.calculateTotalFastest = this.calculateTotalFastest.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -92,19 +93,37 @@ export class FastestLappers extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
-        var context = canvas.getContext("2d");
-        context.fillStyle = "grey";
-        context.font = "12px verdana";
-        var text = "Lenktynių rezultatų portalas";
-        context.fillText(text, 10, canvas.height - 15);
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "10px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
     }
 
     render() {
         if (this.state.fastestLappers.length > 0) {
             var totalFastest = this.calculateTotalFastest(this.state.fastestLappers);
-            var data = this.state.fastestLappers.map(x => ({ label: x.name, y: x.fastestLapsCount, percentage: Math.round((x.fastestLapsCount / totalFastest * 100) * 100) / 100 }));
+            var data = this.state.fastestLappers.map((x, index) => ({ label: x.name, x: index + 1, y: x.fastestLapsCount, percentage: Math.round((x.fastestLapsCount / totalFastest * 100) * 100) / 100 }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;

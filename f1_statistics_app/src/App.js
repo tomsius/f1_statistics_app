@@ -105,7 +105,7 @@ export default class App extends Component {
           <Route path='/misc/grandslams' exact render={(props) => (<GrandSlams {...props} api={"misc/grandslams"} pageTitle={"„Grand Slams“"} />)} />
           <Route path='/misc/dnfs' exact render={(props) => (<NonFinishers {...props} api={"misc/dnfs"} pageTitle={"Nebaigę lenktynių"} />)} />
           <Route path='/misc/positiondifferences' exact render={(props) => (<PositionDifferences {...props} api={"misc/positionchanges"} pageTitle={"Pozicijų pokytis"} />)} />
-          <Route path='/misc/frontrows' exact render={(props) => (<FrontRows {...props} api={"misc/frontrows"} pageTitle={"Komandų „front rows“"} />)} />
+          <Route path='/misc/frontrows' exact render={(props) => (<FrontRows {...props} api={"misc/frontrows"} pageTitle={"Komandų „Front Rows“"} />)} />
           <Route path='/misc/driverpositionsinrace' exact render={(props) => (<DriversFinishingPositions {...props} api={"misc/finishingpositions"} pageTitle={"Lenktynininkų finišavimo pozicijos"} />)} />
           <Route path='/misc/driverstandingschanges' exact render={(props) => (<StandingsChanges {...props} api={"misc/drivers/standingschanges"} pageTitle={"Lenktynininkų čempionato pozicijų pokyčiai"} />)} />
           <Route path='/misc/constructorstandingschanges' exact render={(props) => (<StandingsChanges {...props} api={"misc/constructors/standingschanges"} pageTitle={"Komandų čempionato pozicijų pokyčiai"} />)} />

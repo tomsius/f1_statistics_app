@@ -38,6 +38,7 @@ export class DriversFinishingPositions extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -96,21 +97,36 @@ export class DriversFinishingPositions extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
         
         if (canvas) {
             var context = canvas.getContext("2d");
             context.fillStyle = "grey";
-            context.font = "12px verdana";
+            context.font = "10px verdana";
             var text = "Lenktynių rezultatų portalas";
             context.fillText(text, 10, canvas.height - 15);
         }
     }
 
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
+    }
+
     render() {
         if (this.state.finishingPositions.length > 0 && this.state.selectedDriver !== "") {
-            var data = this.state.finishingPositions.filter(x => x.name == this.state.selectedDriver).map(x => x.finishingPositions)[0].map(x => ({ label: x.finishingPosition, y: x.count }));
+            var data = this.state.finishingPositions.filter(x => x.name == this.state.selectedDriver).map(x => x.finishingPositions)[0].map((x, index) => ({ label: x.finishingPosition, x: index + 1, y: x.count }));
 
             if (this.state.axisYInterval === '') {
                 var maxCount = Math.max.apply(Math, data.map(data => data.y));

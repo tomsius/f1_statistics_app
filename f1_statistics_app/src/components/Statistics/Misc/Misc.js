@@ -62,7 +62,7 @@ export class Misc extends Component {
                 <a href="/misc/frontrows" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
-                        <Card.Title style={{fontWeight:"bold"}}>Komandų „front rows“</Card.Title>
+                        <Card.Title style={{fontWeight:"bold"}}>Komandų „Front Rows“</Card.Title>
                         <Card.Text>
                             Atvaizduojama, kiek kokia komanda kvalifikacijoje užėmė „front row“. „Front row“ - tai 1-2 vietos kvalifikacijoje.
                         </Card.Text>

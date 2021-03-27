@@ -37,6 +37,7 @@ export class HatTricks extends Component {
         this.calculateTotalHatTricks = this.calculateTotalHatTricks.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -92,19 +93,37 @@ export class HatTricks extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
-        var context = canvas.getContext("2d");
-        context.fillStyle = "grey";
-        context.font = "12px verdana";
-        var text = "Lenktynių rezultatų portalas";
-        context.fillText(text, 10, canvas.height - 15);
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "10px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
     }
 
     render() {
         if (this.state.hatTricks !== null) {
             var totalHatTricks = this.calculateTotalHatTricks(this.state.hatTricks);
-            var data = this.state.hatTricks.map(x => ({ label: x.name, y: x.hatTrickCount, percentage: Math.round((x.hatTrickCount / totalHatTricks * 100) * 100) / 100 }));
+            var data = this.state.hatTricks.map((x, index) => ({ label: x.name, x: index + 1, y: x.hatTrickCount, percentage: Math.round((x.hatTrickCount / totalHatTricks * 100) * 100) / 100 }));
             
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;

@@ -36,6 +36,7 @@ export class WinnersPercent extends Component {
         this.fillData = this.fillData.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
@@ -81,18 +82,36 @@ export class WinnersPercent extends Component {
         });
     }
 
+    updateWindowSize() {
+        this.setState({
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight
+        });
+    }
+
     componentDidUpdate() {
         var canvas = document.getElementsByTagName("canvas")[0];
-        var context = canvas.getContext("2d");
-        context.fillStyle = "grey";
-        context.font = "12px verdana";
-        var text = "Lenktynių rezultatų portalas";
-        context.fillText(text, 10, canvas.height - 15);
+        
+        if (canvas) {
+            var context = canvas.getContext("2d");
+            context.fillStyle = "grey";
+            context.font = "10px verdana";
+            var text = "Lenktynių rezultatų portalas";
+            context.fillText(text, 10, canvas.height - 15);
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWindowSize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowSize);
     }
 
     render() {
         if (this.state.winnersPercent.length > 0) {
-            var data = this.state.winnersPercent.filter(x => x.averageWins > 0).map(x => ({ label: x.name, y: x.averageWins }));
+            var data = this.state.winnersPercent.filter(x => x.averageWins > 0).map((x, index) => ({ label: x.name, x: index + 1, y: x.averageWins }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
@@ -139,6 +158,11 @@ export class WinnersPercent extends Component {
                     content: "{label}: {y}%"
                 }
             };
+
+            if (data.length === 1) {
+                options.axisX.minimum = 0;
+                options.axisX.maximum = 0;
+            }
         }
 
         return (
@@ -167,7 +191,6 @@ export class WinnersPercent extends Component {
                                 currenttheme={this.state.theme}
                                 types={[{type: "column", name: "Stulpelinė"}]}
                                 currenttype={this.state.type}
-                                //zoomenabled={this.state.zoomEnabled ? 1 : 0}
                                 axisxtitle={this.state.axisXTitle}
                                 axisxlabelangle={this.state.axisXLabelAngle}
                                 axisxgridthickness={this.state.axisXGridThickness}
