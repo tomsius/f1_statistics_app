@@ -46,7 +46,7 @@ export class Export extends Component {
 
         return (
             <>
-                <button style={{border: "none", width: "50px"}} onClick={this.handleClick}>
+                <button style={{border: "none", width: "50px", backgroundColor: "white"}} onClick={this.handleClick}>
                     <img width="75%" height="75%" src={clipboard} />
                 </button>
             </>
