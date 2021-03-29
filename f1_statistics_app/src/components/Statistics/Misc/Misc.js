@@ -109,6 +109,16 @@ export class Misc extends Component {
                     </Card.Body>
                 </Card>
                 </a>
+                <a href="/misc/laptimes" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex", height:"100%"}}>
+                    <Card.Body>
+                        <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų apvažiuotų ratų laikai lenktynių metu</Card.Title>
+                        <Card.Text>
+                            Atvaizduojami lenktynininkų apvažiuotų ratų laikai tam tikrų lenktynių metu.
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                </a>
         </CardDeck>
         );
     }

@@ -39,6 +39,7 @@ import { FrontRows } from './components/Statistics/Misc/FrontRows';
 import { DriversFinishingPositions } from './components/Statistics/Misc/DriversFinishingPositions';
 import { StandingsChanges } from './components/Statistics/Misc/StandingsChanges';
 import { RacePositionsChanges } from './components/Statistics/Misc/RacePositionsChanges';
+import { LapTimes } from './components/Statistics/Misc/LapTimes';
 import { NotFound } from './components/NotFound';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -110,6 +111,7 @@ export default class App extends Component {
           <Route path='/misc/driverstandingschanges' exact render={(props) => (<StandingsChanges {...props} api={"misc/drivers/standingschanges"} pageTitle={"Lenktynininkų čempionato pozicijų pokyčiai"} />)} />
           <Route path='/misc/constructorstandingschanges' exact render={(props) => (<StandingsChanges {...props} api={"misc/constructors/standingschanges"} pageTitle={"Komandų čempionato pozicijų pokyčiai"} />)} />
           <Route path='/misc/racepositionschanges' exact render={(props) => (<RacePositionsChanges {...props} api={"seasons/races"} pageTitle={"Lenktynininkų pozicijų pokyčiai lenktynių metu"} />)} />
+          <Route path='/misc/laptimes' exact render={(props) => (<LapTimes {...props} api={"seasons/races"} pageTitle={"Lenktynininkų apvažiuotų ratų laikai lenktynių metu"} />)} />
 
           <Route path="*" component={NotFound} />
         </Switch>
