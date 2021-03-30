@@ -19,22 +19,22 @@ export class Wins extends Component {
                     </Card.Body>
                 </Card>
                 </a>
-                <a href="/wins/driverspercent" style={{marginBottom:"15px"}}>
-                <Card style={{display:"flex", height:"100%"}}>
-                    <Card.Body>
-                        <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimų procentas</Card.Title>
-                        <Card.Text>
-                            Atvaizduojama, kokią dalį lenktynių yra laimėjęs lenktynininkas. Lenktynininko laimėtų lenktynių skaičius yra padalinamas iš jo startuotų lenktynių skaičiaus.
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                </a>
                 <a href="/wins/constructors" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų laimėjimai</Card.Title>
                         <Card.Text>
                             Atvaizduojamos komandos, kurios yra laimėjusios bent vieną kartą, ir jų laimėtų lenktynių skaičius.
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                </a>
+                <a href="/wins/driverspercent" style={{marginBottom:"15px"}}>
+                <Card style={{display:"flex", height:"100%"}}>
+                    <Card.Body>
+                        <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimų procentas</Card.Title>
+                        <Card.Text>
+                            Atvaizduojama, kokią dalį lenktynių yra laimėjęs lenktynininkas. Lenktynininko laimėtų lenktynių skaičius yra padalinamas iš jo startuotų lenktynių skaičiaus.
                         </Card.Text>
                     </Card.Body>
                 </Card>
