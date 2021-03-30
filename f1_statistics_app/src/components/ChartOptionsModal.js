@@ -97,7 +97,7 @@ export class ChartOptionsModal extends Component {
                                         <Form.Label>Pavadinimas</Form.Label>
                                     </Col>
                                     <Col>
-                                        <Form.Control type="text" name="title" placeholder="Įveskite grafiko pavadinimą..." defaultValue={this.props.title} onChange={this.props.handleoptionschange} />
+                                        <Form.Control type="text" name="title" placeholder="Grafiko pavadinimas..." defaultValue={this.props.title} onChange={this.props.handleoptionschange} />
                                     </Col>
                             </Row>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
@@ -106,7 +106,7 @@ export class ChartOptionsModal extends Component {
                                         <Form.Label>Saugomo failo pavadinimas</Form.Label>
                                     </Col>
                                     <Col>
-                                        <Form.Control type="text" name="exportFileName" placeholder="Įveskite failo pavadinimą..." defaultValue={this.props.exportfilename} onChange={this.props.handleoptionschange} />
+                                        <Form.Control type="text" name="exportFileName" placeholder="Failo pavadinimas..." defaultValue={this.props.exportfilename} onChange={this.props.handleoptionschange} />
                                     </Col>
                             </Row>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
@@ -166,7 +166,7 @@ export class ChartOptionsModal extends Component {
                                         <Form.Label>Pavadinimas</Form.Label>
                                     </Col>
                                     <Col>
-                                        <Form.Control type="text" name="axisXTitle" placeholder="Įveskite ašies pavadinimą..." defaultValue={this.props.axisxtitle} onChange={this.props.handleoptionschange} />
+                                        <Form.Control type="text" name="axisXTitle" placeholder="Ašies pavadinimas..." defaultValue={this.props.axisxtitle} onChange={this.props.handleoptionschange} />
                                     </Col>
                             </Row>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
@@ -218,13 +218,12 @@ export class ChartOptionsModal extends Component {
                                 </Col>
                             </Row>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                
-                                    <Col>
-                                        <Form.Label>Pavadinimas</Form.Label>
-                                    </Col>
-                                    <Col>
-                                        <Form.Control type="text" name="axisYTitle" placeholder="Įveskite ašies pavadinimą..." defaultValue={this.props.axisytitle} onChange={this.props.handleoptionschange} />
-                                    </Col>
+                                <Col>
+                                    <Form.Label>Pavadinimas</Form.Label>
+                                </Col>
+                                <Col>
+                                    <Form.Control type="text" name="axisYTitle" placeholder="Ašies pavadinimas..." defaultValue={this.props.axisytitle} onChange={this.props.handleoptionschange} />
+                                </Col>
                             </Row>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
                                 <Col>
@@ -270,6 +269,38 @@ export class ChartOptionsModal extends Component {
                                 </Col>
                             </Row>}
                         </>}
+                        {this.props.secondaxis &&
+                            <>
+                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                                <Col>
+                                    <Form.Label><b>Y2 ašies parinktys</b></Form.Label>
+                                </Col>
+                            </Row>
+                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                                <Col>
+                                    <Form.Label>Pavadinimas</Form.Label>
+                                </Col>
+                                <Col>
+                                    <Form.Control type="text" name="axisY2Title" placeholder="Ašies pavadinimas..." defaultValue={this.props.axisy2title} onChange={this.props.handleoptionschange} />
+                                </Col>
+                            </Row>
+                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                                <Col>
+                                    <Form.Label>Žymeklio pasukimo kampas (<span>&#176;</span>)</Form.Label>
+                                </Col>
+                                <Col>
+                                    <Form.Control type="number" name="axisY2LabelAngle" placeholder="Žymeklio pasukimo kampas..." defaultValue={this.props.axisy2labelangle} onChange={this.props.handleoptionschange} />
+                                </Col>
+                            </Row>
+                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                                <Col>
+                                    <Form.Label>Intervalas tarp verčių</Form.Label>
+                                </Col>
+                                <Col>
+                                    <Form.Control type="number" min={1} name="axisY2Interval" placeholder="Intervalas tarp verčių..." defaultValue={this.props.axisy2interval} onChange={this.props.handleoptionschange} />
+                                </Col>
+                            </Row>
+                            </>}
                         </Container>
                     </Form>
                     <br />

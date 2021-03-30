@@ -30,7 +30,11 @@ export class WinnersUnique extends Component {
             axisYGridThickness: 1,
             axisYMinimum: 0,
             axisYMaximum: '',
-            axisYInterval: 1
+            axisYInterval: 1,
+
+            axisY2Title: "Lenktynių skaičius, vnt.",
+            axisY2LabelAngle: 0,
+            axisY2Interval: 2
         };
 
         this.fillData = this.fillData.bind(this);
@@ -49,7 +53,7 @@ export class WinnersUnique extends Component {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
         
-        if (name === 'axisYInterval') {
+        if (name === 'axisYInterval' || name === 'axisY2Interval') {
             valueToUpdate = parseInt(value);
         }
 
@@ -137,6 +141,7 @@ export class WinnersUnique extends Component {
                 data: [
                     {
                         type: this.state.type,
+                        name: "Skirtingų laimėtojų skaičius",
                         dataPoints: data
                     }
                 ],
@@ -155,10 +160,60 @@ export class WinnersUnique extends Component {
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness
                 },
-                toolTip:{   
+                toolTip: {   
                     content: "Skirtingi laimėtojai {label} metais ({y}): {winners}"
                 }
             };
+
+            if (this.state.type === "line") {
+                var racesData = this.state.winnersUnique.map(x => ({ label: x.season, x: x.season, y: x.racesCount }));
+
+                if (this.state.axisY2Maximum === '') {
+                    var defaultMaximum2 = -1;
+                    for (let i = 0; i < this.state.winnersUnique.length; i++) {
+                        if (defaultMaximum2 < this.state.winnersUnique[i].racesCount) {
+                            defaultMaximum2 = this.state.winnersUnique[i].racesCount;
+                        }
+                    }
+    
+                    defaultMaximum2 = defaultMaximum2 % this.state.axisYInterval === 0 ? defaultMaximum2 : (defaultMaximum2 + (this.state.axisYInterval - (defaultMaximum2 % this.state.axisYInterval)));
+                }
+
+                options["axisY"]["titleFontColor"] = "#4F81BC";
+                options["axisY"]["lineColor"] = "#4F81BC";
+                options["axisY"]["labelFontColor"] = "#4F81BC";
+                options["axisY"]["tickColor"] = "#4F81BC";
+                options["axisY2"] = {};
+                options["axisY2"]["title"] = this.state.axisY2Title;
+                options["axisY2"]["minimum"] = 0;
+                options["axisY2"]["interval"] = this.state.axisY2Interval;
+                options["axisY2"]["labelAngle"] = this.state.axisY2LabelAngle;
+                options["axisY2"]["titleFontColor"] = "#C0504E";
+                options["axisY2"]["lineColor"] = "#C0504E";
+                options["axisY2"]["labelFontColor"] = "#C0504E";
+                options["axisY2"]["tickColor"] = "#C0504E";
+                options["data"][0]["showInLegend"] = true;
+                options["data"].push({ type: "line", showInLegend: true, name: "Lenktynių skaičius", axisYType: "secondary", dataPoints: racesData });
+                options["toolTip"]["shared"] = true;
+                options["toolTip"]["contentFormatter"] = function (e) {
+                        var content = "";
+
+                        content += "Skirtingi laimėtojai " + e.entries[0].dataPoint.label + " metais (" + e.entries[0].dataPoint.y + "): " + e.entries[0].dataPoint.winners + "<br />";
+                        content += "Lenktynių skaičius " + e.entries[1].dataPoint.label + " metais: " + e.entries[1].dataPoint.y;
+
+                        return content;
+                    }
+                options["legend"] = {};
+                options["legend"]["cursor"] = "pointer";
+                options["legend"]["itemclick"] = function (e) {
+                    if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                        e.dataSeries.visible = false;
+                    } else {
+                        e.dataSeries.visible = true;
+                    }
+                    e.chart.render();
+                }
+            }
         }
 
         return (
@@ -196,6 +251,10 @@ export class WinnersUnique extends Component {
                             axisyminimum={this.state.axisYMinimum}
                             axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
                             axisyinterval={this.state.axisYInterval}
+                            secondaxis={this.state.type === "line" ? 1 : undefined}
+                            axisy2title={this.state.axisY2Title}
+                            axisy2labelangle={this.state.axisY2LabelAngle}
+                            axisy2interval={this.state.axisY2Interval}
                         />
                         <br />
                         <br />
