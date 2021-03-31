@@ -270,6 +270,10 @@ export class WinnersFromPole extends Component {
                             axisyminimum={this.state.axisYMinimum}
                             axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
                             axisyinterval={this.state.axisYInterval}
+                            secondaxis={this.state.type === "line" ? 1 : undefined}
+                            axisy2title={this.state.axisY2Title}
+                            axisy2labelangle={this.state.axisY2LabelAngle}
+                            axisy2interval={this.state.axisY2Interval}
                         />
                         <br />
                         <br />
