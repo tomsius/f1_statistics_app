@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, CardDeck, Container, Col } from 'react-bootstrap'
+import { Card, CardDeck, Container, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export class Points extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ export class Points extends Component {
     render() {
         return (
             <CardDeck className="flex-container">
-                <a href="/points/drivers" style={{marginBottom:"15px"}}>
+                <Link to="/points/drivers" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų pelnyti taškai</Card.Title>
@@ -18,8 +19,8 @@ export class Points extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/points/constructors" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/points/constructors" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų pelnyti taškai</Card.Title>
@@ -28,8 +29,8 @@ export class Points extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/points/winnerdrivers" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/points/winnerdrivers" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Čempionatą laimėjusių lenktynininkų taškai</Card.Title>
@@ -38,8 +39,8 @@ export class Points extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/points/winnerconstructors" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/points/winnerconstructors" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Čempionatą laimėjusių komandų taškai</Card.Title>
@@ -48,8 +49,8 @@ export class Points extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/points/driverpointschanges" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/points/driverpointschanges" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų taškų pokyčiai</Card.Title>
@@ -58,8 +59,8 @@ export class Points extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/points/constructorpointschanges" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/points/constructorpointschanges" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų taškų pokyčiai</Card.Title>
@@ -68,7 +69,7 @@ export class Points extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
+                </Link>
         </CardDeck>
         );
     }

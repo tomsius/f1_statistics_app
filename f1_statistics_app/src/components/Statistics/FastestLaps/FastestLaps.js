@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, CardDeck, Container, Col } from 'react-bootstrap'
+import { Card, CardDeck, Container, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export class FastestLaps extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ export class FastestLaps extends Component {
     render() {
         return (
             <CardDeck className="flex-container">
-                <a href="/fastestlaps/drivers" style={{marginBottom:"15px"}}>
+                <Link to="/fastestlaps/drivers" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Greičiausiai lenktynių ratą apvažiavę lenktynininkai</Card.Title>
@@ -18,8 +19,8 @@ export class FastestLaps extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/fastestlaps/constructors" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/fastestlaps/constructors" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Greičiausiai lenktynių ratą apvažiavusios komandos</Card.Title>
@@ -28,8 +29,8 @@ export class FastestLaps extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/fastestlaps/driversunique" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/fastestlaps/driversunique" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų lenktynininkų, greičiausiai apvažiavusių ratą, skaičius</Card.Title>
@@ -38,8 +39,8 @@ export class FastestLaps extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/fastestlaps/constructorsunique" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/fastestlaps/constructorsunique" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų komandų, greičiausiai apvažiavusių ratą, skaičius</Card.Title>
@@ -48,7 +49,7 @@ export class FastestLaps extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
+                </Link>
         </CardDeck>
         );
     }

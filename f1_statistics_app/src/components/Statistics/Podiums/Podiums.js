@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, CardDeck, Container, Col } from 'react-bootstrap'
+import { Card, CardDeck, Container, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export class Podiums extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ export class Podiums extends Component {
     render() {
         return (
             <CardDeck className="flex-container">
-                <a href="/podiums/drivers" style={{marginBottom:"15px"}}>
+                <Link to="/podiums/drivers" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų podiumai</Card.Title>
@@ -18,8 +19,8 @@ export class Podiums extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/podiums/constructors" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/podiums/constructors" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų podiumai</Card.Title>
@@ -28,8 +29,8 @@ export class Podiums extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/podiums/driversthree" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/podiums/driversthree" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų trejetukai</Card.Title>
@@ -38,8 +39,8 @@ export class Podiums extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/podiums/constructorsthree" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/podiums/constructorsthree" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų trejetukai</Card.Title>
@@ -48,7 +49,7 @@ export class Podiums extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
+                </Link>
         </CardDeck>
         );
     }

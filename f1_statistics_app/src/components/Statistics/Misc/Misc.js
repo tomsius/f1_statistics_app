@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, CardDeck, Container, Col } from 'react-bootstrap'
+import { Card, CardDeck, Container, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export class Misc extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ export class Misc extends Component {
     render() {
         return (
             <CardDeck className="flex-container">
-                <a href="/misc/racecount" style={{marginBottom:"15px"}}>
+                <Link to="/misc/racecount" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynių skaičius</Card.Title>
@@ -18,8 +19,8 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/misc/hattricks" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/misc/hattricks" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>„Hat Tricks“</Card.Title>
@@ -28,8 +29,8 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/misc/grandslams" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/misc/grandslams" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>„Grand Slams“</Card.Title>
@@ -38,8 +39,8 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/misc/dnfs" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/misc/dnfs" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Nebaigę lenktynių</Card.Title>
@@ -48,8 +49,8 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/misc/positiondifferences" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/misc/positiondifferences" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Pozicijų pokytis</Card.Title>
@@ -58,8 +59,8 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/misc/frontrows" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/misc/frontrows" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų „Front Rows“</Card.Title>
@@ -68,8 +69,8 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/misc/driverpositionsinrace" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/misc/driverpositionsinrace" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų finišavimo pozicijos</Card.Title>
@@ -78,8 +79,8 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/misc/driverstandingschanges" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/misc/driverstandingschanges" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų čempionato pozicijų pokyčiai</Card.Title>
@@ -88,8 +89,8 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/misc/constructorstandingschanges" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/misc/constructorstandingschanges" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų čempionato pozicijų pokyčiai</Card.Title>
@@ -98,8 +99,8 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/misc/racepositionschanges" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/misc/racepositionschanges" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų pozicijų pokyčiai lenktynių metu</Card.Title>
@@ -108,8 +109,8 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/misc/laptimes" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/misc/laptimes" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų apvažiuotų ratų laikai lenktynių metu</Card.Title>
@@ -118,7 +119,7 @@ export class Misc extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
+                </Link>
         </CardDeck>
         );
     }
