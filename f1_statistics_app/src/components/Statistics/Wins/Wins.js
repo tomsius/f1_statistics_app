@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardDeck, Container, Col } from 'react-bootstrap'
+import { Card, CardDeck, Container, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 export class Wins extends Component {
