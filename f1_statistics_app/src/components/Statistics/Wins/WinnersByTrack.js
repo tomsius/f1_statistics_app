@@ -27,7 +27,7 @@ export class WinnersByTrack extends Component {
             axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
-            axisYTitle: "Laimėjimų skaičius, vnt.",
+            axisYTitle: "Laimėjimų ir dalyvavimų skaičius, vnt.",
             axisYLabelAngle: 0,
             axisYGridThickness: 1,
             axisYMinimum: 0,
@@ -87,7 +87,7 @@ export class WinnersByTrack extends Component {
             axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
-            axisYTitle: "Laimėjimų skaičius, vnt.",
+            axisYTitle: "Laimėjimų ir dalyvavimų skaičius, vnt.",
             axisYLabelAngle: 0,
             axisYGridThickness: 1,
             axisYMinimum: 0,
@@ -128,12 +128,13 @@ export class WinnersByTrack extends Component {
     render() {
         if (this.state.winnersByTrack.length > 0 && this.state.selectedTrack !== "") {
             var data = this.state.winnersByTrack.filter(x => x.name == this.state.selectedTrack).map(x => x.winners)[0].map((x, index) => ({ label: x.name, x: index + 1, y: x.winCount }));
+            var participationsData = this.state.winnersByTrack.filter(x => x.name == this.state.selectedTrack).map(x => x.winners)[0].map((x, index) => ({ label: x.name, x: index + 1, y: x.participationsCount }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
-                for (let i = 0; i < data.length; i++) {
-                    if (defaultMaximum < data[i].y) {
-                        defaultMaximum = data[i].y;
+                for (let i = 0; i < participationsData.length; i++) {
+                    if (defaultMaximum < participationsData[i].y) {
+                        defaultMaximum = participationsData[i].y;
                     }
                 }
     
@@ -153,7 +154,14 @@ export class WinnersByTrack extends Component {
                 data: [
                     {
                         type: this.state.type,
+                        name: "Laimėjimai",
                         dataPoints: data
+                    },
+                    {
+                        type: this.state.type,
+                        showInLegend: true,
+                        name: "Dalyvavimai",
+                        dataPoints: participationsData
                     }
                 ],
                 axisX: {
@@ -170,6 +178,21 @@ export class WinnersByTrack extends Component {
                     interval: this.state.axisYInterval,
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness
+                },
+                legend: {
+                    cursor:"pointer",
+		            itemclick: function (e) {
+                        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                            e.dataSeries.visible = false;
+                        }
+                        else {
+                            e.dataSeries.visible = true;
+                        }
+                        e.chart.render();
+                    }
+                },
+                toolTip: {
+                    shared: true
                 }
             };
         }
