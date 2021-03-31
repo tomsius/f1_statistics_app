@@ -40,7 +40,6 @@ export class WinnerPoints extends Component {
     }
 
     fillData(data) {
-        console.log(data);
         this.setState({
             winnerPoints: data
         });
