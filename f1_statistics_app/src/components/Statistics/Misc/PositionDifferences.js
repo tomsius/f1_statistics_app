@@ -126,7 +126,7 @@ export class PositionDifferences extends Component {
 
     render() {
         if (this.state.seasonDifferences.length > 0 && this.state.selectedSeason !== 0) {
-            var data = this.state.seasonDifferences.filter(x => x.season == this.state.selectedSeason).map(x => x.positionChanges)[0].map((x, index) => ({ label: x.name, x: index + 1, y: x.positionChange }));
+            var data = this.state.seasonDifferences.filter(x => x.season == this.state.selectedSeason).map(x => x.positionChanges)[0].map((x, index) => ({ label: x.name, x: index + 1, y: x.positionChange, position: x.championshipPosition }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -999;
@@ -172,7 +172,7 @@ export class PositionDifferences extends Component {
                     gridThickness: this.state.axisYGridThickness
                 },
                 toolTip:{   
-                    content: "{label}: {y}" 
+                    content: "{label}<br />Pozicijų pokytis: {y}<br />Čempionato vieta: {position}" 
                 }
             };
         }
