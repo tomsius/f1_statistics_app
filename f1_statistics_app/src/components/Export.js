@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import clipboard from '../clipboard.png';
 import toastr from 'toastr';
-import 'toastr/build/toastr.min.css'
+import 'toastr/build/toastr.min.css';
 
 export class Export extends Component {
     constructor(props) {
