@@ -80,7 +80,11 @@ export class WinnersUnique extends Component {
             axisYGridThickness: 1,
             axisYMinimum: 0,
             axisYMaximum: '',
-            axisYInterval: 1
+            axisYInterval: 1,
+
+            axisY2Title: "Lenktynių skaičius, vnt.",
+            axisY2LabelAngle: 0,
+            axisY2Interval: 2
         }, () => {
             callback();
         });
@@ -141,7 +145,6 @@ export class WinnersUnique extends Component {
                 data: [
                     {
                         type: this.state.type,
-                        name: "Skirtingų laimėtojų skaičius",
                         dataPoints: data
                     }
                 ],
@@ -193,22 +196,34 @@ export class WinnersUnique extends Component {
                 options["axisY2"]["labelFontColor"] = "#C0504E";
                 options["axisY2"]["tickColor"] = "#C0504E";
                 options["data"][0]["showInLegend"] = true;
+                options["data"][0]["name"] = "Skirtingų laimėtojų skaičius";
                 options["data"].push({ type: "line", showInLegend: true, name: "Lenktynių skaičius", axisYType: "secondary", dataPoints: racesData });
                 options["toolTip"]["shared"] = true;
                 options["toolTip"]["contentFormatter"] = function (e) {
                         var content = "";
-
                         content += "Skirtingi laimėtojai " + e.entries[0].dataPoint.label + " metais (" + e.entries[0].dataPoint.y + "): " + e.entries[0].dataPoint.winners + "<br />";
                         content += "Lenktynių skaičius " + e.entries[1].dataPoint.label + " metais: " + e.entries[1].dataPoint.y;
-
                         return content;
                     }
                 options["legend"] = {};
                 options["legend"]["cursor"] = "pointer";
                 options["legend"]["itemclick"] = function (e) {
+                    if (e.dataSeries.name === "Skirtingų laimėtojų skaičius") {
+                        return;
+                    }
                     if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                        e.chart.options["axisY2"] = {};
                         e.dataSeries.visible = false;
-                    } else {
+                    }
+                    else {
+                        e.chart.options["axisY2"]["title"] = "Lenktynių skaičius, vnt.";
+                        e.chart.options["axisY2"]["minimum"] = 0;
+                        e.chart.options["axisY2"]["interval"] = 2;
+                        e.chart.options["axisY2"]["labelAngle"] = 0;
+                        e.chart.options["axisY2"]["titleFontColor"] = "#C0504E";
+                        e.chart.options["axisY2"]["lineColor"] = "#C0504E";
+                        e.chart.options["axisY2"]["labelFontColor"] = "#C0504E";
+                        e.chart.options["axisY2"]["tickColor"] = "#C0504E";
                         e.dataSeries.visible = true;
                     }
                     e.chart.render();
