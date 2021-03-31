@@ -76,8 +76,10 @@ export class ChartOptionsModal extends Component {
     }
 
     render() {
+        const {handleoptionschange, setdefaultvalues, ...rest} = this.props;
+
         return (
-            <Modal {...this.props} size="lg" aria-labelledby="contained-modal-title-vcenter">
+            <Modal {...rest} size="lg" aria-labelledby="contained-modal-title-vcenter">
                 <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">
                         Grafiko parinktys
