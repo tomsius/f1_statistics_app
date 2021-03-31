@@ -164,6 +164,7 @@ export class WinnersFromPole extends Component {
                     gridThickness: this.state.axisYGridThickness
                 },
                 toolTip:{   
+                    contentFormatter: "",
                     content: "Laimėtojai iš „pole“ pozicijos {label} metais (laimėjimų skaičius: {y}): {winnersWithPole}"
                 }
             };

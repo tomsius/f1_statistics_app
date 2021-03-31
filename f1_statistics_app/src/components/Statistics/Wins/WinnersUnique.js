@@ -163,7 +163,8 @@ export class WinnersUnique extends Component {
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness
                 },
-                toolTip: {   
+                toolTip: {
+                    contentFormatter: "",
                     content: "Skirtingi laimėtojai {label} metais ({y}): {winners}"
                 }
             };
