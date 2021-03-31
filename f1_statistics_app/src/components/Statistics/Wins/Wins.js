@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardDeck, Container, Col } from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 
 export class Wins extends Component {
     constructor(props) {
@@ -9,7 +10,17 @@ export class Wins extends Component {
     render() {
         return (
             <CardDeck className="flex-container">
-                <a href="/wins/drivers" style={{marginBottom:"15px"}}>
+                <Link to="/wins/drivers" style={{marginBottom:"15px"}}>
+                    <Card style={{display:"flex", height:"100%"}}>
+                        <Card.Body>
+                            <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimai</Card.Title>
+                            <Card.Text>
+                                Atvaizduojami lenktynininkai, kurie yra laimėję bent vieną kartą, ir jų laimėtų lenktynių skaičius.
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                </Link>
+                <Link to="/wins/drivers" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimai</Card.Title>
@@ -18,8 +29,8 @@ export class Wins extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/wins/constructors" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/wins/constructors" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų laimėjimai</Card.Title>
@@ -28,8 +39,8 @@ export class Wins extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/wins/driverspercent" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/wins/driverspercent" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimų procentas</Card.Title>
@@ -38,8 +49,8 @@ export class Wins extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/wins/constructorspercent" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/wins/constructorspercent" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Komandų laimėjimų procentas</Card.Title>
@@ -48,8 +59,8 @@ export class Wins extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/wins/driversunique" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/wins/driversunique" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų lenktynininkų, laimėjusių lenktynes, skaičius</Card.Title>
@@ -58,8 +69,8 @@ export class Wins extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/wins/constructorsunique" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/wins/constructorsunique" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Skirtingų komandų, laimėjusių lenktynes, skaičius</Card.Title>
@@ -68,8 +79,8 @@ export class Wins extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/wins/driversbytrack" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/wins/driversbytrack" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynininkų laimėjimai pagal lenktynių trasą</Card.Title>
@@ -78,8 +89,8 @@ export class Wins extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/wins/frompole" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/wins/frompole" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Lenktynių, kurios buvo laimėtos iš „pole“ pozicijos, skaičius</Card.Title>
@@ -88,8 +99,8 @@ export class Wins extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
-                <a href="/wins/bygrid" style={{marginBottom:"15px"}}>
+                </Link>
+                <Link to="/wins/bygrid" style={{marginBottom:"15px"}}>
                 <Card style={{display:"flex", height:"100%"}}>
                     <Card.Body>
                         <Card.Title style={{fontWeight:"bold"}}>Laimėjimai iš tam tikros starto pozicijos</Card.Title>
@@ -98,7 +109,7 @@ export class Wins extends Component {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </a>
+                </Link>
         </CardDeck>
         );
     }
