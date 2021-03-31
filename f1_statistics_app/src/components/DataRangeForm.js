@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 export class DataRangeForm extends Component {
     constructor(props) {
@@ -39,6 +41,27 @@ export class DataRangeForm extends Component {
                     isLoading: false
                 });
                 this.props.callback(result);
+            })
+            .catch(error => {
+                this.setState({
+                    isLoading: false
+                });
+
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "positionClass": "toast-bottom-full-width",
+                    "preventDuplicates": true,
+                    "hideDuration": "1000",
+                    "timeOut": "3000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                  };
+        
+                  toastr["error"]("", "Nepavyko pasiekti serverio");
             });
     }
 
@@ -68,6 +91,27 @@ export class DataRangeForm extends Component {
                     isLoading: false
                 });
                 this.props.callback(result);
+            })
+            .catch(error => {
+                this.setState({
+                    isLoading: false
+                });
+
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "positionClass": "toast-bottom-full-width",
+                    "preventDuplicates": true,
+                    "hideDuration": "1000",
+                    "timeOut": "3000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                  };
+        
+                toastr["error"]("", "Nepavyko pasiekti serverio");
             });
     }
 
