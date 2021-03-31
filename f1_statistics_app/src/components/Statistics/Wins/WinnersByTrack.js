@@ -154,6 +154,7 @@ export class WinnersByTrack extends Component {
                 data: [
                     {
                         type: this.state.type,
+                        showInLegend: true,
                         name: "Laimėjimai",
                         dataPoints: data
                     },
@@ -182,6 +183,9 @@ export class WinnersByTrack extends Component {
                 legend: {
                     cursor:"pointer",
 		            itemclick: function (e) {
+                        if (e.dataSeries.name === "Laimėjimai") {
+                            return;
+                        }
                         if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
                             e.dataSeries.visible = false;
                         }
