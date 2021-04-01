@@ -23,6 +23,7 @@ export class PoleSitters extends Component {
             type: "column",
 
             axisXTitle: this.props.axisName,
+            axisXTitle2: "Metai",
             axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
@@ -80,6 +81,7 @@ export class PoleSitters extends Component {
             type: "column",
 
             axisXTitle: this.props.axisName,
+            axisXTitle2: "Metai",
             axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
@@ -115,18 +117,25 @@ export class PoleSitters extends Component {
 
     render() {
         if (this.state.poleSitters.length > 0) {
-            var totalPoles = this.calculateTotalPoles(this.state.poleSitters);
-            var data = this.state.poleSitters.map((x, index) => ({ label: x.name, x: index + 1, y: x.poleCount, percentage: Math.round((x.poleCount / totalPoles * 100) * 100) / 100 }));
-            
-            if (this.state.axisYMaximum === '') {
-                var defaultMaximum = -1;
-                for (let i = 0; i < this.state.poleSitters.length; i++) {
-                    if (defaultMaximum < this.state.poleSitters[i].poleCount) {
-                        defaultMaximum = this.state.poleSitters[i].poleCount;
+            if (this.state.type !== "stackedColumn") {
+                var totalPoles = this.calculateTotalPoles(this.state.poleSitters);
+                var data = this.state.poleSitters.map((x, index) => ({ label: x.name, x: index + 1, y: x.poleCount, percentage: Math.round((x.poleCount / totalPoles * 100) * 100) / 100 }));
+                
+                if (this.state.axisYMaximum === '') {
+                    var defaultMaximum = -1;
+                    for (let i = 0; i < this.state.poleSitters.length; i++) {
+                        if (defaultMaximum < this.state.poleSitters[i].poleCount) {
+                            defaultMaximum = this.state.poleSitters[i].poleCount;
+                        }
                     }
+        
+                    defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
                 }
-    
-                defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
+            }
+            else {
+                var data = this.state.poleSitters.map(x => ({type: "stackedColumn", showInLegend: true, name: x.name, dataPoints: x.polesByYear.map(yearPole => ({label:yearPole.year, x:yearPole.year, y: yearPole.poleCount}))}));
+        
+                defaultMaximum = 25;
             }
 
             var options = {
@@ -139,15 +148,15 @@ export class PoleSitters extends Component {
                 title: {
                     text: this.state.title
                 },
-                data: [
+                data: this.state.type !== "stackedColumn" ? [
                     {
                         type: this.state.type,
                         dataPoints: data,
                         indexLabel: this.state.type === 'column' ? "" : "{label} {y}"
                     }
-                ],
+                ] : data,
                 axisX: {
-                    title: this.state.axisXTitle,
+                    title: this.state.type !== "stackedColumn" ? this.state.axisXTitle : this.state.axisXTitle2,
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
                     gridThickness: this.state.axisXGridThickness
@@ -160,8 +169,20 @@ export class PoleSitters extends Component {
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness
                 },
-                toolTip:{   
+                toolTip: this.state.type !== "stackedColumn" ? {   
                     content: this.state.type === 'column' ? "{label}: {y}" : "{label}: {percentage}%"
+                } : {
+                    shared: true,
+                    content: function (e) {
+                        var content = e.entries[0].dataPoint.x + "<br />";
+                        var total = 0;
+                        for (let i = 0; i < e.entries.length; i++) {
+                            content += e.entries[i].dataSeries.name + ": " + e.entries[i].dataPoint.y + "<br />";
+                            total += e.entries[i].dataPoint.y;
+                        }
+                        content += "Iš viso: " + total; 
+                        return content;
+                    }
                 }
             };
         }
@@ -192,9 +213,9 @@ export class PoleSitters extends Component {
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
                             themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
                             currenttheme={this.state.theme}
-                            types={[{type: "column", name: "Stulpelinė"}, {type: "pie", name: "Skritulinė"}]}
+                            types={[{type: "column", name: "Stulpelinė"}, {type: "stackedColumn", name: "Stulpelinė (sluoksniuota)"}, {type: "pie", name: "Skritulinė"}]}
                             currenttype={this.state.type}
-                            axisxtitle={this.state.axisXTitle}
+                            axisxtitle={this.state.type !== "stackedColumn" ? this.state.axisXTitle : this.state.axisXTitle2}
                             axisxlabelangle={this.state.axisXLabelAngle}
                             axisxgridthickness={this.state.axisXGridThickness}
                             axisytitle={this.state.axisYTitle}
