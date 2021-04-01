@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { addWatermark } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -45,6 +46,9 @@ export class LapTimes extends Component {
         this.setDefaultValues = this.setDefaultValues.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
         this.formatTime = this.formatTime.bind(this);
+        this.findQuartile = this.findQuartile.bind(this);
+        this.findMinimum = this.findMinimum.bind(this);
+        this.findMaximum = this.findMaximum.bind(this);
     }
 
     fillData() {
@@ -144,15 +148,7 @@ export class LapTimes extends Component {
     }
 
     componentDidUpdate() {
-        var canvas = document.getElementsByTagName("canvas")[0];
-        
-        if (canvas) {
-            var context = canvas.getContext("2d");
-            context.fillStyle = "grey";
-            context.font = "10px verdana";
-            var text = "Lenktynių rezultatų portalas";
-            context.fillText(text, 10, canvas.height - 15);
-        }
+        addWatermark();
     }
 
     componentDidMount() {
@@ -164,17 +160,95 @@ export class LapTimes extends Component {
     }
 
     formatTime(timing) {
-        let minutes = Math.floor(timing / 60);
-        let seconds = Math.round((timing - 60 * minutes) * 1000) / 1000;
+        var minutes = Math.floor(timing / 60);
+        var seconds = Math.round((timing - 60 * minutes) * 1000) / 1000;
 
-        let time = minutes + ":" + seconds;
+        if (seconds > 10) {
+            var time = minutes + ":" + seconds;
+        }
+        else {
+            var time = minutes + ":0" + seconds;
+        }
 
+        var decimalNumber = time.split(".")[1] !== undefined ? time.split(".")[1] : "" ;
+        
+        if (decimalNumber === "") {
+            time += ".";
+        }
+
+        for (let i = decimalNumber.length; i < 3; i++) {
+            time += "0";
+        }
+        
         return time;
+    }
+
+    findQuartile(data, q) {
+        var medianIndex = Math.floor(data.length / 2);
+
+        switch (q) {
+            case 0.25:
+                if (data.length % 2 === 0) {
+                    return this.findMedian(data, 0, medianIndex - 1);
+                }
+                else {
+                    return this.findMedian(data, 0, medianIndex);
+                }
+            case 0.5:
+                return this.findMedian(data, 0, data.length - 1);
+            case 0.75:
+                if (data.length % 2 === 0) {
+                    return this.findMedian(data, medianIndex, data.length - 1);
+                }
+                else {
+                    return this.findMedian(data, medianIndex, data.length - 1);
+                }
+            default:
+                break;
+        }
+    }
+
+    findMedian(data, startIndex, endIndex) {
+        var index = Math.floor((endIndex - startIndex + 1) / 2);
+
+        if (index % 2 === 0) {
+            var result = (data[index - 1] + data[index]) / 2;
+        }
+        else {
+            var result = data[index];
+        }
+
+        return result;
+    }
+
+    findMinimum(data) {
+        var minimum = 999;
+
+        for (let i = 0; i < data.length; i++) {
+            if (minimum > data[i]) {
+                minimum = data[i];
+            }
+        }
+
+        return minimum;
+    }
+
+    findMaximum(data) {
+        var maximum = -1;
+
+        for (let i = 0; i < data.length; i++) {
+            if (maximum < data[i]) {
+                maximum = data[i];
+            }
+        }
+
+        return maximum;
     }
 
     render() {
         if (this.state.lapTimes.length > 0) {
             var data = this.state.lapTimes.map((x, index) => ({ type: "scatter", dataPoints: x.timings.map(timing => ({ label: x.name, x: index + 1, y: timing, laptime: this.formatTime(timing) })) } ));
+            //var boxData = this.state.lapTimes.map((x, index) => ({ type: "boxAndWhisker", dataPoints: [({ label: x.name, x: index + 1, y: [this.findMinimum(x.timings), this.findQuartile(x.timings, 0.25), this.findQuartile(x.timings, 0.75), this.findMaximum(x.timings), this.findQuartile(x.timings, 0.5) ] })] } ));
 
             if (this.state.axisYMaximum === '') {
                 var defaultYMaximum = -1;
@@ -193,8 +267,8 @@ export class LapTimes extends Component {
                 interactivityEnabled: this.state.interactivityEnabled,
                 exportFileName: this.state.exportFileName,
                 exportEnabled: true,
-                zoomEnabled: this.state.zoomEnabled,
-                zoomType: "x",
+                zoomEnabled: true,
+                zoomType: "xy",
                 theme: this.state.theme,
                 title: {
                     text: this.state.title
@@ -220,7 +294,7 @@ export class LapTimes extends Component {
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness
                 },
-                toolTip:{   
+                toolTip: {
                     content: "{laptime}"
                 }
             };

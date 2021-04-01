@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { addWatermark } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -90,15 +91,7 @@ export class PodiumFinishers extends Component {
     }
 
     componentDidUpdate() {
-        var canvas = document.getElementsByTagName("canvas")[0];
-        
-        if (canvas) {
-            var context = canvas.getContext("2d");
-            context.fillStyle = "grey";
-            context.font = "10px verdana";
-            var text = "Lenktynių rezultatų portalas";
-            context.fillText(text, 10, canvas.height - 15);
-        }
+        addWatermark();
     }
 
     componentDidMount() {
