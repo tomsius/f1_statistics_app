@@ -159,7 +159,8 @@ export class Winners extends Component {
                     title: this.state.type !== "stackedColumn" ? this.state.axisXTitle : this.state.axisXTitle2,
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
-                    gridThickness: this.state.axisXGridThickness
+                    gridThickness: this.state.axisXGridThickness,
+                    valueFormatString: " "
                 },
                 axisY: {
                     title: this.state.axisYTitle,

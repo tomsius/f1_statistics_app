@@ -295,7 +295,7 @@ export class LapTimes extends Component {
                     gridThickness: this.state.axisYGridThickness
                 },
                 toolTip: {
-                    content: "{laptime}"
+                    content: "{label}: {laptime}"
                 }
             };
         }
@@ -347,7 +347,7 @@ export class LapTimes extends Component {
                                 interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
                                 themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
                                 currenttheme={this.state.theme}
-                                types={[{type: "line", name: "Linijinė"}]}
+                                types={[{type: "scatter", name: "Taškinė"}]}
                                 currenttype={this.state.type}
                                 axisxtitle={this.state.axisXTitle}
                                 axisxlabelangle={this.state.axisXLabelAngle}
