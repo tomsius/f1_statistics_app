@@ -54,14 +54,14 @@ export class Winners extends Component {
         winners.forEach(winner => {
             totalWins += winner.winCount
         });
-        
+
         return totalWins;
     }
 
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
         }
@@ -128,13 +128,13 @@ export class Winners extends Component {
                             defaultMaximum = this.state.winners[i].winCount;
                         }
                     }
-        
+
                     defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
                 }
             }
             else {
-                var data = this.state.winners.map(x => ({type: "stackedColumn", showInLegend: true, name: x.name, dataPoints: x.winsByYear.map(yearWin => ({label:yearWin.year, x:yearWin.year, y: yearWin.winCount}))}));
-        
+                var data = this.state.winners.map(x => ({ type: "stackedColumn", showInLegend: true, name: x.name, dataPoints: x.winsByYear.map(yearWin => ({ label: yearWin.year, x: yearWin.year, y: yearWin.winCount })) }));
+                
                 defaultMaximum = 25;
             }
 
@@ -169,7 +169,7 @@ export class Winners extends Component {
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness
                 },
-                toolTip: this.state.type !== "stackedColumn" ? {   
+                toolTip: this.state.type !== "stackedColumn" ? {
                     content: this.state.type === 'column' ? "{label}: {y}" : "{label}: {percentage}%"
                 } : {
                     shared: true,
@@ -180,7 +180,7 @@ export class Winners extends Component {
                             content += e.entries[i].dataSeries.name + ": " + e.entries[i].dataPoint.y + "<br />";
                             total += e.entries[i].dataPoint.y;
                         }
-                        content += "Iš viso: " + total; 
+                        content += "Iš viso: " + total;
                         return content;
                     }
                 }
@@ -196,22 +196,22 @@ export class Winners extends Component {
                 {
                     this.state.winners.length > 0 &&
                     <div>
-                        <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                        <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
                             Keisti grafiko parinktis
                         </Button>
-                        <ChartOptionsModal 
+                        <ChartOptionsModal
                             animation={false}
                             size="lg"
-                            show={this.state.modalShow} 
-                            onHide={() => this.setState({modalShow: false})} 
-                            handleoptionschange={this.handleOptionsChange} 
+                            show={this.state.modalShow}
+                            onHide={() => this.setState({ modalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
                             setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                            themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                            themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
                             currenttheme={this.state.theme}
-                            types={[{type: "column", name: "Stulpelinė"}, {type: "stackedColumn", name: "Stulpelinė (sluoksniuota)"}, {type: "pie", name: "Skritulinė"}]}
+                            types={[{ type: "column", name: "Stulpelinė" }, { type: "stackedColumn", name: "Stulpelinė (sluoksniuota)" }, { type: "pie", name: "Skritulinė" }]}
                             currenttype={this.state.type}
                             axisxtitle={this.state.type !== "stackedColumn" ? this.state.axisXTitle : this.state.axisXTitle2}
                             axisxlabelangle={this.state.axisXLabelAngle}
