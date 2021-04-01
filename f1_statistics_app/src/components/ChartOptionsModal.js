@@ -31,7 +31,14 @@ export class ChartOptionsModal extends Component {
         }
 
         inputelement = document.getElementsByName("axisXTitle")[0];
-        inputelement.value = this.props.axisxtitle;
+        if (inputelement) {
+            inputelement.value = this.props.axisxtitle;
+        }
+
+        inputelement = document.getElementsByName("axisXTitle2")[0];
+        if (inputelement) {
+            inputelement.value = this.props.axisxtitle2;
+        }
 
         inputelement = document.getElementsByName("axisXLabelAngle")[0];
         inputelement.value = this.props.axisxlabelangle;
@@ -163,12 +170,14 @@ export class ChartOptionsModal extends Component {
                                 </Col>
                             </Row>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
-                                
                                     <Col>
                                         <Form.Label>Pavadinimas</Form.Label>
                                     </Col>
                                     <Col>
-                                        <Form.Control type="text" name="axisXTitle" placeholder="Ašies pavadinimas..." defaultValue={this.props.axisxtitle} onChange={this.props.handleoptionschange} />
+                                    {this.props.currenttype !== "stackedColumn" &&
+                                        <Form.Control type="text" name="axisXTitle" placeholder="Ašies pavadinimas..." defaultValue={this.props.axisxtitle} onChange={this.props.handleoptionschange} />}
+                                    {this.props.currenttype === "stackedColumn" &&
+                                        <Form.Control type="text" name="axisXTitle2" placeholder="Ašies pavadinimas..." defaultValue={this.props.axisxtitle} onChange={this.props.handleoptionschange} />}
                                     </Col>
                             </Row>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
