@@ -161,7 +161,8 @@ export class Leaders extends Component {
                     interval: 1,
                     gridThickness: this.state.axisXGridThickness,
                     labelMaxWidth: 80,
-                    labelWrap: true
+                    labelWrap: true,
+                    valueFormatString: " "
                 },
                 axisY: {
                     title: this.state.axisYTitle,
