@@ -14,8 +14,8 @@ export function changeExportButtonsLanguage() {
     var container = document.getElementsByClassName("canvasjs-chart-toolbar")[0];
 
     if (container) {
-        var toolbar = container.children[1];
-
+        var toolbar = container.getElementsByTagName("div")[0];
+        
         toolbar.children[0].textContent = "Atspausdinti";
         toolbar.children[1].textContent = "Atsisiųsti (JPEG)";
         toolbar.children[2].textContent = "Atsisiųsti (PNG)";
