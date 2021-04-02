@@ -31,7 +31,11 @@ export class WinnersByGrid extends Component {
             axisYGridThickness: 1,
             axisYMinimum: 0,
             axisYMaximum: '',
-            axisYInterval: ''
+            axisYInterval: '',
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         };
 
         this.fillData = this.fillData.bind(this);
@@ -77,7 +81,11 @@ export class WinnersByGrid extends Component {
             axisYGridThickness: 1,
             axisYMinimum: 0,
             axisYMaximum: '',
-            axisYInterval: ''
+            axisYInterval: '',
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         }, () => {
             callback();
         });
@@ -129,7 +137,8 @@ export class WinnersByGrid extends Component {
                 zoomType: "x",
                 theme: this.state.theme,
                 title: {
-                    text: this.state.title
+                    text: this.state.title,
+                    fontFamily: this.state.titleFont
                 },
                 data: [
                     {
@@ -141,7 +150,9 @@ export class WinnersByGrid extends Component {
                     title: this.state.axisXTitle,
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
-                    gridThickness: this.state.axisXGridThickness
+                    gridThickness: this.state.axisXGridThickness,
+                    titleFontFamily: this.state.axisXFont,
+                    labelFontFamily: this.state.axisXFont
                 },
                 axisY: {
                     title: this.state.axisYTitle,
@@ -149,7 +160,9 @@ export class WinnersByGrid extends Component {
                     maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum,
                     interval: this.state.axisYInterval !== -1 ? this.state.axisYInterval : defaultInterval,
                     labelAngle: this.state.axisYLabelAngle,
-                    gridThickness: this.state.axisYGridThickness
+                    gridThickness: this.state.axisYGridThickness,
+                    titleFontFamily: this.state.axisYFont,
+                    labelFontFamily: this.state.axisYFont
                 },
                 toolTip:{   
                     content: "Laimėtojai iš {label}-os starto pozicijos (laimėjimų skaičius: {y}): {winnersFromGrid}"
@@ -192,6 +205,10 @@ export class WinnersByGrid extends Component {
                             axisyminimum={this.state.axisYMinimum}
                             axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
                             axisyinterval={this.state.axisYInterval !== '' ? this.state.axisYInterval : defaultInterval}
+                            fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
+                            currenttitlefont={this.state.titleFont}
+                            currentaxisxfont={this.state.axisXFont}
+                            currentaxisyfont={this.state.axisYFont}
                         />
                         <br />
                         <br />

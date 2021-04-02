@@ -40,7 +40,11 @@ export class RacePositionsChanges extends Component {
             axisYLabelAngle: 0,
             axisYGridThickness: 1,
             axisYMinimum: 1,
-            axisYMaximum: ''
+            axisYMaximum: '',
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         };
 
         this.fillData = this.fillData.bind(this);
@@ -158,7 +162,11 @@ export class RacePositionsChanges extends Component {
             axisYLabelAngle: 0,
             axisYGridThickness: 1,
             axisYMinimum: 1,
-            axisYMaximum: ''
+            axisYMaximum: '',
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         }, () => {
             callback();
         });
@@ -204,7 +212,8 @@ export class RacePositionsChanges extends Component {
                 zoomType: "x",
                 theme: this.state.theme,
                 title: {
-                    text: this.state.title
+                    text: this.state.title,
+                    fontFamily: this.state.titleFont
                 },
                 data: data,
                 axisX: {
@@ -213,7 +222,9 @@ export class RacePositionsChanges extends Component {
                     minimum: this.state.axisXMinimum,
                     maximum: this.state.axisXMaximum !== '' ? this.state.axisXMaximum : defaultXMaximum,
                     interval: this.state.axisXInterval,
-                    gridThickness: this.state.axisXGridThickness
+                    gridThickness: this.state.axisXGridThickness,
+                    titleFontFamily: this.state.axisXFont,
+                    labelFontFamily: this.state.axisXFont
                 },
                 axisY: {
                     title: this.state.axisYTitle,
@@ -223,6 +234,8 @@ export class RacePositionsChanges extends Component {
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness,
                     reversed: true,
+                    titleFontFamily: this.state.axisYFont,
+                    labelFontFamily: this.state.axisYFont
                 },
                 toolTip:{   
                     content: "{name} pozicija {x}-ame rate: {y}" 
@@ -304,6 +317,10 @@ export class RacePositionsChanges extends Component {
                                 axisygridthickness={this.state.axisYGridThickness}
                                 axisyminimum={this.state.axisYMinimum}
                                 axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum}
+                                fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
+                                currenttitlefont={this.state.titleFont}
+                                currentaxisxfont={this.state.axisXFont}
+                                currentaxisyfont={this.state.axisYFont}
                             />
                             <br />
                             <br />

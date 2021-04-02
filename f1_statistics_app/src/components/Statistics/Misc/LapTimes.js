@@ -27,7 +27,7 @@ export class LapTimes extends Component {
             zoomEnabled: false,
             theme: "light1",
             title: this.props.pageTitle,
-            type: "line",
+            type: "scatter",
 
             axisXTitle: "Lenktynininkas",
             axisXLabelAngle: -90,
@@ -39,6 +39,10 @@ export class LapTimes extends Component {
             axisYMinimum: 50,
             axisYMaximum: '',
             axisYInterval: 10,
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         };
 
         this.fillData = this.fillData.bind(this);
@@ -147,17 +151,22 @@ export class LapTimes extends Component {
             zoomEnabled: false,
             theme: "light1",
             title: "Lenktynininkų apvažiuotų ratų laikai " + this.state.season + " " + this.state.raceName + " metu",
-            type: "line",
+            type: "scatter",
 
             axisXTitle: "Lenktynininkas",
-            axisXLabelAngle: 0,
+            axisXLabelAngle: -90,
             axisXGridThickness: 0,
 
             axisYTitle: "Laikas, s",
             axisYLabelAngle: 0,
             axisYGridThickness: 1,
-            axisYMinimum: 1,
-            axisYMaximum: ''
+            axisYMinimum: 50,
+            axisYMaximum: '',
+            axisYInterval: 10,
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         }, () => {
             callback();
         });
@@ -295,7 +304,8 @@ export class LapTimes extends Component {
                 zoomType: "xy",
                 theme: this.state.theme,
                 title: {
-                    text: this.state.title
+                    text: this.state.title,
+                    fontFamily: this.state.titleFont
                 },
                 data: data,
                 axisX: {
@@ -307,7 +317,9 @@ export class LapTimes extends Component {
                     maximum: data.length + 1,
                     labelMaxWidth: 80,
                     labelWrap: true,
-                    valueFormatString: " "
+                    valueFormatString: " ",
+                    titleFontFamily: this.state.axisXFont,
+                    labelFontFamily: this.state.axisXFont
                 },
                 axisY: {
                     title: this.state.axisYTitle,
@@ -315,7 +327,9 @@ export class LapTimes extends Component {
                     maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum,
                     interval: this.state.axisYInterval,
                     labelAngle: this.state.axisYLabelAngle,
-                    gridThickness: this.state.axisYGridThickness
+                    gridThickness: this.state.axisYGridThickness,
+                    titleFontFamily: this.state.axisYFont,
+                    labelFontFamily: this.state.axisYFont
                 },
                 toolTip: {
                     content: "{label}: {laptime}"
@@ -381,6 +395,10 @@ export class LapTimes extends Component {
                                 axisyminimum={this.state.axisYMinimum}
                                 axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum}
                                 axisyinterval={this.state.axisYInterval}
+                                fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
+                                currenttitlefont={this.state.titleFont}
+                                currentaxisxfont={this.state.axisXFont}
+                                currentaxisyfont={this.state.axisYFont}
                             />
                             <br />
                             <br />

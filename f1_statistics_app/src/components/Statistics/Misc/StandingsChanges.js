@@ -31,7 +31,11 @@ export class StandingsChanges extends Component {
             axisYLabelAngle: 0,
             axisYGridThickness: 0,
             axisYMinimum: 1,
-            axisYMaximum: ''
+            axisYMaximum: '',
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         };
 
         this.fillData = this.fillData.bind(this);
@@ -91,7 +95,11 @@ export class StandingsChanges extends Component {
             axisYGridThickness: 0,
             axisYMinimum: 1,
             axisYMaximum: '',
-            axisYInterval: 1
+            axisYInterval: 1,
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         }, () => {
             callback();
         });
@@ -133,7 +141,8 @@ export class StandingsChanges extends Component {
                 zoomType: "x",
                 theme: this.state.theme,
                 title: {
-                    text: this.state.title
+                    text: this.state.title,
+                    fontFamily: this.state.titleFont
                 },
                 data: data,
                 axisX: {
@@ -143,6 +152,8 @@ export class StandingsChanges extends Component {
                     gridThickness: this.state.axisXGridThickness,
                     labelMaxWidth: 80,
                     labelWrap: true,
+                    titleFontFamily: this.state.axisXFont,
+                    labelFontFamily: this.state.axisXFont
                 },
                 axisY: {
                     title: this.state.axisYTitle,
@@ -151,7 +162,9 @@ export class StandingsChanges extends Component {
                     interval: 1,
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness,
-                    reversed: true
+                    reversed: true,
+                    titleFontFamily: this.state.axisYFont,
+                    labelFontFamily: this.state.axisYFont
                 },
                 toolTip:{   
                     content: "{name} (taškų skaičius - {points}): {y}"  
@@ -226,6 +239,10 @@ export class StandingsChanges extends Component {
                                 axisygridthickness={this.state.axisYGridThickness}
                                 axisyminimum={this.state.axisYMinimum}
                                 axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum}
+                                fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
+                                currenttitlefont={this.state.titleFont}
+                                currentaxisxfont={this.state.axisXFont}
+                                currentaxisyfont={this.state.axisYFont}
                             />
                             <br />
                             <br />

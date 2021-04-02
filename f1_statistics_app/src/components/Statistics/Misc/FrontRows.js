@@ -31,7 +31,11 @@ export class FrontRows extends Component {
             axisYGridThickness: 1,
             axisYMinimum: 0,
             axisYMaximum: '',
-            axisYInterval: 5
+            axisYInterval: 5,
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         };
 
         this.fillData = this.fillData.bind(this);
@@ -88,7 +92,11 @@ export class FrontRows extends Component {
             axisYGridThickness: 1,
             axisYMinimum: 0,
             axisYMaximum: '',
-            axisYInterval: 5
+            axisYInterval: 5,
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         }, () => {
             callback();
         });
@@ -138,7 +146,8 @@ export class FrontRows extends Component {
                 zoomType: "x",
                 theme: this.state.theme,
                 title: {
-                    text: this.state.title
+                    text: this.state.title,
+                    fontFamily: this.state.titleFont
                 },
                 data: [
                     {
@@ -152,7 +161,9 @@ export class FrontRows extends Component {
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
                     gridThickness: this.state.axisXGridThickness,
-                    valueFormatString: " "
+                    valueFormatString: " ",
+                    titleFontFamily: this.state.axisXFont,
+                    labelFontFamily: this.state.axisXFont
                 },
                 axisY: {
                     title: this.state.axisYTitle,
@@ -160,7 +171,9 @@ export class FrontRows extends Component {
                     maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum,
                     interval: this.state.axisYInterval,
                     labelAngle: this.state.axisYLabelAngle,
-                    gridThickness: this.state.axisYGridThickness
+                    gridThickness: this.state.axisYGridThickness,
+                    titleFontFamily: this.state.axisYFont,
+                    labelFontFamily: this.state.axisYFont
                 },
                 toolTip:{   
                     content: this.state.type === 'column' ? "{label}: {y}" : "{label}: {percentage}%"
@@ -203,6 +216,10 @@ export class FrontRows extends Component {
                             axisyminimum={this.state.axisYMinimum}
                             axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
                             axisyinterval={this.state.axisYInterval}
+                            fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
+                            currenttitlefont={this.state.titleFont}
+                            currentaxisxfont={this.state.axisXFont}
+                            currentaxisyfont={this.state.axisYFont}
                         />
                         <br />
                         <br />

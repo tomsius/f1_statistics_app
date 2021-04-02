@@ -13,6 +13,9 @@ export class ChartOptionsModal extends Component {
         var inputelement = document.getElementsByName("title")[0];
         inputelement.value = this.props.title;
 
+        var inputelement = document.getElementsByName("titleFont")[0];
+        inputelement.value = this.props.currenttitlefont;
+
         inputelement = document.getElementsByName("exportFileName")[0];
         inputelement.value = this.props.exportfilename;
 
@@ -33,6 +36,11 @@ export class ChartOptionsModal extends Component {
         inputelement = document.getElementsByName("axisXTitle")[0];
         if (inputelement) {
             inputelement.value = this.props.axisxtitle;
+        }
+
+        var inputelement = document.getElementsByName("axisXFont")[0];
+        if (inputelement) {
+            inputelement.value = this.props.currentaxisxfont;
         }
 
         inputelement = document.getElementsByName("axisXTitle2")[0];
@@ -63,6 +71,9 @@ export class ChartOptionsModal extends Component {
 
         inputelement = document.getElementsByName("axisYTitle")[0];
         inputelement.value = this.props.axisytitle;
+
+        inputelement = document.getElementsByName("axisYFont")[0];
+        inputelement.value = this.props.currentaxisyfont;
 
         inputelement = document.getElementsByName("axisYLabelAngle")[0];
         inputelement.value = this.props.axisylabelangle;
@@ -107,6 +118,19 @@ export class ChartOptionsModal extends Component {
                                     </Col>
                                     <Col>
                                         <Form.Control type="text" name="title" placeholder="Grafiko pavadinimas..." defaultValue={this.props.title} onChange={this.props.handleoptionschange} />
+                                    </Col>
+                            </Row>
+                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                                
+                                    <Col>
+                                        <Form.Label>Šriftas</Form.Label>
+                                    </Col>
+                                    <Col>
+                                        <Form.Control as="select" custom name="titleFont" defaultValue={this.props.currenttitlefont} onChange={this.props.handleoptionschange}>
+                                                {this.props.fonts.map(x => 
+                                                    <option key={x} value={x}>{x}</option>
+                                                )}
+                                        </Form.Control>
                                     </Col>
                             </Row>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
@@ -181,6 +205,19 @@ export class ChartOptionsModal extends Component {
                                     </Col>
                             </Row>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                                
+                                    <Col>
+                                        <Form.Label>Šriftas</Form.Label>
+                                    </Col>
+                                    <Col>
+                                        <Form.Control as="select" custom name="axisXFont" defaultValue={this.props.currentaxisxfont} onChange={this.props.handleoptionschange}>
+                                                {this.props.fonts.map(x => 
+                                                    <option key={x} value={x}>{x}</option>
+                                                )}
+                                        </Form.Control>
+                                    </Col>
+                            </Row>
+                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
                                 <Col>
                                     <Form.Label>Žymeklio pasukimo kampas (<span>&#176;</span>)</Form.Label>
                                 </Col>
@@ -235,6 +272,19 @@ export class ChartOptionsModal extends Component {
                                 <Col>
                                     <Form.Control type="text" name="axisYTitle" placeholder="Ašies pavadinimas..." defaultValue={this.props.axisytitle} onChange={this.props.handleoptionschange} />
                                 </Col>
+                            </Row>
+                            <Row style={{paddingLeft: 0, paddingRight: 0}}>
+                                
+                                    <Col>
+                                        <Form.Label>Šriftas</Form.Label>
+                                    </Col>
+                                    <Col>
+                                        <Form.Control as="select" custom name="axisYFont" defaultValue={this.props.currentaxisyfont} onChange={this.props.handleoptionschange}>
+                                                {this.props.fonts.map(x => 
+                                                    <option key={x} value={x}>{x}</option>
+                                                )}
+                                        </Form.Control>
+                                    </Col>
                             </Row>
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
                                 <Col>

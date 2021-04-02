@@ -35,7 +35,11 @@ export class WinnerPoints extends Component {
 
             axisY2Title: "Lenktynių skaičius, vnt.",
             axisY2LabelAngle: 0,
-            axisY2Interval: 2
+            axisY2Interval: 2,
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         };
 
         this.fillData = this.fillData.bind(this);
@@ -85,7 +89,11 @@ export class WinnerPoints extends Component {
 
             axisY2Title: "Lenktynių skaičius, vnt.",
             axisY2LabelAngle: 0,
-            axisY2Interval: 2
+            axisY2Interval: 2,
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         }, () => {
             callback();
         });
@@ -134,7 +142,8 @@ export class WinnerPoints extends Component {
                 zoomType: "x",
                 theme: this.state.theme,
                 title: {
-                    text: this.state.title
+                    text: this.state.title,
+                    fontFamily: this.state.titleFont
                 },
                 data: [
                     {
@@ -147,7 +156,9 @@ export class WinnerPoints extends Component {
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
                     gridThickness: this.state.axisXGridThickness,
-                    valueFormatString: " "
+                    valueFormatString: " ",
+                    titleFontFamily: this.state.axisXFont,
+                    labelFontFamily: this.state.axisXFont
                 },
                 axisY: {
                     title: this.state.axisYTitle,
@@ -155,7 +166,9 @@ export class WinnerPoints extends Component {
                     maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum,
                     interval: this.state.axisYInterval,
                     labelAngle: this.state.axisYLabelAngle,
-                    gridThickness: this.state.axisYGridThickness
+                    gridThickness: this.state.axisYGridThickness,
+                    titleFontFamily: this.state.axisYFont,
+                    labelFontFamily: this.state.axisYFont
                 },
                 toolTip:{   
                     contentFormatter: "",
@@ -265,6 +278,10 @@ export class WinnerPoints extends Component {
                                     axisy2title={this.state.axisY2Title}
                                     axisy2labelangle={this.state.axisY2LabelAngle}
                                     axisy2interval={this.state.axisY2Interval}
+                                    fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
+                                    currenttitlefont={this.state.titleFont}
+                                    currentaxisxfont={this.state.axisXFont}
+                                    currentaxisyfont={this.state.axisYFont}
                                 />
                         <br />
                         <br />

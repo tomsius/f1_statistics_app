@@ -31,7 +31,11 @@ export class DriverNationalities extends Component {
             axisYGridThickness: 1,
             axisYMinimum: 0,
             axisYMaximum: '',
-            axisYInterval: 1
+            axisYInterval: 1,
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         };
 
         this.fillData = this.fillData.bind(this);
@@ -88,7 +92,11 @@ export class DriverNationalities extends Component {
             axisYGridThickness: 1,
             axisYMinimum: 0,
             axisYMaximum: '',
-            axisYInterval: 1
+            axisYInterval: 1,
+            
+            titleFont: "Calibri",
+            axisXFont: "Calibri",
+            axisYFont: "Calibri"
         }, () => {
             callback();
         });
@@ -138,7 +146,8 @@ export class DriverNationalities extends Component {
                 zoomType: "x",
                 theme: this.state.theme,
                 title: {
-                    text: this.state.title
+                    text: this.state.title,
+                    fontFamily: this.state.titleFont
                 },
                 data: [
                     {
@@ -154,7 +163,9 @@ export class DriverNationalities extends Component {
                     gridThickness: this.state.axisXGridThickness,
                     labelMaxWidth: 80,
                     labelWrap: true,
-                    valueFormatString: " "
+                    valueFormatString: " ",
+                    titleFontFamily: this.state.axisXFont,
+                    labelFontFamily: this.state.axisXFont
                 },
                 axisY: {
                     title: this.state.axisYTitle,
@@ -162,7 +173,9 @@ export class DriverNationalities extends Component {
                     maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum,
                     interval: this.state.axisYInterval,
                     labelAngle: this.state.axisYLabelAngle,
-                    gridThickness: this.state.axisYGridThickness
+                    gridThickness: this.state.axisYGridThickness,
+                    titleFontFamily: this.state.axisYFont,
+                    labelFontFamily: this.state.axisYFont
                 },
                 toolTip:{   
                     content: this.state.type === 'column' ? "{label} ({y}): {drivers}" : "{label} ({percentage}%): {drivers}"   
@@ -205,6 +218,10 @@ export class DriverNationalities extends Component {
                             axisyminimum={this.state.axisYMinimum}
                             axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
                             axisyinterval={this.state.axisYInterval}
+                            fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
+                            currenttitlefont={this.state.titleFont}
+                            currentaxisxfont={this.state.axisXFont}
+                            currentaxisyfont={this.state.axisYFont}
                         />
                         <br />
                         <br />
