@@ -147,7 +147,7 @@ export class ChartOptionsModal extends Component {
                             <Row style={{paddingLeft: 0, paddingRight: 0}}>
                                 
                                     <Col>
-                                        <Form.Label>Interaktyvumas</Form.Label>
+                                        <Form.Label>Rodyti etiketes</Form.Label>
                                     </Col>
                                     <Col>
                                         <Form.Check type="switch" id="custom-switch1" name="interactivityEnabled" checked={this.props.interactivityenabled} onChange={this.props.handleoptionschange} />
