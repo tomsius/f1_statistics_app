@@ -308,7 +308,6 @@ export class LapTimes extends Component {
                     labelMaxWidth: 80,
                     labelWrap: true,
                     valueFormatString: " "
-
                 },
                 axisY: {
                     title: this.state.axisYTitle,
