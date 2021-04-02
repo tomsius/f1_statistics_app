@@ -120,7 +120,7 @@ export class DataRangeForm extends Component {
 
             <Container>
                 <Row className="justify-content-md-center">
-                    <Col sm={5}>
+                    <Col sm={4}>
                         <Form onSubmit={this.handleSubmitByDate}>
                             <Form.Group controlId="From">
                                 <Form.Label>Nuo</Form.Label>
@@ -132,12 +132,12 @@ export class DataRangeForm extends Component {
                             </Form.Group>
                             <Form.Group>
                                 <Button variant="primary" type="submit" disabled={this.state.isLoading}>
-                                    {this.state.isLoading ? "Palaukite..." : "Rodyti statistiką pagal metus"}
+                                    {this.state.isLoading ? "Palaukite..." : "Rodyti pagal metus"}
                                 </Button>
                             </Form.Group>
                         </Form>
                     </Col>
-                    <Col sm={5}>
+                    <Col sm={4}>
                         <Form onSubmit={this.handleSubmitBySeason}>
                             <Form.Group controlId="Season">
                                 <Form.Label>Sezonas</Form.Label>
@@ -145,7 +145,7 @@ export class DataRangeForm extends Component {
                             </Form.Group>
                             <Form.Group>
                                 <Button variant="primary" type="submit" disabled={this.state.isLoading}>
-                                    {this.state.isLoading ? "Palaukite..." : "Rodyti statistiką pagal sezoną"}
+                                    {this.state.isLoading ? "Palaukite..." : "Rodyti pagal sezoną"}
                                 </Button>
                             </Form.Group>
                         </Form>
