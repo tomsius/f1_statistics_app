@@ -3,7 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
-import { addWatermark } from '../../../js/utils';
+import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -92,6 +92,7 @@ export class WinnersPercent extends Component {
 
     componentDidUpdate() {
         addWatermark();
+        changeExportButtonsLanguage();
     }
 
     componentDidMount() {
