@@ -4,6 +4,8 @@ import CanvasJSReact from '../../../canvasjs.react';
 import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -70,6 +72,27 @@ export class RacePositionsChanges extends Component {
                 title: "Lenktynininkų pozicijų pokyčiai " + this.state.season + " " + this.state.raceName + " metu",
                 exportFileName: "Lenktynininkų pozicijų pokyčiai " + this.state.season + " " + this.state.raceName + " metu"
             });
+        })
+        .catch(error => {
+            this.setState({
+                isLoading: false
+            });
+
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "positionClass": "toast-bottom-full-width",
+                "preventDuplicates": true,
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+              };
+    
+            toastr["error"]("", "Nepavyko pasiekti serverio");
         });
     }
 
