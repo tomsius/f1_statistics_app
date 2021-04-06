@@ -11,9 +11,11 @@ export class Footer extends Component {
                 <footer className="footer">
                     <hr />
                     <div>
-                        <span>Tomas Kašelynas <a href="https://github.com/tomsius" target="_blank"><i className="fa" style={{fontSize: "24px"}}>&#xf09b;</i></a></span>
+                        <span>F-1 lenktynių rezultatų portalas {new Date().getFullYear()}</span>
                         <br />
-                        <span>Lenktynių rezultatų portalas {new Date().getFullYear()}</span>
+                        <span>Tomas Kašelynas <a href="https://github.com/tomsius" target="_blank"><span className="fa" style={{fontSize: "24px"}}>&#xf09b;</span></a></span>
+                        <br />
+                        <span><a href="mailto:tomas.kaselynas@ktu.edu"><i>tomas.kaselynas@ktu.edu</i></a></span>
                     </div>
                     <div className="ml-auto">
                         <a href="https://github.com/tomsius/f1_statistics" target="_blank">Back-end</a> | <a href="https://github.com/tomsius/f1_statistics_app" target="_blank">Front-end</a>
