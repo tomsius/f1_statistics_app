@@ -9,7 +9,7 @@ export class Home extends Component {
         return (
             <div className="container">
                 <br />
-                <h1>Lenktynių rezultatų portalas</h1>
+                <h1>F-1 lenktynių rezultatų portalas</h1>
                 <h2>Bakalaurinis darbas</h2>
                 <br />
                 <p>
