@@ -45,13 +45,6 @@ export class DataOptionsModal extends Component {
         if (inputelement) {
             inputelement.value = this.props.podiumto;
         }
-
-        inputelement = document.getElementsByName("selectedCircuits");
-        if (inputelement) {
-            for (let i = 0; i < inputelement.length; i++) {
-                console.log(inputelement[i]);
-            }
-        }
     }
 
     render() {
@@ -136,7 +129,7 @@ export class DataOptionsModal extends Component {
                                         </Col>
                                     </Row>
                                 </>}
-                                {this.props.gridfrom !== undefined &&
+                            {this.props.podiumfrom !== undefined &&
                                 <>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                                         <Col>
@@ -160,6 +153,30 @@ export class DataOptionsModal extends Component {
                                         </Col>
                                     </Row>
                                 </>}
+                            {this.props.podiumfinishertitle !== undefined &&
+                                <>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>{this.props.podiumfinishertitle}</Form.Label>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                                {this.props.selectedpodiumfinishers.map(x =>
+                                                        <Form.Check
+                                                            type="checkbox"
+                                                            inline
+                                                            value={x.podiumFinisher}
+                                                            label={x.podiumFinisher}
+                                                            name="selectedPodiumFinishers"
+                                                            checked={x.checked}
+                                                            onChange={this.props.handleoptionschange}
+                                                            style={{ float: "left", paddingLeft: 0, paddingRight: 0 }}
+                                                        />
+                                                )}
+                                        </Col>
+                                    </Row>
+                                </>}
                             {this.props.selectedcircuits !== undefined &&
                                 <>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
@@ -169,22 +186,21 @@ export class DataOptionsModal extends Component {
                                     </Row>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                                         <Col>
-                                        <div style={{textAlign: "center", paddingLeft: 0, paddingRight: 0, display: "inline-block" }}>
-                                            {this.props.selectedcircuits.map(x =>
-                                                <>
-                                                    <Form.Check
-                                                        type="checkbox"
-                                                        //id={"checkbox-" + x.circuit}
-                                                        value={x.circuit}
-                                                        label={x.circuit}
-                                                        name="selectedCircuits"
-                                                        checked={x.checked}
-                                                        onChange={this.props.handleoptionschange}
-                                                        style={{ float: "left", paddingLeft: 0, paddingRight: 0 }}
-                                                    />
-                                                    <br />
-                                                </>
-                                            )}
+                                            <div style={{ textAlign: "center", paddingLeft: 0, paddingRight: 0, display: "inline-block" }}>
+                                                {this.props.selectedcircuits.map(x =>
+                                                    <>
+                                                        <Form.Check
+                                                            type="checkbox"
+                                                            value={x.circuit}
+                                                            label={x.circuit}
+                                                            name="selectedCircuits"
+                                                            checked={x.checked}
+                                                            onChange={this.props.handleoptionschange}
+                                                            style={{ float: "left", paddingLeft: 0, paddingRight: 0 }}
+                                                        />
+                                                        <br />
+                                                    </>
+                                                )}
                                             </div>
                                         </Col>
                                     </Row>
@@ -192,10 +208,10 @@ export class DataOptionsModal extends Component {
                         </Container>
                     </Form>
                 </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => { this.props.setdefaultdatafilters(this.resetValues) }}>Atstatyti reikšmes</Button>
-                        <Button onClick={this.props.onHide}>Uždaryti</Button>
-                    </Modal.Footer>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => { this.props.setdefaultdatafilters(this.resetValues) }}>Atstatyti reikšmes</Button>
+                    <Button onClick={this.props.onHide}>Uždaryti</Button>
+                </Modal.Footer>
             </Modal>
         );
     }
