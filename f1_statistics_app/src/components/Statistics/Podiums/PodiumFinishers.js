@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
@@ -24,7 +25,7 @@ export class PodiumFinishers extends Component {
 
             axisXTitle: this.props.axisName,
             axisXTitle2: "Metai",
-            axisXLabelAngle: -90,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Podiumų skaičius, vnt.",
@@ -36,19 +37,31 @@ export class PodiumFinishers extends Component {
             
             titleFont: "Calibri",
             axisXFont: "Calibri",
-            axisYFont: "Calibri"
+            axisYFont: "Calibri",
+
+            from: 0,
+            to: '',
+            podiumFrom: 1,
+            podiumTo: 3,
+            gridFrom: 1,
+            gridTo: '',
+            selectedCircuits: []
         };
 
         this.fillData = this.fillData.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
+        this.filterData = this.filterData.bind(this);
+        this.getCircuits = this.getCircuits.bind(this);
+        this.initializeCircuits = this.initializeCircuits.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
         this.setState({
             podiumFinishers: data
-        });
+        }, () => this.initializeCircuits(this.getCircuits(this.state.podiumFinishers)));
     }
 
     handleOptionsChange(event) {
@@ -57,6 +70,11 @@ export class PodiumFinishers extends Component {
 
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
+        }
+
+        if (name === 'selectedCircuits') {
+            valueToUpdate = this.state.selectedCircuits;
+            valueToUpdate.filter(x => x.circuit === value)[0].checked = checked;
         }
 
         this.setState({
@@ -75,7 +93,7 @@ export class PodiumFinishers extends Component {
 
             axisXTitle: this.props.axisName,
             axisXTitle2: "Metai",
-            axisXLabelAngle: -90,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Podiumų skaičius, vnt.",
@@ -90,6 +108,141 @@ export class PodiumFinishers extends Component {
             axisYFont: "Calibri"
         }, () => {
             callback();
+        });
+    }
+
+    setDefaultDataFilters(callback) {
+        this.setState({
+            from: 0,
+            to: '',
+            gapFrom: 0,
+            gapTo: '',
+            gridFrom: 1,
+            gridTo: '',
+            selectedCircuits: []
+        }, () => {
+            this.initializeCircuits(this.getCircuits(this.state.podiumFinishers));
+            callback();
+        });
+    }
+
+    filterData(data) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        this.state.selectedCircuits.forEach(selectedCircuit => {
+            if (selectedCircuit.checked === false) {
+                filteredData.forEach(x => {
+                    var i = 0;
+
+                    while (i < x.podiumInformation.length) {
+                        if (x.podiumInformation[i].circuitName === selectedCircuit.circuit) {
+                            x.podiumInformation.splice(i, 1);
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+
+                    x.podiumCount = x.podiumInformation.length;
+                });
+            }
+        });
+
+        filteredData.forEach(x => {
+            var i = 0;
+
+            while (i < x.podiumInformation.length) {
+                if (x.podiumInformation[i].podiumPosition < this.state.podiumFrom) {
+                    x.podiumInformation.splice(i, 1);
+                }
+                else {
+                    i++;
+                }
+            }
+
+            x.podiumCount = x.podiumInformation.length;
+        });
+
+        filteredData.forEach(x => {
+            var i = 0;
+
+            while (i < x.podiumInformation.length) {
+                if (x.podiumInformation[i].podiumPosition > this.state.podiumTo) {
+                    x.podiumInformation.splice(i, 1);
+                }
+                else {
+                    i++;
+                }
+            }
+
+            x.podiumCount = x.podiumInformation.length;
+        });
+        
+        filteredData.forEach(x => {
+            var i = 0;
+
+            while (i < x.podiumInformation.length) {
+                if (x.podiumInformation[i].gridPosition < this.state.gridFrom) {
+                    x.podiumInformation.splice(i, 1);
+                }
+                else {
+                    i++;
+                }
+            }
+
+            x.podiumCount = x.podiumInformation.length;
+        });
+
+        if (this.state.gridTo !== '') {
+            filteredData.forEach(x => {
+                var i = 0;
+
+                while (i < x.podiumInformation.length) {
+                    if (x.podiumInformation[i].gridPosition > this.state.gridTo) {
+                        x.podiumInformation.splice(i, 1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+
+                x.podiumCount = x.podiumInformation.length;
+            });
+        }
+        
+        filteredData = filteredData.filter(x => x.podiumCount >= this.state.from);
+
+        if (this.state.to !== '') {
+            filteredData = filteredData.filter(x => x.podiumCount <= this.state.to);
+        }
+
+        return filteredData;
+    }
+
+    getCircuits(data) {
+        var uniqueCircuits = new Set();
+
+        data.forEach(x => {
+            x.podiumInformation.forEach(y => {
+                uniqueCircuits.add(y.circuitName);
+            });
+        });
+
+        return [...uniqueCircuits];
+    }
+
+    initializeCircuits(circuits) {
+        var circuitObjects = [];
+        circuits.forEach(x => {
+            var circuitObject = { circuit: x, checked: true };
+
+            circuitObjects.push(circuitObject);
+        });
+
+        circuitObjects.sort((a, b) => (a.circuit > b.circuit ? 1 : -1));
+
+        this.setState({
+            selectedCircuits: circuitObjects
         });
     }
 
@@ -116,13 +269,14 @@ export class PodiumFinishers extends Component {
     render() {
         if (this.state.podiumFinishers.length > 0) {
             if (this.state.type !== "stackedColumn") {
-                var data = this.state.podiumFinishers.map((x, index) => ({ label: x.name, x: index + 1, y: x.podiumCount }));
+                var filteredData = this.filterData(this.state.podiumFinishers);
+                var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.podiumCount }));
 
                 if (this.state.axisYMaximum === '') {
                     var defaultMaximum = -1;
-                    for (let i = 0; i < this.state.podiumFinishers.length; i++) {
-                        if (defaultMaximum < this.state.podiumFinishers[i].podiumCount) {
-                            defaultMaximum = this.state.podiumFinishers[i].podiumCount;
+                    for (let i = 0; i < filteredData.length; i++) {
+                        if (defaultMaximum < filteredData[i].podiumCount) {
+                            defaultMaximum = filteredData[i].podiumCount;
                         }
                     }
 
@@ -229,6 +383,26 @@ export class PodiumFinishers extends Component {
                             currenttitlefont={this.state.titleFont}
                             currentaxisxfont={this.state.axisXFont}
                             currentaxisyfont={this.state.axisYFont}
+                        />
+                        <br />
+                        <br />
+                        <Button variant="primary" onClick={() => this.setState({ dataOptionsModalShow: true })}>
+                            Keisti duomenų parinktis
+                        </Button>
+                        <DataOptionsModal
+                            animation={false}
+                            size="lg"
+                            show={this.state.dataOptionsModalShow}
+                            onHide={() => this.setState({ dataOptionsModalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
+                            setdefaultdatafilters={this.setDefaultDataFilters}
+                            from={this.state.from}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.podiumFinishers.map(x => x.podiumCount))}
+                            podiumfrom={this.state.podiumFrom}
+                            podiumto={this.state.podiumTo !== '' ? this.state.podiumTo : Math.max.apply(Math, this.state.podiumFinishers.map(x => Math.max.apply(Math, x.podiumInformation.map(y => y.podiumPosition))))}
+                            gridfrom={this.state.gridFrom}
+                            gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.podiumFinishers.map(x => Math.max.apply(Math, x.podiumInformation.map(y => y.gridPosition))))}
+                            selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />
                         <br />
