@@ -56,14 +56,14 @@ export class Winners extends Component {
         this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
         this.filterData = this.filterData.bind(this);
         this.getCircuits = this.getCircuits.bind(this);
+        this.initializeCircuits = this.initializeCircuits.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
         this.setState({
             winners: data
-        }, () => this.initializeCircuits(this.getCircuits(this.state.winners))
-        );
+        }, () => this.initializeCircuits(this.getCircuits(this.state.winners)));
     }
 
     calculateTotalWins(winners) {
@@ -289,9 +289,9 @@ export class Winners extends Component {
 
                 if (this.state.axisYMaximum === '') {
                     var defaultMaximum = -1;
-                    for (let i = 0; i < this.state.winners.length; i++) {
-                        if (defaultMaximum < this.state.winners[i].winCount) {
-                            defaultMaximum = this.state.winners[i].winCount;
+                    for (let i = 0; i < filteredData.length; i++) {
+                        if (defaultMaximum < filteredData[i].winCount) {
+                            defaultMaximum = filteredData[i].winCount;
                         }
                     }
 
