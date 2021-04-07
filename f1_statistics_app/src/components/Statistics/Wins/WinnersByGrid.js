@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
@@ -35,19 +36,27 @@ export class WinnersByGrid extends Component {
             
             titleFont: "Calibri",
             axisXFont: "Calibri",
-            axisYFont: "Calibri"
+            axisYFont: "Calibri",
+            
+            from: 0,
+            to: '',
+            selectedCircuits: []
         };
 
         this.fillData = this.fillData.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
+        this.filterData = this.filterData.bind(this);
+        this.getCircuits = this.getCircuits.bind(this);
+        this.initializeCircuits = this.initializeCircuits.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
         this.setState({
             winnersByGrid: data
-        });
+        }, () => this.initializeCircuits(this.getCircuits(this.state.winnersByGrid)));
     }
 
     handleOptionsChange(event) {
@@ -56,6 +65,11 @@ export class WinnersByGrid extends Component {
         
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
+        }
+
+        if (name === 'selectedCircuits') {
+            valueToUpdate = this.state.selectedCircuits;
+            valueToUpdate.filter(x => x.circuit === value)[0].checked = checked;
         }
 
         this.setState({
@@ -91,6 +105,75 @@ export class WinnersByGrid extends Component {
         });
     }
 
+    setDefaultDataFilters(callback) {
+        this.setState({
+            from: 0,
+            to: '',
+            selectedCircuits: []
+        }, () => {
+            this.initializeCircuits(this.getCircuits(this.state.winnersByGrid));
+            callback();
+        });
+    }
+
+    filterData(data) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        this.state.selectedCircuits.forEach(selectedCircuit => {
+            if (selectedCircuit.checked === false) {
+                filteredData.forEach(x => {
+                    var i = 0;
+
+                    while (i < x.winInformation.length) {
+                        if (x.winInformation[i].circuitName === selectedCircuit.circuit) {
+                            x.winInformation.splice(i, 1);
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+
+                    x.winCount = x.winInformation.length;
+                });
+            }
+        });
+        
+        filteredData = filteredData.filter(x => x.winCount >= this.state.from);
+
+        if (this.state.to !== '') {
+            filteredData = filteredData.filter(x => x.winCount <= this.state.to);
+        }
+
+        return filteredData;
+    }
+
+    getCircuits(data) {
+        var uniqueCircuits = new Set();
+
+        data.forEach(x => {
+            x.winInformation.forEach(y => {
+                uniqueCircuits.add(y.circuitName);
+            });
+        });
+
+        return [...uniqueCircuits];
+    }
+
+    initializeCircuits(circuits) {
+        var circuitObjects = [];
+        circuits.forEach(x => {
+            var circuitObject = { circuit: x, checked: true };
+
+            circuitObjects.push(circuitObject);
+        });
+
+        circuitObjects.sort((a, b) => (a.circuit > b.circuit ? 1 : -1));
+
+        this.setState({
+            selectedCircuits: circuitObjects
+        });
+    }
+
     updateWindowSize() {
         this.setState({
             windowWidth: window.innerWidth,
@@ -113,15 +196,16 @@ export class WinnersByGrid extends Component {
 
     render() {
         if (this.state.winnersByGrid.length > 0) {
-            var data = this.state.winnersByGrid.map(x => ({ label: x.gridPosition, x: x.gridPosition, y: x.winCount, winnersFromGrid: x.winners.filter((value, index, element) => element.indexOf(value) === index).join(", ") }));
+            var filteredData = this.filterData(this.state.winnersByGrid);
+            var data = filteredData.map(x => ({ label: x.gridPosition, x: x.gridPosition, y: x.winCount, winnersFromGrid: x.winInformation.map(winner => winner.name).filter((value, index, elements) => elements.indexOf(value) === index).join(", ") }));
 
-            var defaultInterval = data[0].y <= 20 ? 1 : data[0].y <= 100 ? 5 : 20;
+            var defaultInterval = Math.max.apply(Math, data.map(d => d.y)) <= 20 ? 1 : Math.max.apply(Math, data.map(d => d.y)) <= 100 ? 5 : 20;
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
-                for (let i = 0; i < this.state.winnersByGrid.length; i++) {
-                    if (defaultMaximum < this.state.winnersByGrid[i].winCount) {
-                        defaultMaximum = this.state.winnersByGrid[i].winCount;
+                for (let i = 0; i < filteredData.length; i++) {
+                    if (defaultMaximum < filteredData[i].winCount) {
+                        defaultMaximum = filteredData[i].winCount;
                     }
                 }
     
@@ -158,7 +242,7 @@ export class WinnersByGrid extends Component {
                     title: this.state.axisYTitle,
                     minimum: this.state.axisYMinimum,
                     maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum,
-                    interval: this.state.axisYInterval !== -1 ? this.state.axisYInterval : defaultInterval,
+                    interval: this.state.axisYInterval !== '' ? this.state.axisYInterval : defaultInterval,
                     labelAngle: this.state.axisYLabelAngle,
                     gridThickness: this.state.axisYGridThickness,
                     titleFontFamily: this.state.axisYFont,
@@ -209,6 +293,22 @@ export class WinnersByGrid extends Component {
                             currenttitlefont={this.state.titleFont}
                             currentaxisxfont={this.state.axisXFont}
                             currentaxisyfont={this.state.axisYFont}
+                        />
+                        <br />
+                        <br />
+                        <Button variant="primary" onClick={() => this.setState({ dataOptionsModalShow: true })}>
+                            Keisti duomenų parinktis
+                        </Button>
+                        <DataOptionsModal
+                            animation={false}
+                            size="lg"
+                            show={this.state.dataOptionsModalShow}
+                            onHide={() => this.setState({ dataOptionsModalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
+                            setdefaultdatafilters={this.setDefaultDataFilters}
+                            from={this.state.from}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.winnersByGrid.map(x => x.winCount))}
+                            selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />
                         <br />
