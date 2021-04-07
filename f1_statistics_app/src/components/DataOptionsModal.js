@@ -36,6 +36,16 @@ export class DataOptionsModal extends Component {
             inputelement.value = this.props.gridto;
         }
 
+        inputelement = document.getElementsByName("podiumFrom")[0];
+        if (inputelement) {
+            inputelement.value = this.props.podiumfrom;
+        }
+
+        inputelement = document.getElementsByName("podiumTo")[0];
+        if (inputelement) {
+            inputelement.value = this.props.podiumto;
+        }
+
         inputelement = document.getElementsByName("selectedCircuits");
         if (inputelement) {
             for (let i = 0; i < inputelement.length; i++) {
@@ -123,6 +133,30 @@ export class DataOptionsModal extends Component {
                                         </Col>
                                         <Col>
                                             <Form.Control type="number" name="gridTo" placeholder="Iki..." defaultValue={this.props.gridto} onChange={this.props.handleoptionschange} />
+                                        </Col>
+                                    </Row>
+                                </>}
+                                {this.props.gridfrom !== undefined &&
+                                <>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Podiumo vieta</Form.Label>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Nuo</Form.Label>
+                                        </Col>
+                                        <Col>
+                                            <Form.Control type="number" name="podiumFrom" placeholder="Nuo..." defaultValue={this.props.podiumfrom} onChange={this.props.handleoptionschange} />
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Iki</Form.Label>
+                                        </Col>
+                                        <Col>
+                                            <Form.Control type="number" name="podiumTo" placeholder="Iki..." defaultValue={this.props.podiumto} onChange={this.props.handleoptionschange} />
                                         </Col>
                                     </Row>
                                 </>}
