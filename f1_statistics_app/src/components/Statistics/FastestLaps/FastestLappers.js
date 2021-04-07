@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
@@ -36,20 +37,30 @@ export class FastestLappers extends Component {
             
             titleFont: "Calibri",
             axisXFont: "Calibri",
-            axisYFont: "Calibri"
+            axisYFont: "Calibri",
+
+            from: 0,
+            to: '',
+            gridFrom: 1,
+            gridTo: '',
+            selectedCircuits: []
         };
 
         this.fillData = this.fillData.bind(this);
         this.calculateTotalFastest = this.calculateTotalFastest.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
+        this.filterData = this.filterData.bind(this);
+        this.getCircuits = this.getCircuits.bind(this);
+        this.initializeCircuits = this.initializeCircuits.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
         this.setState({
             fastestLappers: data
-        });
+        }, () => this.initializeCircuits(this.getCircuits(this.state.fastestLappers)));
     }
 
     calculateTotalFastest(fastestLappers) {
@@ -68,6 +79,11 @@ export class FastestLappers extends Component {
 
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
+        }
+
+        if (name === 'selectedCircuits') {
+            valueToUpdate = this.state.selectedCircuits;
+            valueToUpdate.filter(x => x.circuit === value)[0].checked = checked;
         }
 
         this.setState({
@@ -104,6 +120,109 @@ export class FastestLappers extends Component {
         });
     }
 
+    setDefaultDataFilters(callback) {
+        this.setState({
+            from: 0,
+            to: '',
+            gridFrom: 1,
+            gridTo: '',
+            selectedCircuits: []
+        }, () => {
+            this.initializeCircuits(this.getCircuits(this.state.fastestLappers));
+            callback();
+        });
+    }
+
+    filterData(data) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        this.state.selectedCircuits.forEach(selectedCircuit => {
+            if (selectedCircuit.checked === false) {
+                filteredData.forEach(x => {
+                    var i = 0;
+
+                    while (i < x.fastestLapInformation.length) {
+                        if (x.fastestLapInformation[i].circuitName === selectedCircuit.circuit) {
+                            x.fastestLapInformation.splice(i, 1);
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+
+                    x.fastestLapsCount = x.fastestLapInformation.length;
+                });
+            }
+        });
+        
+        filteredData.forEach(x => {
+            var i = 0;
+
+            while (i < x.fastestLapInformation.length) {
+                if (x.fastestLapInformation[i].gridPosition < this.state.gridFrom) {
+                    x.fastestLapInformation.splice(i, 1);
+                }
+                else {
+                    i++;
+                }
+            }
+
+            x.fastestLapsCount = x.fastestLapInformation.length;
+        });
+
+        if (this.state.gridTo !== '') {
+            filteredData.forEach(x => {
+                var i = 0;
+
+                while (i < x.fastestLapInformation.length) {
+                    if (x.fastestLapInformation[i].gridPosition > this.state.gridTo) {
+                        x.fastestLapInformation.splice(i, 1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+
+                x.fastestLapsCount = x.fastestLapInformation.length;
+            });
+        }
+        
+        filteredData = filteredData.filter(x => x.fastestLapsCount >= this.state.from);
+
+        if (this.state.to !== '') {
+            filteredData = filteredData.filter(x => x.fastestLapsCount <= this.state.to);
+        }
+
+        return filteredData;
+    }
+
+    getCircuits(data) {
+        var uniqueCircuits = new Set();
+
+        data.forEach(x => {
+            x.fastestLapInformation.forEach(y => {
+                uniqueCircuits.add(y.circuitName);
+            });
+        });
+
+        return [...uniqueCircuits];
+    }
+
+    initializeCircuits(circuits) {
+        var circuitObjects = [];
+        circuits.forEach(x => {
+            var circuitObject = { circuit: x, checked: true };
+
+            circuitObjects.push(circuitObject);
+        });
+
+        circuitObjects.sort((a, b) => (a.circuit > b.circuit ? 1 : -1));
+
+        this.setState({
+            selectedCircuits: circuitObjects
+        });
+    }
+
     updateWindowSize() {
         this.setState({
             windowWidth: window.innerWidth,
@@ -127,14 +246,15 @@ export class FastestLappers extends Component {
     render() {
         if (this.state.fastestLappers.length > 0) {
             if (this.state.type !== "stackedColumn") {
-                var totalFastest = this.calculateTotalFastest(this.state.fastestLappers);
-                var data = this.state.fastestLappers.map((x, index) => ({ label: x.name, x: index + 1, y: x.fastestLapsCount, percentage: Math.round((x.fastestLapsCount / totalFastest * 100) * 100) / 100 }));
+                var filteredData = this.filterData(this.state.fastestLappers);
+                var totalFastest = this.calculateTotalFastest(filteredData);
+                var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.fastestLapsCount, percentage: Math.round((x.fastestLapsCount / totalFastest * 100) * 100) / 100 }));
 
                 if (this.state.axisYMaximum === '') {
                     var defaultMaximum = -1;
-                    for (let i = 0; i < this.state.fastestLappers.length; i++) {
-                        if (defaultMaximum < this.state.fastestLappers[i].fastestLapsCount) {
-                            defaultMaximum = this.state.fastestLappers[i].fastestLapsCount;
+                    for (let i = 0; i < filteredData.length; i++) {
+                        if (defaultMaximum < filteredData[i].fastestLapsCount) {
+                            defaultMaximum = filteredData[i].fastestLapsCount;
                         }
                     }
 
@@ -245,6 +365,24 @@ export class FastestLappers extends Component {
                             currenttitlefont={this.state.titleFont}
                             currentaxisxfont={this.state.axisXFont}
                             currentaxisyfont={this.state.axisYFont}
+                        />
+                        <br />
+                        <br />
+                        <Button variant="primary" onClick={() => this.setState({ dataOptionsModalShow: true })}>
+                            Keisti duomenų parinktis
+                        </Button>
+                        <DataOptionsModal
+                            animation={false}
+                            size="lg"
+                            show={this.state.dataOptionsModalShow}
+                            onHide={() => this.setState({ dataOptionsModalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
+                            setdefaultdatafilters={this.setDefaultDataFilters}
+                            from={this.state.from}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.fastestLappers.map(x => x.fastestLapsCount))}
+                            gridfrom={this.state.gridFrom}
+                            gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.fastestLappers.map(x => Math.max.apply(Math, x.fastestLapInformation.map(y => y.gridPosition))))}
+                            selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />
                         <br />
