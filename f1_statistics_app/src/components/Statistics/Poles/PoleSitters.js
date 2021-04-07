@@ -42,7 +42,8 @@ export class PoleSitters extends Component {
             from: 0,
             to: '',
             gapFrom: 0,
-            gapTo: ''
+            gapTo: '',
+            selectedCircuits: []
         };
 
         this.fillData = this.fillData.bind(this);
@@ -51,13 +52,15 @@ export class PoleSitters extends Component {
         this.setDefaultValues = this.setDefaultValues.bind(this);
         this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
         this.filterData = this.filterData.bind(this);
+        this.getCircuits = this.getCircuits.bind(this);
+        this.initializeCircuits = this.initializeCircuits.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
         this.setState({
             poleSitters: data
-        });
+        }, () => this.initializeCircuits(this.getCircuits(this.state.poleSitters)));
     }
 
     calculateTotalPoles(poleSitters) {
@@ -76,6 +79,11 @@ export class PoleSitters extends Component {
         
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
+        }
+
+        if (name === 'selectedCircuits') {
+            valueToUpdate = this.state.selectedCircuits;
+            valueToUpdate.filter(x => x.circuit === value)[0].checked = checked;
         }
 
         this.setState({
@@ -117,12 +125,35 @@ export class PoleSitters extends Component {
             from: 0,
             to: '',
             gapFrom: 0,
-            gapTo: ''
-        }, () => callback());
+            gapTo: '',
+            selectedCircuits: []
+        }, () => {
+            this.initializeCircuits(this.getCircuits(this.state.poleSitters));
+            callback();
+        });
     }
 
     filterData(data) {
         var filteredData = JSON.parse(JSON.stringify(data));
+
+        this.state.selectedCircuits.forEach(selectedCircuit => {
+            if (selectedCircuit.checked === false) {
+                filteredData.forEach(x => {
+                    var i = 0;
+
+                    while (i < x.poleInformation.length) {
+                        if (x.poleInformation[i].circuitName === selectedCircuit.circuit) {
+                            x.poleInformation.splice(i, 1);
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+
+                    x.poleCount = x.poleInformation.length;
+                });
+            }
+        });
 
         filteredData.forEach(x => {
             var i = 0;
@@ -165,6 +196,32 @@ export class PoleSitters extends Component {
         return filteredData;
     }
 
+    getCircuits(data) {
+        var uniqueCircuits = new Set();
+
+        data.forEach(x => {
+            x.poleInformation.forEach(y => {
+                uniqueCircuits.add(y.circuitName);
+            });
+        });
+
+        return [...uniqueCircuits];
+    }
+
+    initializeCircuits(circuits) {
+        var circuitObjects = [];
+        circuits.forEach(x => {
+            var circuitObject = { circuit: x, checked: true };
+
+            circuitObjects.push(circuitObject);
+        });
+
+        circuitObjects.sort((a, b) => (a.circuit > b.circuit ? 1 : -1));
+
+        this.setState({
+            selectedCircuits: circuitObjects
+        });
+    }
 
     updateWindowSize() {
         this.setState({
@@ -322,6 +379,7 @@ export class PoleSitters extends Component {
                             to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.poleSitters.map(x => x.poleCount))}
                             gapfrom={this.state.gapFrom}
                             gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.poleSitters.map(x => Math.max.apply(Math, x.poleInformation.map(y => y.gapToSecond))))}
+                            selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />
                         <br />
