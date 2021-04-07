@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
@@ -36,13 +37,20 @@ export class PoleSitters extends Component {
             
             titleFont: "Calibri",
             axisXFont: "Calibri",
-            axisYFont: "Calibri"
+            axisYFont: "Calibri",
+
+            from: 0,
+            to: '',
+            gapFrom: 0,
+            gapTo: ''
         };
 
         this.fillData = this.fillData.bind(this);
         this.calculateTotalPoles = this.calculateTotalPoles.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
+        this.filterData = this.filterData.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
@@ -104,6 +112,60 @@ export class PoleSitters extends Component {
         });
     }
 
+    setDefaultDataFilters(callback) {
+        this.setState({
+            from: 0,
+            to: '',
+            gapFrom: 0,
+            gapTo: ''
+        }, () => callback());
+    }
+
+    filterData(data) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        filteredData.forEach(x => {
+            var i = 0;
+
+            while (i < x.poleInformation.length) {
+                if (x.poleInformation[i].gapToSecond < this.state.gapFrom) {
+                    x.poleInformation.splice(i, 1);
+                }
+                else {
+                    i++;
+                }
+            }
+
+            x.poleCount = x.poleInformation.length;
+        });
+
+        if (this.state.gapTo !== '') {
+            filteredData.forEach(x => {
+                var i = 0;
+
+                while (i < x.poleInformation.length) {
+                    if (x.poleInformation[i].gapToSecond > this.state.gapTo) {
+                        x.poleInformation.splice(i, 1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+
+                x.poleCount = x.poleInformation.length;
+            });
+        }
+        
+        filteredData = filteredData.filter(x => x.poleCount >= this.state.from);
+
+        if (this.state.to !== '') {
+            filteredData = filteredData.filter(x => x.poleCount <= this.state.to);
+        }
+
+        return filteredData;
+    }
+
+
     updateWindowSize() {
         this.setState({
             windowWidth: window.innerWidth,
@@ -127,14 +189,15 @@ export class PoleSitters extends Component {
     render() {
         if (this.state.poleSitters.length > 0) {
             if (this.state.type !== "stackedColumn") {
-                var totalPoles = this.calculateTotalPoles(this.state.poleSitters);
-                var data = this.state.poleSitters.map((x, index) => ({ label: x.name, x: index + 1, y: x.poleCount, percentage: Math.round((x.poleCount / totalPoles * 100) * 100) / 100 }));
+                var filteredData = this.filterData(this.state.poleSitters);
+                var totalPoles = this.calculateTotalPoles(filteredData);
+                var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.poleCount, percentage: Math.round((x.poleCount / totalPoles * 100) * 100) / 100 }));
                 
                 if (this.state.axisYMaximum === '') {
                     var defaultMaximum = -1;
-                    for (let i = 0; i < this.state.poleSitters.length; i++) {
-                        if (defaultMaximum < this.state.poleSitters[i].poleCount) {
-                            defaultMaximum = this.state.poleSitters[i].poleCount;
+                    for (let i = 0; i < filteredData.length; i++) {
+                        if (defaultMaximum < filteredData[i].poleCount) {
+                            defaultMaximum = filteredData[i].poleCount;
                         }
                     }
         
@@ -242,6 +305,23 @@ export class PoleSitters extends Component {
                             currenttitlefont={this.state.titleFont}
                             currentaxisxfont={this.state.axisXFont}
                             currentaxisyfont={this.state.axisYFont}
+                        />
+                        <br />
+                        <br />
+                        <Button variant="primary" onClick={() => this.setState({ dataOptionsModalShow: true })}>
+                            Keisti duomenų parinktis
+                        </Button>
+                        <DataOptionsModal
+                            animation={false}
+                            size="lg"
+                            show={this.state.dataOptionsModalShow}
+                            onHide={() => this.setState({ dataOptionsModalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
+                            setdefaultdatafilters={this.setDefaultDataFilters}
+                            from={this.state.from}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.poleSitters.map(x => x.poleCount))}
+                            gapfrom={this.state.gapFrom}
+                            gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.poleSitters.map(x => Math.max.apply(Math, x.poleInformation.map(y => y.gapToSecond))))}
                         />
                         <br />
                         <br />
