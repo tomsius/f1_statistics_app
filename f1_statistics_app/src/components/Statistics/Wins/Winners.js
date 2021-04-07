@@ -283,8 +283,9 @@ export class Winners extends Component {
     render() {
         if (this.state.winners.length > 0) {
             if (this.state.type !== "stackedColumn") {
-                var totalWins = this.calculateTotalWins(this.filterData(this.state.winners));
-                var data = this.filterData(this.state.winners).map((x, index) => ({ label: x.name, x: index + 1, y: x.winCount, percentage: Math.round((x.winCount / totalWins * 100) * 100) / 100 }));
+                var filteredData = this.filterData(this.state.winners);
+                var totalWins = this.calculateTotalWins(filteredData);
+                var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.winCount, percentage: Math.round((x.winCount / totalWins * 100) * 100) / 100 }));
 
                 if (this.state.axisYMaximum === '') {
                     var defaultMaximum = -1;
