@@ -70,7 +70,7 @@ export class Winners extends Component {
         var totalWins = 0;
 
         winners.forEach(winner => {
-            totalWins += winner.winCount
+            totalWins += winner.totalWinCount
         });
 
         return totalWins;
@@ -143,91 +143,110 @@ export class Winners extends Component {
 
         this.state.selectedCircuits.forEach(selectedCircuit => {
             if (selectedCircuit.checked === false) {
-                filteredData.forEach(x => {
+                filteredData.forEach(winner => {
+                    winner.winsByYear.forEach(year => {
+                        var i = 0;
+
+                        while (i < year.winInformation.length) {
+                            if (year.winInformation[i].circuitName === selectedCircuit.circuit) {
+                                year.winInformation.splice(i, 1);
+                            }
+                            else {
+                                i++;
+                            }
+                        }
+
+                        year.yearWinCount = year.winInformation.length;
+                    });
+                    winner.totalWinCount = winner.winsByYear.map(year => year.yearWinCount).reduce((accumulator, currentValue) => accumulator + currentValue);
+                });
+            }
+        });
+
+        filteredData.forEach(winner => {
+            winner.winsByYear.forEach(year => {
+                var i = 0;
+
+                while (i < year.winInformation.length) {
+                    if (year.winInformation[i].gapToSecond < this.state.gapFrom) {
+                        year.winInformation.splice(i, 1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+
+                year.yearWinCount = year.winInformation.length;
+            });
+
+            winner.totalWinCount = winner.winsByYear.map(year => year.yearWinCount).reduce((accumulator, currentValue) => accumulator + currentValue);
+        });
+
+        if (this.state.gapTo !== '') {
+            filteredData.forEach(winner => {
+                winner.winsByYear.forEach(year => {
                     var i = 0;
 
-                    while (i < x.winInformation.length) {
-                        if (x.winInformation[i].circuitName === selectedCircuit.circuit) {
-                            x.winInformation.splice(i, 1);
+                    while (i < year.winInformation.length) {
+                        if (year.winInformation[i].gapToSecond > this.state.gapTo) {
+                            year.winInformation.splice(i, 1);
                         }
                         else {
                             i++;
                         }
                     }
 
-                    x.winCount = x.winInformation.length;
+                    year.yearWinCount = year.winInformation.length;
                 });
-            }
-        });
 
-        filteredData.forEach(x => {
-            var i = 0;
+                winner.totalWinCount = winner.winsByYear.map(year => year.yearWinCount).reduce((accumulator, currentValue) => accumulator + currentValue);
+            });
+        }
 
-            while (i < x.winInformation.length) {
-                if (x.winInformation[i].gapToSecond < this.state.gapFrom) {
-                    x.winInformation.splice(i, 1);
-                }
-                else {
-                    i++;
-                }
-            }
-
-            x.winCount = x.winInformation.length;
-        });
-
-        if (this.state.gapTo !== '') {
-            filteredData.forEach(x => {
+        filteredData.forEach(winner => {
+            winner.winsByYear.forEach(year => {
                 var i = 0;
 
-                while (i < x.winInformation.length) {
-                    if (x.winInformation[i].gapToSecond > this.state.gapTo) {
-                        x.winInformation.splice(i, 1);
+                while (i < year.winInformation.length) {
+                    if (year.winInformation[i].gridPosition < this.state.gridFrom) {
+                        year.winInformation.splice(i, 1);
                     }
                     else {
                         i++;
                     }
                 }
 
-                x.winCount = x.winInformation.length;
+                year.yearWinCount = year.winInformation.length;
             });
-        }
-        
-        filteredData.forEach(x => {
-            var i = 0;
 
-            while (i < x.winInformation.length) {
-                if (x.winInformation[i].gridPosition < this.state.gridFrom) {
-                    x.winInformation.splice(i, 1);
-                }
-                else {
-                    i++;
-                }
-            }
-
-            x.winCount = x.winInformation.length;
+            winner.totalWinCount = winner.winsByYear.map(year => year.yearWinCount).reduce((accumulator, currentValue) => accumulator + currentValue);
         });
 
         if (this.state.gridTo !== '') {
-            filteredData.forEach(x => {
-                var i = 0;
+            filteredData.forEach(winner => {
+                winner.winsByYear.forEach(year => {
+                    var i = 0;
 
-                while (i < x.winInformation.length) {
-                    if (x.winInformation[i].gridPosition > this.state.gridTo) {
-                        x.winInformation.splice(i, 1);
+                    while (i < year.winInformation.length) {
+                        if (year.winInformation[i].gridPosition > this.state.gridTo) {
+                            year.winInformation.splice(i, 1);
+                        }
+                        else {
+                            i++;
+                        }
                     }
-                    else {
-                        i++;
-                    }
-                }
 
-                x.winCount = x.winInformation.length;
+                    year.yearWinCount = year.winInformation.length;
+                });
+
+                winner.totalWinCount = winner.winsByYear.map(year => year.yearWinCount).reduce((accumulator, currentValue) => accumulator + currentValue);
             });
         }
-        
-        filteredData = filteredData.filter(x => x.winCount >= this.state.from);
+
+        filteredData = filteredData.filter(winner => winner.totalWinCount >= this.state.from);
 
         if (this.state.to !== '') {
-            filteredData = filteredData.filter(x => x.winCount <= this.state.to);
+            filteredData = filteredData.filter(winner => winner.totalWinCount <= this.state.to);
         }
 
         return filteredData;
@@ -236,9 +255,11 @@ export class Winners extends Component {
     getCircuits(data) {
         var uniqueCircuits = new Set();
 
-        data.forEach(x => {
-            x.winInformation.forEach(y => {
-                uniqueCircuits.add(y.circuitName);
+        data.forEach(winner => {
+            winner.winsByYear.forEach(year => {
+                year.winInformation.forEach(information => {
+                    uniqueCircuits.add(information.circuitName);
+                });
             });
         });
 
@@ -282,16 +303,17 @@ export class Winners extends Component {
 
     render() {
         if (this.state.winners.length > 0) {
+            var filteredData = this.filterData(this.state.winners);
+
             if (this.state.type !== "stackedColumn") {
-                var filteredData = this.filterData(this.state.winners);
                 var totalWins = this.calculateTotalWins(filteredData);
-                var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.winCount, percentage: Math.round((x.winCount / totalWins * 100) * 100) / 100 }));
+                var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.totalWinCount, percentage: Math.round((x.totalWinCount / totalWins * 100) * 100) / 100 }));
 
                 if (this.state.axisYMaximum === '') {
                     var defaultMaximum = -1;
                     for (let i = 0; i < filteredData.length; i++) {
-                        if (defaultMaximum < filteredData[i].winCount) {
-                            defaultMaximum = filteredData[i].winCount;
+                        if (defaultMaximum < filteredData[i].totalWinCount) {
+                            defaultMaximum = filteredData[i].totalWinCount;
                         }
                     }
 
@@ -299,7 +321,7 @@ export class Winners extends Component {
                 }
             }
             else {
-                var data = this.state.winners.map(x => ({ type: "stackedColumn", showInLegend: true, name: x.name, dataPoints: x.winsByYear.map(yearWin => ({ label: yearWin.year, x: yearWin.year, y: yearWin.winCount })) }));
+                var data = filteredData.map(x => ({ type: "stackedColumn", showInLegend: true, name: x.name, dataPoints: x.winsByYear.map(yearWin => ({ label: yearWin.year, x: yearWin.year, y: yearWin.yearWinCount })) }));
 
                 defaultMaximum = 25;
             }
@@ -349,8 +371,10 @@ export class Winners extends Component {
                         var content = e.entries[0].dataPoint.x + "<br />";
                         var total = 0;
                         for (let i = 0; i < e.entries.length; i++) {
-                            content += e.entries[i].dataSeries.name + ": " + e.entries[i].dataPoint.y + "<br />";
-                            total += e.entries[i].dataPoint.y;
+                            if (e.entries[i].dataPoint.y > 0) {
+                                content += e.entries[i].dataSeries.name + ": " + e.entries[i].dataPoint.y + "<br />";
+                                total += e.entries[i].dataPoint.y;
+                            }
                         }
                         content += "Iš viso: " + total;
                         return content;
@@ -412,11 +436,11 @@ export class Winners extends Component {
                             handleoptionschange={this.handleOptionsChange}
                             setdefaultdatafilters={this.setDefaultDataFilters}
                             from={this.state.from}
-                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.winners.map(x => x.winCount))}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.winners.map(x => x.totalWinCount))}
                             gapfrom={this.state.gapFrom}
-                            gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.winners.map(x => Math.max.apply(Math, x.winInformation.map(y => y.gapToSecond))))}
+                            gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.winners.map(winner => winner.winsByYear.map(year => Math.max.apply(Math, year.winInformation.map(information => information.gapToSecond)))))}
                             gridfrom={this.state.gridFrom}
-                            gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.winners.map(x => Math.max.apply(Math, x.winInformation.map(y => y.gridPosition))))}
+                            gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.winners.map(winner => winner.winsByYear.map(year => Math.max.apply(Math, year.winInformation.map(information => information.gridPosition)))))}
                             selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />
