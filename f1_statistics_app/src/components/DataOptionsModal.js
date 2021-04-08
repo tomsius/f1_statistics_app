@@ -205,6 +205,34 @@ export class DataOptionsModal extends Component {
                                         </Col>
                                     </Row>
                                 </>}
+                                {this.props.selectednationalities !== undefined &&
+                                <>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Pilietybės</Form.Label>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <div style={{ textAlign: "center", paddingLeft: 0, paddingRight: 0, display: "inline-block" }}>
+                                                {this.props.selectednationalities.map(x =>
+                                                    <>
+                                                        <Form.Check
+                                                            type="checkbox"
+                                                            value={x.nationality}
+                                                            label={x.nationality}
+                                                            name="selectedNationalities"
+                                                            checked={x.checked}
+                                                            onChange={this.props.handleoptionschange}
+                                                            style={{ float: "left", paddingLeft: 0, paddingRight: 0 }}
+                                                        />
+                                                        <br />
+                                                    </>
+                                                )}
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </>}
                         </Container>
                     </Form>
                 </Modal.Body>
