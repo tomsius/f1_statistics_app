@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
@@ -23,6 +24,7 @@ export class NonFinishers extends Component {
             type: "column",
 
             axisXTitle: "Lenktynininkas",
+            axisXTitle2: "Metai",
             axisXLabelAngle: -90,
             axisXGridThickness: 0,
 
@@ -32,30 +34,40 @@ export class NonFinishers extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 5,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
-            axisYFont: "Calibri"
+            axisYFont: "Calibri",
+
+            from: 0,
+            to: '',
+            lapsCompletedFrom: 0,
+            lapsCompletedTo: '',
+            selectedCircuits: []
         };
 
         this.fillData = this.fillData.bind(this);
         this.calculateTotalNonFinishers = this.calculateTotalNonFinishers.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
+        this.filterData = this.filterData.bind(this);
+        this.getCircuits = this.getCircuits.bind(this);
+        this.initializeCircuits = this.initializeCircuits.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
         this.setState({
             nonFinishers: data
-        });
+        }, () => this.initializeCircuits(this.getCircuits(this.state.nonFinishers)));
     }
 
     calculateTotalNonFinishers(nonFinishers) {
         var totalNonFinishers = 0;
 
-        nonFinishers.forEach(totalNonFinisher => {
-            totalNonFinishers += totalNonFinisher.didNotFinishCount
+        nonFinishers.forEach(nonFinisher => {
+            totalNonFinishers += nonFinisher.totalDidNotFinishCount
         });
 
         return totalNonFinishers;
@@ -64,9 +76,14 @@ export class NonFinishers extends Component {
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
+        }
+
+        if (name === 'selectedCircuits') {
+            valueToUpdate = this.state.selectedCircuits;
+            valueToUpdate.filter(x => x.circuit === value)[0].checked = checked;
         }
 
         this.setState({
@@ -84,6 +101,7 @@ export class NonFinishers extends Component {
             type: "column",
 
             axisXTitle: "Lenktynininkas",
+            axisXTitle2: "Metai",
             axisXLabelAngle: -90,
             axisXGridThickness: 0,
 
@@ -93,12 +111,129 @@ export class NonFinishers extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 5,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
         }, () => {
             callback();
+        });
+    }
+
+    setDefaultDataFilters(callback) {
+        this.setState({
+            from: 0,
+            to: '',
+            lapsCompletedFrom: 0,
+            lapsCompletedTo: '',
+            selectedCircuits: []
+        }, () => {
+            this.initializeCircuits(this.getCircuits(this.state.nonFinishers));
+            callback();
+        });
+    }
+
+    filterData(data) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        this.state.selectedCircuits.forEach(selectedCircuit => {
+            if (selectedCircuit.checked === false) {
+                filteredData.forEach(nonFinisher => {
+                    nonFinisher.didNotFinishByYear.forEach(year => {
+                        var i = 0;
+
+                        while (i < year.didNotFinishInformation.length) {
+                            if (year.didNotFinishInformation[i].circuitName === selectedCircuit.circuit) {
+                                year.didNotFinishInformation.splice(i, 1);
+                            }
+                            else {
+                                i++;
+                            }
+                        }
+
+                        year.yearDidNotFinishCount = year.didNotFinishInformation.length;
+                    });
+                    
+                    nonFinisher.totalDidNotFinishCount = nonFinisher.didNotFinishByYear.map(year => year.yearDidNotFinishCount).reduce((accumulator, currentValue) => accumulator + currentValue);
+                });
+            }
+        });
+
+        filteredData.forEach(nonFinisher => {
+            nonFinisher.didNotFinishByYear.forEach(year => {
+                var i = 0;
+
+                while (i < year.didNotFinishInformation.length) {
+                    if (year.didNotFinishInformation[i].lapsCompleted < this.state.lapsCompletedFrom) {
+                        year.didNotFinishInformation.splice(i, 1);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+
+                year.yearDidNotFinishCount = year.didNotFinishInformation.length;
+            });
+
+            nonFinisher.totalDidNotFinishCount = nonFinisher.didNotFinishByYear.map(year => year.yearDidNotFinishCount).reduce((accumulator, currentValue) => accumulator + currentValue);
+        });
+
+        if (this.state.lapsCompletedTo !== '') {
+            filteredData.forEach(nonFinisher => {
+                nonFinisher.didNotFinishByYear.forEach(year => {
+                    var i = 0;
+
+                    while (i < year.didNotFinishInformation.length) {
+                        if (year.didNotFinishInformation[i].lapsCompleted > this.state.lapsCompletedTo) {
+                            year.didNotFinishInformation.splice(i, 1);
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+
+                    year.yearDidNotFinishCount = year.didNotFinishInformation.length;
+                });
+
+                nonFinisher.totalDidNotFinishCount = nonFinisher.didNotFinishByYear.map(year => year.yearDidNotFinishCount).reduce((accumulator, currentValue) => accumulator + currentValue);
+            });
+        }
+
+        filteredData = filteredData.filter(nonFinisher => nonFinisher.totalDidNotFinishCount >= this.state.from);
+
+        if (this.state.to !== '') {
+            filteredData = filteredData.filter(nonFinisher => nonFinisher.totalDidNotFinishCount <= this.state.to);
+        }
+
+        return filteredData;
+    }
+
+    getCircuits(data) {
+        var uniqueCircuits = new Set();
+
+        data.forEach(nonFinisher => {
+            nonFinisher.didNotFinishByYear.forEach(year => {
+                year.didNotFinishInformation.forEach(information => {
+                    uniqueCircuits.add(information.circuitName);
+                });
+            });
+        });
+
+        return [...uniqueCircuits];
+    }
+
+    initializeCircuits(circuits) {
+        var circuitObjects = [];
+        circuits.forEach(x => {
+            var circuitObject = { circuit: x, checked: true };
+
+            circuitObjects.push(circuitObject);
+        });
+
+        circuitObjects.sort((a, b) => (a.circuit > b.circuit ? 1 : -1));
+
+        this.setState({
+            selectedCircuits: circuitObjects
         });
     }
 
@@ -124,18 +259,27 @@ export class NonFinishers extends Component {
 
     render() {
         if (this.state.nonFinishers.length > 0) {
-            var totalNonFinishers = this.calculateTotalNonFinishers(this.state.nonFinishers);
-            var data = this.state.nonFinishers.map((x, index) => ({ label: x.name, x: index + 1, y: x.didNotFinishCount, percentage: Math.round((x.didNotFinishCount / totalNonFinishers * 100) * 100) / 100 }));
-            
-            if (this.state.axisYMaximum === '') {
-                var defaultMaximum = -1;
-                for (let i = 0; i < this.state.nonFinishers.length; i++) {
-                    if (defaultMaximum < this.state.nonFinishers[i].didNotFinishCount) {
-                        defaultMaximum = this.state.nonFinishers[i].didNotFinishCount;
+            var filteredData = this.filterData(this.state.nonFinishers);
+
+            if (this.state.type !== "stackedColumn") {
+                var totalNonFinishers = this.calculateTotalNonFinishers(filteredData);
+                var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.totalDidNotFinishCount, percentage: Math.round((x.totalDidNotFinishCount / totalNonFinishers * 100) * 100) / 100 }));
+
+                if (this.state.axisYMaximum === '') {
+                    var defaultMaximum = -1;
+                    for (let i = 0; i < filteredData.length; i++) {
+                        if (defaultMaximum < filteredData[i].totalDidNotFinishCount) {
+                            defaultMaximum = filteredData[i].totalDidNotFinishCount;
+                        }
                     }
+
+                    defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
                 }
-    
-                defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
+            }
+            else {
+                var data = filteredData.map(x => ({ type: "stackedColumn", showInLegend: true, name: x.name, dataPoints: x.didNotFinishByYear.map(year => ({ label: year.year, x: year.year, y: year.yearDidNotFinishCount })) }));
+
+                defaultMaximum = 100;
             }
 
             var options = {
@@ -149,15 +293,15 @@ export class NonFinishers extends Component {
                     text: this.state.title,
                     fontFamily: this.state.titleFont
                 },
-                data: [
+                data: this.state.type !== "stackedColumn" ? [
                     {
                         type: this.state.type,
                         dataPoints: data,
                         indexLabel: this.state.type === 'column' ? "" : "{label} {y}"
                     }
-                ],
+                ] : data,
                 axisX: {
-                    title: this.state.axisXTitle,
+                    title: this.state.type !== "stackedColumn" ? this.state.axisXTitle : this.state.axisXTitle2,
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
                     gridThickness: this.state.axisXGridThickness,
@@ -177,8 +321,22 @@ export class NonFinishers extends Component {
                     titleFontFamily: this.state.axisYFont,
                     labelFontFamily: this.state.axisYFont
                 },
-                toolTip:{   
+                toolTip: this.state.type !== "stackedColumn" ? {
                     content: this.state.type === 'column' ? "{label}: {y}" : "{label}: {percentage}%"
+                } : {
+                    shared: true,
+                    content: function (e) {
+                        var content = e.entries[0].dataPoint.x + "<br />";
+                        var total = 0;
+                        for (let i = 0; i < e.entries.length; i++) {
+                            if (e.entries[i].dataPoint.y > 0) {
+                                content += e.entries[i].dataSeries.name + ": " + e.entries[i].dataPoint.y + "<br />";
+                                total += e.entries[i].dataPoint.y;
+                            }
+                        }
+                        content += "Iš viso: " + total;
+                        return content;
+                    }
                 }
             };
         }
@@ -192,24 +350,24 @@ export class NonFinishers extends Component {
                 {
                     this.state.nonFinishers.length > 0 &&
                     <div>
-                        <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                        <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
                             Keisti grafiko parinktis
                         </Button>
-                        <ChartOptionsModal 
+                        <ChartOptionsModal
                             animation={false}
                             size="lg"
-                            show={this.state.modalShow} 
-                            onHide={() => this.setState({modalShow: false})} 
-                            handleoptionschange={this.handleOptionsChange} 
+                            show={this.state.modalShow}
+                            onHide={() => this.setState({ modalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
                             setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                            themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                            themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
                             currenttheme={this.state.theme}
-                            types={[{type: "column", name: "Stulpelinė"}, {type: "pie", name: "Skritulinė"}]}
+                            types={[{ type: "column", name: "Stulpelinė" }, { type: "stackedColumn", name: "Stulpelinė (sluoksniuota)" }, { type: "pie", name: "Skritulinė" }]}
                             currenttype={this.state.type}
-                            axisxtitle={this.state.axisXTitle}
+                            axisxtitle={this.state.type !== "stackedColumn" ? this.state.axisXTitle : this.state.axisXTitle2}
                             axisxlabelangle={this.state.axisXLabelAngle}
                             axisxgridthickness={this.state.axisXGridThickness}
                             axisytitle={this.state.axisYTitle}
@@ -222,6 +380,24 @@ export class NonFinishers extends Component {
                             currenttitlefont={this.state.titleFont}
                             currentaxisxfont={this.state.axisXFont}
                             currentaxisyfont={this.state.axisYFont}
+                        />
+                        <br />
+                        <br />
+                        <Button variant="primary" onClick={() => this.setState({ dataOptionsModalShow: true })}>
+                            Keisti duomenų parinktis
+                        </Button>
+                        <DataOptionsModal
+                            animation={false}
+                            size="lg"
+                            show={this.state.dataOptionsModalShow}
+                            onHide={() => this.setState({ dataOptionsModalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
+                            setdefaultdatafilters={this.setDefaultDataFilters}
+                            from={this.state.from}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.nonFinishers.map(nonFinisher => nonFinisher.totalDidNotFinishCount))}
+                            lapscompletedfrom={this.state.lapsCompletedFrom}
+                            lapscompletedto={this.state.lapsCompletedTo !== '' ? this.state.lapsCompletedTo : Math.max.apply(Math, this.state.nonFinishers.map(nonFinisher => nonFinisher.didNotFinishByYear.map(year => Math.max.apply(Math, year.didNotFinishInformation.map(information => information.lapsCompleted)))))}
+                            selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />
                         <br />
