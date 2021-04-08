@@ -69,8 +69,8 @@ export class PodiumThree extends Component {
     calculateTotalSamePodiums(podiumThree) {
         var totalSamePodiums = 0;
 
-        podiumThree.forEach(p => {
-            totalSamePodiums += p.samePodiumCount
+        podiumThree.forEach(podium => {
+            totalSamePodiums += podium.samePodiumCount
         });
 
         return totalSamePodiums;
@@ -145,19 +145,19 @@ export class PodiumThree extends Component {
 
         this.state.selectedCircuits.forEach(selectedCircuit => {
             if (selectedCircuit.checked === false) {
-                filteredData.forEach(x => {
+                filteredData.forEach(podiumThree => {
                     var i = 0;
 
-                    while (i < x.circuits.length) {
-                        if (x.circuits[i] === selectedCircuit.circuit) {
-                            x.circuits.splice(i, 1);
+                    while (i < podiumThree.circuits.length) {
+                        if (podiumThree.circuits[i] === selectedCircuit.circuit) {
+                            podiumThree.circuits.splice(i, 1);
                         }
                         else {
                             i++;
                         }
                     }
 
-                    x.samePodiumCount = x.circuits.length;
+                    podiumThree.samePodiumCount = podiumThree.circuits.length;
                 });
             }
         });
@@ -173,10 +173,10 @@ export class PodiumThree extends Component {
             }
         });
         
-        filteredData = filteredData.filter(x => x.samePodiumCount >= this.state.from);
+        filteredData = filteredData.filter(podiumThree => podiumThree.samePodiumCount >= this.state.from);
 
         if (this.state.to !== '') {
-            filteredData = filteredData.filter(x => x.samePodiumCount <= this.state.to);
+            filteredData = filteredData.filter(podiumThree => podiumThree.samePodiumCount <= this.state.to);
         }
 
         return filteredData;
@@ -185,9 +185,9 @@ export class PodiumThree extends Component {
     getCircuits(data) {
         var uniqueCircuits = new Set();
 
-        data.forEach(x => {
-            x.circuits.forEach(y => {
-                uniqueCircuits.add(y);
+        data.forEach(podiumThree => {
+            podiumThree.circuits.forEach(circuit => {
+                uniqueCircuits.add(circuit);
             });
         });
 
@@ -212,9 +212,9 @@ export class PodiumThree extends Component {
     getPodiumFinishers(data) {
         var uniquePodiumfinishers = new Set();
 
-        data.forEach(x => {
-            x.podiumFinishers.forEach(y => {
-                uniquePodiumfinishers.add(y);
+        data.forEach(podiumThree => {
+            podiumThree.podiumFinishers.forEach(podiumFinisher => {
+                uniquePodiumfinishers.add(podiumFinisher);
             });
         });
 
@@ -369,7 +369,7 @@ export class PodiumThree extends Component {
                             handleoptionschange={this.handleOptionsChange}
                             setdefaultdatafilters={this.setDefaultDataFilters}
                             from={this.state.from}
-                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.podiumThree.map(x => x.samePodiumCount))}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.podiumThree.map(podiumThree => podiumThree.samePodiumCount))}
                             selectedcircuits={this.state.selectedCircuits}
                             podiumfinishertitle={this.props.axisName === "Lenktynininkų trejetukas" ? "Lenktynininkas" : "Komanda"}
                             selectedpodiumfinishers={this.state.selectedPodiumFinishers}

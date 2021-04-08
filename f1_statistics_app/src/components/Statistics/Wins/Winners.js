@@ -437,7 +437,7 @@ export class Winners extends Component {
                             handleoptionschange={this.handleOptionsChange}
                             setdefaultdatafilters={this.setDefaultDataFilters}
                             from={this.state.from}
-                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.winners.map(x => x.totalWinCount))}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.winners.map(winner => winner.totalWinCount))}
                             gapfrom={this.state.gapFrom}
                             gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.winners.map(winner => winner.winsByYear.map(year => Math.max.apply(Math, year.winInformation.map(information => information.gapToSecond)))))}
                             gridfrom={this.state.gridFrom}

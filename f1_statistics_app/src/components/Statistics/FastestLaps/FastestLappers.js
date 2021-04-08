@@ -396,7 +396,7 @@ export class FastestLappers extends Component {
                             handleoptionschange={this.handleOptionsChange}
                             setdefaultdatafilters={this.setDefaultDataFilters}
                             from={this.state.from}
-                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.fastestLappers.map(x => x.totalFastestLapsCount))}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.fastestLappers.map(fastestLapper => fastestLapper.totalFastestLapsCount))}
                             gridfrom={this.state.gridFrom}
                             gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.fastestLappers.map(fastestLapper => fastestLapper.fastestLapsByYear.map(year => Math.max.apply(Math, year.fastestLapInformation.map(information => information.gridPosition)))))}
                             selectedcircuits={this.state.selectedCircuits}

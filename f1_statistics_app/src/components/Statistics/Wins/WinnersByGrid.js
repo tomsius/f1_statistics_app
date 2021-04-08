@@ -307,7 +307,7 @@ export class WinnersByGrid extends Component {
                             handleoptionschange={this.handleOptionsChange}
                             setdefaultdatafilters={this.setDefaultDataFilters}
                             from={this.state.from}
-                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.winnersByGrid.map(x => x.winCount))}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.winnersByGrid.map(winner => winner.winCount))}
                             selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />

@@ -438,7 +438,7 @@ export class PodiumFinishers extends Component {
                             handleoptionschange={this.handleOptionsChange}
                             setdefaultdatafilters={this.setDefaultDataFilters}
                             from={this.state.from}
-                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.podiumFinishers.map(x => x.totalPodiumCount))}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.podiumFinishers.map(podiumFinisher => podiumFinisher.totalPodiumCount))}
                             podiumfrom={this.state.podiumFrom}
                             podiumto={this.state.podiumTo !== '' ? this.state.podiumTo : Math.max.apply(Math, this.state.podiumFinishers.map(podiumFinisher => podiumFinisher.podiumsByYear.map(year => Math.max.apply(Math, year.podiumInformation.map(information => information.podiumPosition)))))}
                             gridfrom={this.state.gridFrom}

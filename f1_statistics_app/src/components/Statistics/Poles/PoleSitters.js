@@ -394,7 +394,7 @@ export class PoleSitters extends Component {
                             handleoptionschange={this.handleOptionsChange}
                             setdefaultdatafilters={this.setDefaultDataFilters}
                             from={this.state.from}
-                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.poleSitters.map(x => x.totalPoleCount))}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.poleSitters.map(poleSitter => poleSitter.totalPoleCount))}
                             gapfrom={this.state.gapFrom}
                             gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.poleSitters.map(poleSitter => poleSitter.polesByYear.map(year => Math.max.apply(Math, year.poleInformation.map(information => information.gapToSecond)))))}
                             selectedcircuits={this.state.selectedCircuits}

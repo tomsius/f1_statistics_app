@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
@@ -24,7 +25,7 @@ export class Leaders extends Component {
 
             axisXTitle: this.props.axisName,
             axisXTitle2: "Metai",
-            axisXLabelAngle: -90,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Pirmavimų skaičius, vnt.",
@@ -36,27 +37,35 @@ export class Leaders extends Component {
             
             titleFont: "Calibri",
             axisXFont: "Calibri",
-            axisYFont: "Calibri"
+            axisYFont: "Calibri",
+
+            from: 0,
+            to: '',
+            selectedCircuits: []
         };
 
         this.fillData = this.fillData.bind(this);
         this.calculateTotalLaps = this.calculateTotalLaps.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
+        this.filterData = this.filterData.bind(this);
+        this.getCircuits = this.getCircuits.bind(this);
+        this.initializeCircuits = this.initializeCircuits.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
         this.setState({
             leaders: data
-        });
+        }, () => this.initializeCircuits(this.getCircuits(this.state.leaders)));
     }
 
     calculateTotalLaps(leaders) {
         var totalLaps = 0;
 
         leaders.forEach(leader => {
-            totalLaps += leader.leadingLapCount
+            totalLaps += leader.totalLeadingLapCount
         });
 
         return totalLaps;
@@ -68,6 +77,11 @@ export class Leaders extends Component {
 
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
+        }
+
+        if (name === 'selectedCircuits') {
+            valueToUpdate = this.state.selectedCircuits;
+            valueToUpdate.filter(x => x.circuit === value)[0].checked = checked;
         }
 
         this.setState({
@@ -86,7 +100,7 @@ export class Leaders extends Component {
 
             axisXTitle: this.props.axisName,
             axisXTitle2: "Metai",
-            axisXLabelAngle: -90,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Pirmavimų skaičius, vnt.",
@@ -101,6 +115,81 @@ export class Leaders extends Component {
             axisYFont: "Calibri"
         }, () => {
             callback();
+        });
+    }
+
+    setDefaultDataFilters(callback) {
+        this.setState({
+            from: 0,
+            to: '',
+            selectedCircuits: []
+        }, () => {
+            this.initializeCircuits(this.getCircuits(this.state.leaders));
+            callback();
+        });
+    }
+
+    filterData(data) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        this.state.selectedCircuits.forEach(selectedCircuit => {
+            if (selectedCircuit.checked === false) {
+                filteredData.forEach(leader => {
+                    leader.leadingLapsByYear.forEach(year => {
+                        var i = 0;
+
+                        while (i < year.leadingLapInformation.length) {
+                            if (year.leadingLapInformation[i].circuitName === selectedCircuit.circuit) {
+                                year.leadingLapInformation.splice(i, 1);
+                            }
+                            else {
+                                i++;
+                            }
+                        }
+
+                        year.yearLeadingLapCount = year.leadingLapInformation.length;
+                    });
+                    
+                    leader.totalLeadingLapCount = leader.leadingLapsByYear.map(year => year.yearLeadingLapCount).reduce((accumulator, currentValue) => accumulator + currentValue);
+                });
+            }
+        });
+
+        filteredData = filteredData.filter(leader => leader.totalLeadingLapCount >= this.state.from);
+
+        if (this.state.to !== '') {
+            filteredData = filteredData.filter(leader => leader.totalLeadingLapCount <= this.state.to);
+        }
+
+        return filteredData;
+    }
+
+    getCircuits(data) {
+        var uniqueCircuits = new Set();
+
+        data.forEach(leader => {
+            leader.leadingLapsByYear.forEach(year => {
+                year.leadingLapInformation.forEach(information => {
+                    uniqueCircuits.add(information.circuitName);
+                });
+            });
+        });
+
+        return [...uniqueCircuits];
+    }
+
+    initializeCircuits(circuits) {
+        var circuitObjects = [];
+        circuits.forEach(x => {
+            var circuitObject = { circuit: x, checked: true };
+
+            circuitObjects.push(circuitObject);
+        });
+
+        circuitObjects.sort((a, b) => (a.circuit > b.circuit ? 1 : -1));
+
+        this.setState({
+            selectedCircuits: circuitObjects
         });
     }
 
@@ -126,15 +215,17 @@ export class Leaders extends Component {
 
     render() {
         if (this.state.leaders.length > 0) {
+            var filteredData = this.filterData(this.state.leaders);
+
             if (this.state.type !== "stackedColumn") {
-                var totalLaps = this.calculateTotalLaps(this.state.leaders);
-                var data = this.state.leaders.map(x => ({ label: x.name, y: x.leadingLapCount, percentage: Math.round((x.leadingLapCount / totalLaps * 100) * 100) / 100 }));
+                var totalLaps = this.calculateTotalLaps(filteredData);
+                var data = filteredData.map(x => ({ label: x.name, y: x.totalLeadingLapCount, percentage: Math.round((x.totalLeadingLapCount / totalLaps * 100) * 100) / 100 }));
 
                 if (this.state.axisYMaximum === '') {
                     var defaultMaximum = -1;
                     for (let i = 0; i < this.state.leaders.length; i++) {
-                        if (defaultMaximum < this.state.leaders[i].leadingLapCount) {
-                            defaultMaximum = this.state.leaders[i].leadingLapCount;
+                        if (defaultMaximum < this.state.leaders[i].totalLeadingLapCount) {
+                            defaultMaximum = this.state.leaders[i].totalLeadingLapCount;
                         }
                     }
 
@@ -142,7 +233,7 @@ export class Leaders extends Component {
                 }
             }
             else {
-                var data = this.state.leaders.map(x => ({ type: "stackedColumn", showInLegend: true, name: x.name, dataPoints: x.leadingLapsByYear.map(yearLeadingLap => ({ label: yearLeadingLap.year, x: yearLeadingLap.year, y: yearLeadingLap.leadingLapCount })) }));
+                var data = filteredData.map(x => ({ type: "stackedColumn", showInLegend: true, name: x.name, dataPoints: x.leadingLapsByYear.map(yearLeadingLap => ({ label: yearLeadingLap.year, x: yearLeadingLap.year, y: yearLeadingLap.yearLeadingLapCount })) }));
 
                 defaultMaximum = 1400;
             }
@@ -243,6 +334,22 @@ export class Leaders extends Component {
                             currenttitlefont={this.state.titleFont}
                             currentaxisxfont={this.state.axisXFont}
                             currentaxisyfont={this.state.axisYFont}
+                        />
+                        <br />
+                        <br />
+                        <Button variant="primary" onClick={() => this.setState({ dataOptionsModalShow: true })}>
+                            Keisti duomenų parinktis
+                        </Button>
+                        <DataOptionsModal
+                            animation={false}
+                            size="lg"
+                            show={this.state.dataOptionsModalShow}
+                            onHide={() => this.setState({ dataOptionsModalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
+                            setdefaultdatafilters={this.setDefaultDataFilters}
+                            from={this.state.from}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.leaders.map(leader => leader.totalLeadingLapCount))}
+                            selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />
                         <br />
