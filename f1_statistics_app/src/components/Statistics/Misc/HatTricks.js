@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
@@ -35,20 +36,28 @@ export class HatTricks extends Component {
             
             titleFont: "Calibri",
             axisXFont: "Calibri",
-            axisYFont: "Calibri"
+            axisYFont: "Calibri",
+
+            from: 0,
+            to: '',
+            selectedNationalities: []
         };
 
         this.fillData = this.fillData.bind(this);
         this.calculateTotalHatTricks = this.calculateTotalHatTricks.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
+        this.filterData = this.filterData.bind(this);
+        this.getNationalities = this.getNationalities.bind(this);
+        this.initializeNationalities = this.initializeNationalities.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
         this.setState({
             hatTricks: data
-        });
+        }, () => { this.initializeNationalities(this.getNationalities(this.state.hatTricks)) });
     }
 
     calculateTotalHatTricks(hatTricks) {
@@ -67,6 +76,11 @@ export class HatTricks extends Component {
         
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
+        }
+
+        if (name === 'selectedNationalities') {
+            valueToUpdate = this.state.selectedNationalities;
+            valueToUpdate.filter(x => x.nationality === value)[0].checked = checked;
         }
 
         this.setState({
@@ -102,6 +116,65 @@ export class HatTricks extends Component {
         });
     }
 
+    setDefaultDataFilters(callback) {
+        this.setState({
+            from: 0,
+            to: '',
+            selectedNationalities: []
+        }, () => {
+            this.initializeNationalities(this.getNationalities(this.state.hatTricks));
+            callback();
+        });
+    }
+
+    filterData(data) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        this.state.selectedNationalities.forEach(selectedNationality => {
+            if (selectedNationality.checked === false) {
+                for (let i = 0; i < filteredData.length; i++) {
+                    if (filteredData[i].nationality === selectedNationality.nationality) {
+                        filteredData.splice(i, 1);
+                        i--;
+                    }
+                }
+            }
+        });
+
+        filteredData = filteredData.filter(hatTrick => hatTrick.hatTrickCount >= this.state.from);
+
+        if (this.state.to !== '') {
+            filteredData = filteredData.filter(hatTrick => hatTrick.hatTrickCount <= this.state.to);
+        }
+
+        return filteredData;
+    }
+
+    getNationalities(data) {
+        var uniqueNationalities = new Set();
+
+        data.forEach(hatTrick => {
+            uniqueNationalities.add(hatTrick.nationality);
+        });
+
+        return [...uniqueNationalities];
+    }
+
+    initializeNationalities(nationalities) {
+        var nationalityObjects = [];
+        nationalities.forEach(nationality => {
+            var nationalityObject = { nationality: nationality, checked: true };
+
+            nationalityObjects.push(nationalityObject);
+        });
+
+        nationalityObjects.sort((a, b) => (a.nationality > b.nationality ? 1 : -1));
+
+        this.setState({
+            selectedNationalities: nationalityObjects
+        });
+    }
+
     updateWindowSize() {
         this.setState({
             windowWidth: window.innerWidth,
@@ -124,14 +197,15 @@ export class HatTricks extends Component {
 
     render() {
         if (this.state.hatTricks !== null) {
-            var totalHatTricks = this.calculateTotalHatTricks(this.state.hatTricks);
-            var data = this.state.hatTricks.map((x, index) => ({ label: x.name, x: index + 1, y: x.hatTrickCount, percentage: Math.round((x.hatTrickCount / totalHatTricks * 100) * 100) / 100 }));
+            var filteredData = this.filterData(this.state.hatTricks);
+            var totalHatTricks = this.calculateTotalHatTricks(filteredData);
+            var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.hatTrickCount, percentage: Math.round((x.hatTrickCount / totalHatTricks * 100) * 100) / 100 }));
             
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
-                for (let i = 0; i < this.state.hatTricks.length; i++) {
-                    if (defaultMaximum < this.state.hatTricks[i].hatTrickCount) {
-                        defaultMaximum = this.state.hatTricks[i].hatTrickCount;
+                for (let i = 0; i < filteredData.length; i++) {
+                    if (defaultMaximum < filteredData[i].hatTrickCount) {
+                        defaultMaximum = filteredData[i].hatTrickCount;
                     }
                 }
     
@@ -222,6 +296,22 @@ export class HatTricks extends Component {
                             currenttitlefont={this.state.titleFont}
                             currentaxisxfont={this.state.axisXFont}
                             currentaxisyfont={this.state.axisYFont}
+                        />
+                        <br />
+                        <br />
+                        <Button variant="primary" onClick={() => this.setState({ dataOptionsModalShow: true })}>
+                            Keisti duomenų parinktis
+                        </Button>
+                        <DataOptionsModal
+                            animation={false}
+                            size="lg"
+                            show={this.state.dataOptionsModalShow}
+                            onHide={() => this.setState({ dataOptionsModalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
+                            setdefaultdatafilters={this.setDefaultDataFilters}
+                            from={this.state.from}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.hatTricks.map(hatTrick => hatTrick.hatTrickCount))}
+                            selectednationalities={this.state.selectedNationalities}
                         />
                         <br />
                         <br />
