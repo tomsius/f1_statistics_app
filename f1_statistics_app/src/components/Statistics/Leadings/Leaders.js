@@ -224,8 +224,8 @@ export class Leaders extends Component {
                 if (this.state.axisYMaximum === '') {
                     var defaultMaximum = -1;
                     for (let i = 0; i < this.state.leaders.length; i++) {
-                        if (defaultMaximum < this.state.leaders[i].totalLeadingLapCount) {
-                            defaultMaximum = this.state.leaders[i].totalLeadingLapCount;
+                        if (defaultMaximum < filteredData[i].totalLeadingLapCount) {
+                            defaultMaximum = filteredData[i].totalLeadingLapCount;
                         }
                     }
 
