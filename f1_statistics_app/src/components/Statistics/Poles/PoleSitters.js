@@ -34,7 +34,7 @@ export class PoleSitters extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 5,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri",
@@ -67,7 +67,7 @@ export class PoleSitters extends Component {
         var totalPoles = 0;
 
         poleSitters.forEach(poleSitter => {
-            totalPoles += poleSitter.poleCount
+            totalPoles += poleSitter.totalPoleCount
         });
 
         return totalPoles;
@@ -76,7 +76,7 @@ export class PoleSitters extends Component {
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
         }
@@ -111,7 +111,7 @@ export class PoleSitters extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 5,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -138,59 +138,71 @@ export class PoleSitters extends Component {
 
         this.state.selectedCircuits.forEach(selectedCircuit => {
             if (selectedCircuit.checked === false) {
-                filteredData.forEach(x => {
-                    var i = 0;
+                filteredData.forEach(poleSitter => {
+                    poleSitter.polesByYear.forEach(year => {
+                        var i = 0;
 
-                    while (i < x.poleInformation.length) {
-                        if (x.poleInformation[i].circuitName === selectedCircuit.circuit) {
-                            x.poleInformation.splice(i, 1);
+                        while (i < year.poleInformation.length) {
+                            if (year.poleInformation[i].circuitName === selectedCircuit.circuit) {
+                                year.poleInformation.splice(i, 1);
+                            }
+                            else {
+                                i++;
+                            }
                         }
-                        else {
-                            i++;
-                        }
-                    }
 
-                    x.poleCount = x.poleInformation.length;
+                        year.yearPoleCount = year.poleInformation.length;
+                    });
+
+                    poleSitter.totalPoleCount = poleSitter.polesByYear.map(year => year.yearPoleCount).reduce((accumulator, currentValue) => accumulator + currentValue);
                 });
             }
         });
 
-        filteredData.forEach(x => {
-            var i = 0;
-
-            while (i < x.poleInformation.length) {
-                if (x.poleInformation[i].gapToSecond < this.state.gapFrom) {
-                    x.poleInformation.splice(i, 1);
-                }
-                else {
-                    i++;
-                }
-            }
-
-            x.poleCount = x.poleInformation.length;
-        });
-
-        if (this.state.gapTo !== '') {
-            filteredData.forEach(x => {
+        filteredData.forEach(poleSitter => {
+            poleSitter.polesByYear.forEach(year => {
                 var i = 0;
 
-                while (i < x.poleInformation.length) {
-                    if (x.poleInformation[i].gapToSecond > this.state.gapTo) {
-                        x.poleInformation.splice(i, 1);
+                while (i < year.poleInformation.length) {
+                    if (year.poleInformation[i].gapToSecond < this.state.gapFrom) {
+                        year.poleInformation.splice(i, 1);
                     }
                     else {
                         i++;
                     }
                 }
 
-                x.poleCount = x.poleInformation.length;
+                year.yearPoleCount = year.poleInformation.length;
+            });
+
+            poleSitter.totalPoleCount = poleSitter.polesByYear.map(year => year.yearPoleCount).reduce((accumulator, currentValue) => accumulator + currentValue);
+        });
+
+        if (this.state.gapTo !== '') {
+            filteredData.forEach(poleSitter => {
+                poleSitter.polesByYear.forEach(year => {
+                    var i = 0;
+
+                    while (i < year.poleInformation.length) {
+                        if (year.poleInformation[i].gapToSecond > this.state.gapTo) {
+                            year.poleInformation.splice(i, 1);
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+
+                    year.yearPoleCount = year.poleInformation.length;
+                });
+
+                poleSitter.totalPoleCount = poleSitter.polesByYear.map(year => year.yearPoleCount).reduce((accumulator, currentValue) => accumulator + currentValue);
             });
         }
-        
-        filteredData = filteredData.filter(x => x.poleCount >= this.state.from);
+
+        filteredData = filteredData.filter(x => x.totalPoleCount >= this.state.from);
 
         if (this.state.to !== '') {
-            filteredData = filteredData.filter(x => x.poleCount <= this.state.to);
+            filteredData = filteredData.filter(x => x.totalPoleCount <= this.state.to);
         }
 
         return filteredData;
@@ -199,9 +211,11 @@ export class PoleSitters extends Component {
     getCircuits(data) {
         var uniqueCircuits = new Set();
 
-        data.forEach(x => {
-            x.poleInformation.forEach(y => {
-                uniqueCircuits.add(y.circuitName);
+        data.forEach(poleSitter => {
+            poleSitter.polesByYear.forEach(year => {
+                year.poleInformation.forEach(information => {
+                    uniqueCircuits.add(information.circuitName);
+                });
             });
         });
 
@@ -245,25 +259,26 @@ export class PoleSitters extends Component {
 
     render() {
         if (this.state.poleSitters.length > 0) {
+            var filteredData = this.filterData(this.state.poleSitters);
+
             if (this.state.type !== "stackedColumn") {
-                var filteredData = this.filterData(this.state.poleSitters);
                 var totalPoles = this.calculateTotalPoles(filteredData);
-                var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.poleCount, percentage: Math.round((x.poleCount / totalPoles * 100) * 100) / 100 }));
-                
+                var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.totalPoleCount, percentage: Math.round((x.totalPoleCount / totalPoles * 100) * 100) / 100 }));
+
                 if (this.state.axisYMaximum === '') {
                     var defaultMaximum = -1;
                     for (let i = 0; i < filteredData.length; i++) {
-                        if (defaultMaximum < filteredData[i].poleCount) {
-                            defaultMaximum = filteredData[i].poleCount;
+                        if (defaultMaximum < filteredData[i].totalPoleCount) {
+                            defaultMaximum = filteredData[i].totalPoleCount;
                         }
                     }
-        
+
                     defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
                 }
             }
             else {
-                var data = this.state.poleSitters.map(x => ({type: "stackedColumn", showInLegend: true, name: x.name, dataPoints: x.polesByYear.map(yearPole => ({label:yearPole.year, x:yearPole.year, y: yearPole.poleCount}))}));
-        
+                var data = filteredData.map(x => ({ type: "stackedColumn", showInLegend: true, name: x.name, dataPoints: x.polesByYear.map(yearPole => ({ label: yearPole.year, x: yearPole.year, y: yearPole.yearPoleCount })) }));
+
                 defaultMaximum = 25;
             }
 
@@ -290,6 +305,7 @@ export class PoleSitters extends Component {
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
                     gridThickness: this.state.axisXGridThickness,
+                    valueFormatString: " ",
                     titleFontFamily: this.state.axisXFont,
                     labelFontFamily: this.state.axisXFont
                 },
@@ -303,7 +319,7 @@ export class PoleSitters extends Component {
                     titleFontFamily: this.state.axisYFont,
                     labelFontFamily: this.state.axisYFont
                 },
-                toolTip: this.state.type !== "stackedColumn" ? {   
+                toolTip: this.state.type !== "stackedColumn" ? {
                     content: this.state.type === 'column' ? "{label}: {y}" : "{label}: {percentage}%"
                 } : {
                     shared: true,
@@ -311,10 +327,12 @@ export class PoleSitters extends Component {
                         var content = e.entries[0].dataPoint.x + "<br />";
                         var total = 0;
                         for (let i = 0; i < e.entries.length; i++) {
-                            content += e.entries[i].dataSeries.name + ": " + e.entries[i].dataPoint.y + "<br />";
-                            total += e.entries[i].dataPoint.y;
+                            if (e.entries[i].dataPoint.y > 0) {
+                                content += e.entries[i].dataSeries.name + ": " + e.entries[i].dataPoint.y + "<br />";
+                                total += e.entries[i].dataPoint.y;
+                            }
                         }
-                        content += "Iš viso: " + total; 
+                        content += "Iš viso: " + total;
                         return content;
                     }
                 }
@@ -325,29 +343,29 @@ export class PoleSitters extends Component {
             <div>
                 <h1>{this.props.pageTitle}</h1>
                 <br />
-                <p style={{color:"red", textAlign:"center"}}>*Pilni kvalifikacijos duomenys prieinami nuo 2003 metų.</p>
+                <p style={{ color: "red", textAlign: "center" }}>*Pilni kvalifikacijos duomenys prieinami nuo 2003 metų.</p>
                 <br />
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
                 {
                     this.state.poleSitters.length > 0 &&
                     <div>
-                        <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                        <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
                             Keisti grafiko parinktis
                         </Button>
-                        <ChartOptionsModal 
+                        <ChartOptionsModal
                             animation={false}
                             size="lg"
-                            show={this.state.modalShow} 
-                            onHide={() => this.setState({modalShow: false})} 
-                            handleoptionschange={this.handleOptionsChange} 
+                            show={this.state.modalShow}
+                            onHide={() => this.setState({ modalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
                             setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                            themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                            themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
                             currenttheme={this.state.theme}
-                            types={[{type: "column", name: "Stulpelinė"}, {type: "stackedColumn", name: "Stulpelinė (sluoksniuota)"}, {type: "pie", name: "Skritulinė"}]}
+                            types={[{ type: "column", name: "Stulpelinė" }, { type: "stackedColumn", name: "Stulpelinė (sluoksniuota)" }, { type: "pie", name: "Skritulinė" }]}
                             currenttype={this.state.type}
                             axisxtitle={this.state.type !== "stackedColumn" ? this.state.axisXTitle : this.state.axisXTitle2}
                             axisxlabelangle={this.state.axisXLabelAngle}
@@ -376,9 +394,9 @@ export class PoleSitters extends Component {
                             handleoptionschange={this.handleOptionsChange}
                             setdefaultdatafilters={this.setDefaultDataFilters}
                             from={this.state.from}
-                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.poleSitters.map(x => x.poleCount))}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.poleSitters.map(x => x.totalPoleCount))}
                             gapfrom={this.state.gapFrom}
-                            gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.poleSitters.map(x => Math.max.apply(Math, x.poleInformation.map(y => y.gapToSecond))))}
+                            gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.poleSitters.map(poleSitter => poleSitter.polesByYear.map(year => Math.max.apply(Math, year.poleInformation.map(information => information.gapToSecond)))))}
                             selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />

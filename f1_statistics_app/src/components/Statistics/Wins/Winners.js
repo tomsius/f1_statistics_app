@@ -158,6 +158,7 @@ export class Winners extends Component {
 
                         year.yearWinCount = year.winInformation.length;
                     });
+                    
                     winner.totalWinCount = winner.winsByYear.map(year => year.yearWinCount).reduce((accumulator, currentValue) => accumulator + currentValue);
                 });
             }
