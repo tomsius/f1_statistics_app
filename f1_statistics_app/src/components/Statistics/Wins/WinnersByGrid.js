@@ -197,7 +197,7 @@ export class WinnersByGrid extends Component {
     render() {
         if (this.state.winnersByGrid.length > 0) {
             var filteredData = this.filterData(this.state.winnersByGrid);
-            var data = filteredData.map(x => ({ label: x.gridPosition, x: x.gridPosition, y: x.winCount, winnersFromGrid: x.winInformation.map(winner => winner.name).filter((value, index, elements) => elements.indexOf(value) === index).join(", ") }));
+            var data = filteredData.map(x => ({ label: x.gridPosition, x: x.gridPosition, y: x.winCount, winnersFromGrid: x.winInformation.map(winner => winner.winnerName).filter((value, index, elements) => elements.indexOf(value) === index).join(", ") }));
 
             var defaultInterval = Math.max.apply(Math, data.map(d => d.y)) <= 20 ? 1 : Math.max.apply(Math, data.map(d => d.y)) <= 100 ? 5 : 20;
 
