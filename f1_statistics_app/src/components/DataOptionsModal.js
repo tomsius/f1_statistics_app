@@ -163,7 +163,7 @@ export class DataOptionsModal extends Component {
                                         </Col>
                                     </Row>
                                 </>}
-                                {this.props.championshipfrom !== undefined &&
+                            {this.props.championshipfrom !== undefined &&
                                 <>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                                         <Col>
@@ -187,6 +187,43 @@ export class DataOptionsModal extends Component {
                                         </Col>
                                     </Row>
                                 </>}
+                            {this.props.finishedracestatuses !== undefined &&
+                                <>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Lenktynių finišavimo statusas</Form.Label>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            {this.props.finishedracestatuses.map(x => {
+                                                if (this.props.selectedstatus === x.value) {
+                                                    return <Form.Check
+                                                        type="radio"
+                                                        inline
+                                                        defaultChecked
+                                                        value={x.value}
+                                                        label={x.label}
+                                                        name="finishedRace"
+                                                        onChange={this.props.handleoptionschange}
+                                                        style={{ paddingLeft: 0, paddingRight: 0 }}
+                                                    />
+                                                }
+                                                else {
+                                                    return <Form.Check
+                                                        type="radio"
+                                                        inline
+                                                        value={x.value}
+                                                        label={x.label}
+                                                        name="finishedRace"
+                                                        onChange={this.props.handleoptionschange}
+                                                        style={{ paddingLeft: 0, paddingRight: 0 }}
+                                                    />
+                                                }
+                                            })}
+                                        </Col>
+                                    </Row>
+                                </>}
                             {this.props.podiumfinishertitle !== undefined &&
                                 <>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
@@ -196,18 +233,18 @@ export class DataOptionsModal extends Component {
                                     </Row>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                                         <Col>
-                                                {this.props.selectedpodiumfinishers.map(x =>
-                                                        <Form.Check
-                                                            type="checkbox"
-                                                            inline
-                                                            value={x.podiumFinisher}
-                                                            label={x.podiumFinisher}
-                                                            name="selectedPodiumFinishers"
-                                                            checked={x.checked}
-                                                            onChange={this.props.handleoptionschange}
-                                                            style={{ float: "left", paddingLeft: 0, paddingRight: 0 }}
-                                                        />
-                                                )}
+                                            {this.props.selectedpodiumfinishers.map(x =>
+                                                <Form.Check
+                                                    type="checkbox"
+                                                    inline
+                                                    value={x.podiumFinisher}
+                                                    label={x.podiumFinisher}
+                                                    name="selectedPodiumFinishers"
+                                                    checked={x.checked}
+                                                    onChange={this.props.handleoptionschange}
+                                                    style={{ float: "left", paddingLeft: 0, paddingRight: 0 }}
+                                                />
+                                            )}
                                         </Col>
                                     </Row>
                                 </>}
@@ -239,7 +276,7 @@ export class DataOptionsModal extends Component {
                                         </Col>
                                     </Row>
                                 </>}
-                                {this.props.selectednationalities !== undefined &&
+                            {this.props.selectednationalities !== undefined &&
                                 <>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                                         <Col>
