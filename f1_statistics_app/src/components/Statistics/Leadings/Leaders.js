@@ -14,7 +14,8 @@ export class Leaders extends Component {
         super(props);
         this.state = {
             leaders: [],
-            modalShow: false,
+            chartOptionsModalShow: false,
+            dataOptionsModalShow: false,
 
             interactivityEnabled: true,
             exportFileName: this.props.pageTitle,
@@ -304,14 +305,14 @@ export class Leaders extends Component {
                 {
                     this.state.leaders.length > 0 &&
                     <div>
-                        <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
+                        <Button variant="primary" onClick={() => this.setState({ chartOptionsModalShow: true })}>
                             Keisti grafiko parinktis
                         </Button>
                         <ChartOptionsModal
                             animation={false}
                             size="lg"
-                            show={this.state.modalShow}
-                            onHide={() => this.setState({ modalShow: false })}
+                            show={this.state.chartOptionsModalShow}
+                            onHide={() => this.setState({ chartOptionsModalShow: false })}
                             handleoptionschange={this.handleOptionsChange}
                             setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
