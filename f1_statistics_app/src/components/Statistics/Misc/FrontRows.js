@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
@@ -13,7 +14,8 @@ export class FrontRows extends Component {
         super(props);
         this.state = {
             frontRows: [],
-            modalShow: false,
+            chartOptionsModalShow: false,
+            dataOptionsModalShow: false,
 
             interactivityEnabled: true,
             exportFileName: this.props.pageTitle,
@@ -32,30 +34,38 @@ export class FrontRows extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 5,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
-            axisYFont: "Calibri"
+            axisYFont: "Calibri",
+
+            from: 0,
+            to: '',
+            selectedCircuits: []
         };
 
         this.fillData = this.fillData.bind(this);
         this.calculateTotalFrontRows = this.calculateTotalFrontRows.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
+        this.filterData = this.filterData.bind(this);
+        this.getCircuits = this.getCircuits.bind(this);
+        this.initializeCircuits = this.initializeCircuits.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
     fillData(data) {
         this.setState({
             frontRows: data
-        });
+        }, () => this.initializeCircuits(this.getCircuits(this.state.frontRows)));
     }
 
     calculateTotalFrontRows(frontRows) {
         var totalFrontRows = 0;
 
         frontRows.forEach(frontRow => {
-            totalFrontRows += frontRow.frontRowCount
+            totalFrontRows += frontRow.totalFrontRowCount
         });
 
         return totalFrontRows;
@@ -64,9 +74,14 @@ export class FrontRows extends Component {
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
+        }
+
+        if (name === 'selectedCircuits') {
+            valueToUpdate = this.state.selectedCircuits;
+            valueToUpdate.filter(x => x.circuit === value)[0].checked = checked;
         }
 
         this.setState({
@@ -93,12 +108,81 @@ export class FrontRows extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 5,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
         }, () => {
             callback();
+        });
+    }
+
+    setDefaultDataFilters(callback) {
+        this.setState({
+            from: 0,
+            to: '',
+            selectedCircuits: []
+        }, () => {
+            this.initializeCircuits(this.getCircuits(this.state.frontRows));
+            callback();
+        });
+    }
+
+    filterData(data) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        this.state.selectedCircuits.forEach(selectedCircuit => {
+            if (selectedCircuit.checked === false) {
+                filteredData.forEach(frontRow => {
+                    var i = 0;
+
+                    while (i < frontRow.frontRowInformation.length) {
+                        if (frontRow.frontRowInformation[i].circuitName === selectedCircuit.circuit) {
+                            frontRow.frontRowInformation.splice(i, 1);
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+
+                    frontRow.totalFrontRowCount = frontRow.frontRowInformation.length;
+                });
+            }
+        });
+
+        filteredData = filteredData.filter(frontRow => frontRow.totalFrontRowCount >= this.state.from);
+
+        if (this.state.to !== '') {
+            filteredData = filteredData.filter(frontRow => frontRow.totalFrontRowCount <= this.state.to);
+        }
+
+        return filteredData;
+    }
+
+    getCircuits(data) {
+        var uniqueCircuits = new Set();
+
+        data.forEach(frontRow => {
+            frontRow.frontRowInformation.forEach(information => {
+                uniqueCircuits.add(information.circuitName);
+            });
+        });
+
+        return [...uniqueCircuits];
+    }
+
+    initializeCircuits(circuits) {
+        var circuitObjects = [];
+        circuits.forEach(x => {
+            var circuitObject = { circuit: x, checked: true };
+
+            circuitObjects.push(circuitObject);
+        });
+
+        circuitObjects.sort((a, b) => (a.circuit > b.circuit ? 1 : -1));
+
+        this.setState({
+            selectedCircuits: circuitObjects
         });
     }
 
@@ -124,17 +208,18 @@ export class FrontRows extends Component {
 
     render() {
         if (this.state.frontRows.length > 0) {
-            var totalFrontRows = this.calculateTotalFrontRows(this.state.frontRows);
-            var data = this.state.frontRows.map((x, index) => ({ label: x.name, x: index + 1, y: x.frontRowCount, percentage: Math.round((x.frontRowCount / totalFrontRows * 100) * 100) / 100 }));
-            
+            var filteredData = this.filterData(this.state.frontRows);
+            var totalFrontRows = this.calculateTotalFrontRows(filteredData);
+            var data = filteredData.map((x, index) => ({ label: x.name, x: index + 1, y: x.totalFrontRowCount, percentage: Math.round((x.totalFrontRowCount / totalFrontRows * 100) * 100) / 100 }));
+
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
-                for (let i = 0; i < this.state.frontRows.length; i++) {
-                    if (defaultMaximum < this.state.frontRows[i].frontRowCount) {
-                        defaultMaximum = this.state.frontRows[i].frontRowCount;
+                for (let i = 0; i < filteredData.length; i++) {
+                    if (defaultMaximum < filteredData[i].totalFrontRowCount) {
+                        defaultMaximum = filteredData[i].totalFrontRowCount;
                     }
                 }
-    
+
                 defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
             }
 
@@ -175,7 +260,7 @@ export class FrontRows extends Component {
                     titleFontFamily: this.state.axisYFont,
                     labelFontFamily: this.state.axisYFont
                 },
-                toolTip:{   
+                toolTip: {
                     content: this.state.type === 'column' ? "{label}: {y}" : "{label}: {percentage}%"
                 }
             };
@@ -190,22 +275,22 @@ export class FrontRows extends Component {
                 {
                     this.state.frontRows.length > 0 &&
                     <div>
-                        <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                        <Button variant="primary" onClick={() => this.setState({ chartOptionsModalShow: true })}>
                             Keisti grafiko parinktis
                         </Button>
-                        <ChartOptionsModal 
+                        <ChartOptionsModal
                             animation={false}
                             size="lg"
-                            show={this.state.modalShow} 
-                            onHide={() => this.setState({modalShow: false})} 
-                            handleoptionschange={this.handleOptionsChange} 
+                            show={this.state.chartOptionsModalShow}
+                            onHide={() => this.setState({ chartOptionsModalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
                             setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                            themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                            themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
                             currenttheme={this.state.theme}
-                            types={[{type: "column", name: "Stulpelinė"}, {type: "pie", name: "Skritulinė"}]}
+                            types={[{ type: "column", name: "Stulpelinė" }, { type: "pie", name: "Skritulinė" }]}
                             currenttype={this.state.type}
                             axisxtitle={this.state.axisXTitle}
                             axisxlabelangle={this.state.axisXLabelAngle}
@@ -220,6 +305,22 @@ export class FrontRows extends Component {
                             currenttitlefont={this.state.titleFont}
                             currentaxisxfont={this.state.axisXFont}
                             currentaxisyfont={this.state.axisYFont}
+                        />
+                        <br />
+                        <br />
+                        <Button variant="primary" onClick={() => this.setState({ dataOptionsModalShow: true })}>
+                            Keisti duomenų parinktis
+                        </Button>
+                        <DataOptionsModal
+                            animation={false}
+                            size="lg"
+                            show={this.state.dataOptionsModalShow}
+                            onHide={() => this.setState({ dataOptionsModalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
+                            setdefaultdatafilters={this.setDefaultDataFilters}
+                            from={this.state.from}
+                            to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.frontRows.map(frontRow => frontRow.totalFrontRowCount))}
+                            selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />
                         <br />
