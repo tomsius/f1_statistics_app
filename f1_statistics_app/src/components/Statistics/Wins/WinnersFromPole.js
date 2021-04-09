@@ -36,7 +36,7 @@ export class WinnersFromPole extends Component {
             axisY2Title: "Lenktynių skaičius, vnt.",
             axisY2LabelAngle: 0,
             axisY2Interval: 2,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -57,7 +57,7 @@ export class WinnersFromPole extends Component {
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
         }
@@ -90,7 +90,7 @@ export class WinnersFromPole extends Component {
             axisY2Title: "Lenktynių skaičius, vnt.",
             axisY2LabelAngle: 0,
             axisY2Interval: 2,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -130,7 +130,7 @@ export class WinnersFromPole extends Component {
                         defaultMaximum = this.state.winnersFromPole[i].winsFromPoleCount;
                     }
                 }
-    
+
                 defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
             }
 
@@ -170,7 +170,7 @@ export class WinnersFromPole extends Component {
                     titleFontFamily: this.state.axisYFont,
                     labelFontFamily: this.state.axisYFont
                 },
-                toolTip:{   
+                toolTip: {
                     contentFormatter: "",
                     content: "Laimėtojai iš „pole“ pozicijos {label} metais (laimėjimų skaičius: {y}): {winnersWithPole}"
                 }
@@ -186,7 +186,7 @@ export class WinnersFromPole extends Component {
                             defaultMaximum2 = this.state.winnersFromPole[i].racesCount;
                         }
                     }
-    
+
                     defaultMaximum2 = defaultMaximum2 % this.state.axisYInterval === 0 ? defaultMaximum2 : (defaultMaximum2 + (this.state.axisYInterval - (defaultMaximum2 % this.state.axisYInterval)));
                 }
 
@@ -208,13 +208,13 @@ export class WinnersFromPole extends Component {
                 options["data"].push({ type: "line", showInLegend: true, name: "Lenktynių skaičius", axisYType: "secondary", dataPoints: racesData });
                 options["toolTip"]["shared"] = true;
                 options["toolTip"]["contentFormatter"] = function (e) {
-                        var content = "";
+                    var content = "";
 
-                        content += "aimėtojai iš „pole“ pozicijos " + e.entries[0].dataPoint.label + " metais (laimėjimų skaičius: " + e.entries[0].dataPoint.y + "): " + e.entries[0].dataPoint.winnersWithPole + "<br />";
-                        content += "Lenktynių skaičius " + e.entries[1].dataPoint.label + " metais: " + e.entries[1].dataPoint.y;
+                    content += "aimėtojai iš „pole“ pozicijos " + e.entries[0].dataPoint.label + " metais (laimėjimų skaičius: " + e.entries[0].dataPoint.y + "): " + e.entries[0].dataPoint.winnersWithPole + "<br />";
+                    content += "Lenktynių skaičius " + e.entries[1].dataPoint.label + " metais: " + e.entries[1].dataPoint.y;
 
-                        return content;
-                    }
+                    return content;
+                }
                 options["legend"] = {};
                 options["legend"]["cursor"] = "pointer";
                 options["legend"]["itemclick"] = function (e) {
@@ -245,29 +245,29 @@ export class WinnersFromPole extends Component {
             <div>
                 <h1>{this.props.pageTitle}</h1>
                 <br />
-                <p style={{color:"red", textAlign:"center"}}>*Pilni kvalifikacijos duomenys prieinami nuo 2003 metų.</p>
+                <p style={{ color: "red", textAlign: "center" }}>*Pilni kvalifikacijos duomenys prieinami nuo 2003 metų.</p>
                 <br />
                 <DataRangeForm api={this.props.api} callback={this.fillData} />
                 <br />
                 {
                     this.state.winnersFromPole.length > 0 &&
                     <div>
-                        <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                        <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
                             Keisti grafiko parinktis
                         </Button>
-                        <ChartOptionsModal 
+                        <ChartOptionsModal
                             animation={false}
                             size="lg"
-                            show={this.state.modalShow} 
-                            onHide={() => this.setState({modalShow: false})} 
-                            handleoptionschange={this.handleOptionsChange} 
+                            show={this.state.modalShow}
+                            onHide={() => this.setState({ modalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
                             setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                            themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                            themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
                             currenttheme={this.state.theme}
-                            types={[{type: "column", name: "Stulpelinė"}, {type: "line", name: "Linijinė"}]}
+                            types={[{ type: "column", name: "Stulpelinė" }, { type: "line", name: "Linijinė" }]}
                             currenttype={this.state.type}
                             axisxtitle={this.state.axisXTitle}
                             axisxlabelangle={this.state.axisXLabelAngle}

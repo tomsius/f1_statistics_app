@@ -154,7 +154,7 @@ export class NonFinishers extends Component {
 
                         year.yearDidNotFinishCount = year.didNotFinishInformation.length;
                     });
-                    
+
                     nonFinisher.totalDidNotFinishCount = nonFinisher.didNotFinishByYear.map(year => year.yearDidNotFinishCount).reduce((accumulator, currentValue) => accumulator + currentValue);
                 });
             }

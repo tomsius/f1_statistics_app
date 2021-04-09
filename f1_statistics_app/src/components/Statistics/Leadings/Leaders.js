@@ -35,7 +35,7 @@ export class Leaders extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 200,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri",
@@ -110,7 +110,7 @@ export class Leaders extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 200,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -150,7 +150,7 @@ export class Leaders extends Component {
 
                         year.yearLeadingLapCount = year.leadingLapInformation.length;
                     });
-                    
+
                     leader.totalLeadingLapCount = leader.leadingLapsByYear.map(year => year.yearLeadingLapCount).reduce((accumulator, currentValue) => accumulator + currentValue);
                 });
             }

@@ -7,13 +7,13 @@ export class Footer extends Component {
 
     render() {
         return (
-            <div className="d-flex flex-column" style={{marginTop: "100px"}}>
+            <div className="d-flex flex-column" style={{ marginTop: "100px" }}>
                 <footer className="footer">
                     <hr />
                     <div>
                         <span>F-1 lenktynių rezultatų portalas {new Date().getFullYear()}</span>
                         <br />
-                        <span>Tomas Kašelynas <a href="https://github.com/tomsius" target="_blank"><span className="fa" style={{fontSize: "24px"}}>&#xf09b;</span></a></span>
+                        <span>Tomas Kašelynas <a href="https://github.com/tomsius" target="_blank"><span className="fa" style={{ fontSize: "24px" }}>&#xf09b;</span></a></span>
                         <br />
                         <span><a href="mailto:tomas.kaselynas@ktu.edu"><i>tomas.kaselynas@ktu.edu</i></a></span>
                     </div>

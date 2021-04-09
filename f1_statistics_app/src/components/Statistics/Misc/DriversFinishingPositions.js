@@ -382,7 +382,7 @@ export class DriversFinishingPositions extends Component {
                                     setdefaultdatafilters={this.setDefaultDataFilters}
                                     from={this.state.from}
                                     to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, selectedData.finishingPositions.map(position => position.count))}
-                                    finishedracestatuses={[{value: "all", label: "Visos"}, {value: "finishedOnly", label: "Tik baigtos"}, {value: "notFinishedOnly", label: "Tik nebaigtos"}]}
+                                    finishedracestatuses={[{ value: "all", label: "Visos" }, { value: "finishedOnly", label: "Tik baigtos" }, { value: "notFinishedOnly", label: "Tik nebaigtos" }]}
                                     selectedstatus={this.state.finishedRace}
                                     selectedcircuits={this.state.selectedCircuits}
                                 />

@@ -33,7 +33,7 @@ export class SeasonPoints extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 50,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -68,7 +68,7 @@ export class SeasonPoints extends Component {
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
         }
@@ -97,7 +97,7 @@ export class SeasonPoints extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 50,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -138,7 +138,7 @@ export class SeasonPoints extends Component {
                         defaultMaximum = data[i].y;
                     }
                 }
-    
+
                 defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
             }
 
@@ -181,7 +181,7 @@ export class SeasonPoints extends Component {
                     titleFontFamily: this.state.axisYFont,
                     labelFontFamily: this.state.axisYFont
                 },
-                toolTip:{   
+                toolTip: {
                     content: this.state.type === 'column' ? "{label}: {y}" : "{label}: {percentage}%"
                 }
             };
@@ -211,26 +211,26 @@ export class SeasonPoints extends Component {
                                 </ToggleButton>
                             ))}
                         </ButtonGroup>
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
                         {this.state.selectedSeason !== 0 &&
                             <div>
-                                <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                                <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
                                     Keisti grafiko parinktis
                                 </Button>
-                                <ChartOptionsModal 
+                                <ChartOptionsModal
                                     animation={false}
                                     size="lg"
-                                    show={this.state.modalShow} 
-                                    onHide={() => this.setState({modalShow: false})} 
-                                    handleoptionschange={this.handleOptionsChange} 
+                                    show={this.state.modalShow}
+                                    onHide={() => this.setState({ modalShow: false })}
+                                    handleoptionschange={this.handleOptionsChange}
                                     setdefaultvalues={this.setDefaultValues}
                                     title={this.state.title}
                                     exportfilename={this.state.exportFileName}
                                     interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                                    themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                                    themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
                                     currenttheme={this.state.theme}
-                                    types={[{type: "column", name: "Stulpelinė"}, {type: "pie", name: "Skritulinė"}]}
+                                    types={[{ type: "column", name: "Stulpelinė" }, { type: "pie", name: "Skritulinė" }]}
                                     currenttype={this.state.type}
                                     axisxtitle={this.state.axisXTitle}
                                     axisxlabelangle={this.state.axisXLabelAngle}

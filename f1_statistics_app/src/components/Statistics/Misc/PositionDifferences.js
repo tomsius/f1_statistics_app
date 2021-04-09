@@ -157,7 +157,7 @@ export class PositionDifferences extends Component {
                 });
             }
         });
-        
+
         for (let i = 0; i < filteredData.positionChanges.length; i++) {
             if (filteredData.positionChanges[i].championshipPosition < this.state.championshipFrom) {
                 filteredData.positionChanges.splice(i, 1);

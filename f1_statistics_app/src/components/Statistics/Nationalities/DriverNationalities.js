@@ -32,7 +32,7 @@ export class DriverNationalities extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 1,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -64,7 +64,7 @@ export class DriverNationalities extends Component {
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
         }
@@ -93,7 +93,7 @@ export class DriverNationalities extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: 1,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -126,7 +126,7 @@ export class DriverNationalities extends Component {
         if (this.state.nationalities.length > 0) {
             var totalDrivers = this.calculateTotalDrivers(this.state.nationalities);
             var data = this.state.nationalities.map((x, index) => ({ label: x.nationality, x: index + 1, y: x.driversCount, percentage: Math.round((x.driversCount / totalDrivers * 100) * 100) / 100, drivers: x.drivers.join(", ") }));
-            
+
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
                 for (let i = 0; i < this.state.nationalities.length; i++) {
@@ -134,7 +134,7 @@ export class DriverNationalities extends Component {
                         defaultMaximum = this.state.nationalities[i].driversCount;
                     }
                 }
-    
+
                 defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
             }
 
@@ -177,8 +177,8 @@ export class DriverNationalities extends Component {
                     titleFontFamily: this.state.axisYFont,
                     labelFontFamily: this.state.axisYFont
                 },
-                toolTip:{   
-                    content: this.state.type === 'column' ? "{label} ({y}): {drivers}" : "{label} ({percentage}%): {drivers}"   
+                toolTip: {
+                    content: this.state.type === 'column' ? "{label} ({y}): {drivers}" : "{label} ({percentage}%): {drivers}"
                 }
             };
         }
@@ -192,22 +192,22 @@ export class DriverNationalities extends Component {
                 {
                     this.state.nationalities.length > 0 &&
                     <div>
-                        <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                        <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
                             Keisti grafiko parinktis
                         </Button>
-                        <ChartOptionsModal 
+                        <ChartOptionsModal
                             animation={false}
                             size="lg"
-                            show={this.state.modalShow} 
-                            onHide={() => this.setState({modalShow: false})} 
-                            handleoptionschange={this.handleOptionsChange} 
+                            show={this.state.modalShow}
+                            onHide={() => this.setState({ modalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
                             setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                            themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                            themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
                             currenttheme={this.state.theme}
-                            types={[{type: "column", name: "Stulpelinė"}, {type: "pie", name: "Skritulinė"}]}
+                            types={[{ type: "column", name: "Stulpelinė" }, { type: "pie", name: "Skritulinė" }]}
                             currenttype={this.state.type}
                             axisxtitle={this.state.axisXTitle}
                             axisxlabelangle={this.state.axisXLabelAngle}

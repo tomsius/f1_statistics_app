@@ -25,8 +25,8 @@ export class Navigation extends Component {
                             <NavLink className="d-inline p-2 text-light" to="/misc">Įvairios</NavLink>
                         </Nav>
                     </Navbar.Collapse>
-            </Navbar>
-        </div>
+                </Navbar>
+            </div>
         );
     }
 }

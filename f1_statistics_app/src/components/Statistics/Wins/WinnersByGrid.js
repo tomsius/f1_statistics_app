@@ -34,11 +34,11 @@ export class WinnersByGrid extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: '',
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri",
-            
+
             from: 0,
             to: '',
             selectedCircuits: []
@@ -63,7 +63,7 @@ export class WinnersByGrid extends Component {
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
         }
@@ -97,7 +97,7 @@ export class WinnersByGrid extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: '',
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -138,7 +138,7 @@ export class WinnersByGrid extends Component {
                 });
             }
         });
-        
+
         filteredData = filteredData.filter(x => x.winCount >= this.state.from);
 
         if (this.state.to !== '') {
@@ -209,7 +209,7 @@ export class WinnersByGrid extends Component {
                         defaultMaximum = filteredData[i].winCount;
                     }
                 }
-    
+
                 var interval = this.state.axisYInterval !== '' ? this.state.axisYInterval : defaultInterval;
                 defaultMaximum = defaultMaximum % interval === 0 ? defaultMaximum : (defaultMaximum + (interval - (defaultMaximum % interval)));
             }
@@ -249,7 +249,7 @@ export class WinnersByGrid extends Component {
                     titleFontFamily: this.state.axisYFont,
                     labelFontFamily: this.state.axisYFont
                 },
-                toolTip:{   
+                toolTip: {
                     content: "Laimėtojai iš {label}-os starto pozicijos (laimėjimų skaičius: {y}): {winnersFromGrid}"
                 }
             };
@@ -264,22 +264,22 @@ export class WinnersByGrid extends Component {
                 {
                     this.state.winnersByGrid.length > 0 &&
                     <div>
-                        <Button variant="primary" onClick={() => this.setState({chartOptionsModalShow: true})}>
+                        <Button variant="primary" onClick={() => this.setState({ chartOptionsModalShow: true })}>
                             Keisti grafiko parinktis
                         </Button>
-                        <ChartOptionsModal 
+                        <ChartOptionsModal
                             animation={false}
                             size="lg"
-                            show={this.state.chartOptionsModalShow} 
-                            onHide={() => this.setState({chartOptionsModalShow: false})} 
-                            handleoptionschange={this.handleOptionsChange} 
+                            show={this.state.chartOptionsModalShow}
+                            onHide={() => this.setState({ chartOptionsModalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
                             setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                            themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                            themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
                             currenttheme={this.state.theme}
-                            types={[{type: "column", name: "Stulpelinė"}]}
+                            types={[{ type: "column", name: "Stulpelinė" }]}
                             currenttype={this.state.type}
                             axisxtitle={this.state.axisXTitle}
                             axisxlabelangle={this.state.axisXLabelAngle}

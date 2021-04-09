@@ -39,7 +39,7 @@ export class LapTimes extends Component {
             axisYMinimum: 50,
             axisYMaximum: '',
             axisYInterval: 10,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -62,44 +62,44 @@ export class LapTimes extends Component {
             isLoading: true
         });
 
-        fetch('http://localhost:55032/api/misc/' + this.state.season + '/' + this.state.round + '/laptimes', 
-        {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(result => {
-            this.setState({
-                lapTimes: result,
-                isLoading: false,
-                title: "Lenktynininkų apvažiuotų ratų laikai " + this.state.season + " " + this.state.raceName + " metu",
-                exportFileName: "Lenktynininkų apvažiuotų ratų laikai " + this.state.season + " " + this.state.raceName + " metu"
-            });
-        })
-        .catch(error => {
-            this.setState({
-                isLoading: false
-            });
+        fetch('http://localhost:55032/api/misc/' + this.state.season + '/' + this.state.round + '/laptimes',
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                this.setState({
+                    lapTimes: result,
+                    isLoading: false,
+                    title: "Lenktynininkų apvažiuotų ratų laikai " + this.state.season + " " + this.state.raceName + " metu",
+                    exportFileName: "Lenktynininkų apvažiuotų ratų laikai " + this.state.season + " " + this.state.raceName + " metu"
+                });
+            })
+            .catch(error => {
+                this.setState({
+                    isLoading: false
+                });
 
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "positionClass": "toast-bottom-full-width",
-                "preventDuplicates": true,
-                "hideDuration": "1000",
-                "timeOut": "3000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-              };
-    
-            toastr["error"]("", "Nepavyko pasiekti serverio");
-        });
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "positionClass": "toast-bottom-full-width",
+                    "preventDuplicates": true,
+                    "hideDuration": "1000",
+                    "timeOut": "3000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+
+                toastr["error"]("", "Nepavyko pasiekti serverio");
+            });
     }
 
     fillSeasons(data) {
@@ -134,7 +134,7 @@ export class LapTimes extends Component {
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval' || name === 'axisXInterval') {
             valueToUpdate = parseInt(value);
         }
@@ -163,7 +163,7 @@ export class LapTimes extends Component {
             axisYMinimum: 50,
             axisYMaximum: '',
             axisYInterval: 10,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -203,8 +203,8 @@ export class LapTimes extends Component {
             var time = minutes + ":0" + seconds;
         }
 
-        var decimalNumber = time.split(".")[1] !== undefined ? time.split(".")[1] : "" ;
-        
+        var decimalNumber = time.split(".")[1] !== undefined ? time.split(".")[1] : "";
+
         if (decimalNumber === "") {
             time += ".";
         }
@@ -212,7 +212,7 @@ export class LapTimes extends Component {
         for (let i = decimalNumber.length; i < 3; i++) {
             time += "0";
         }
-        
+
         return time;
     }
 
@@ -280,7 +280,7 @@ export class LapTimes extends Component {
 
     render() {
         if (this.state.lapTimes.length > 0) {
-            var data = this.state.lapTimes.map((x, index) => ({ type: "scatter", dataPoints: x.timings.map(timing => ({ label: x.name, x: index + 1, y: timing, laptime: this.formatTime(timing) })) } ));
+            var data = this.state.lapTimes.map((x, index) => ({ type: "scatter", dataPoints: x.timings.map(timing => ({ label: x.name, x: index + 1, y: timing, laptime: this.formatTime(timing) })) }));
             //var boxData = this.state.lapTimes.map((x, index) => ({ type: "boxAndWhisker", dataPoints: [({ label: x.name, x: index + 1, y: [this.findMinimum(x.timings), this.findQuartile(x.timings, 0.25), this.findQuartile(x.timings, 0.75), this.findMaximum(x.timings), this.findQuartile(x.timings, 0.5) ] })] } ));
 
             if (this.state.axisYMaximum === '') {
@@ -293,7 +293,7 @@ export class LapTimes extends Component {
                     }
                 }
             }
-            
+
             defaultYMaximum = defaultYMaximum + 5;
 
             var options = {
@@ -349,7 +349,7 @@ export class LapTimes extends Component {
                         {this.state.seasons.map(x => (
                             <div>
                                 <ButtonGroup vertical>
-                                    <p style={{margin: "auto"}}>{x.season}</p>
+                                    <p style={{ margin: "auto" }}>{x.season}</p>
                                     {x.races.map(race => (
                                         <Button
                                             key={x.season + race.round}
@@ -365,47 +365,47 @@ export class LapTimes extends Component {
                                 </ButtonGroup>
                             </div>
                         ))}
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
                         {this.state.lapTimes.length > 0 &&
-                        <div>
-                            <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
-                                Keisti grafiko parinktis
+                            <div>
+                                <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
+                                    Keisti grafiko parinktis
                             </Button>
-                            <ChartOptionsModal 
-                                animation={false}
-                                size="lg"
-                                show={this.state.modalShow} 
-                                onHide={() => this.setState({modalShow: false})} 
-                                handleoptionschange={this.handleOptionsChange} 
-                                setdefaultvalues={this.setDefaultValues}
-                                title={this.state.title}
-                                exportfilename={this.state.exportFileName}
-                                interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                                themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
-                                currenttheme={this.state.theme}
-                                types={[{type: "scatter", name: "Taškinė"}]}
-                                currenttype={this.state.type}
-                                axisxtitle={this.state.axisXTitle}
-                                axisxlabelangle={this.state.axisXLabelAngle}
-                                axisxgridthickness={this.state.axisXGridThickness}
-                                axisytitle={this.state.axisYTitle}
-                                axisylabelangle={this.state.axisYLabelAngle}
-                                axisygridthickness={this.state.axisYGridThickness}
-                                axisyminimum={this.state.axisYMinimum}
-                                axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum}
-                                axisyinterval={this.state.axisYInterval}
-                                fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
-                                currenttitlefont={this.state.titleFont}
-                                currentaxisxfont={this.state.axisXFont}
-                                currentaxisyfont={this.state.axisYFont}
-                            />
-                            <br />
-                            <br />
-                            <div style={{ position: "relative", right: "6em" }}>
-                                <CanvasJSChart options={options} />
-                            </div>
-                        </div>}
+                                <ChartOptionsModal
+                                    animation={false}
+                                    size="lg"
+                                    show={this.state.modalShow}
+                                    onHide={() => this.setState({ modalShow: false })}
+                                    handleoptionschange={this.handleOptionsChange}
+                                    setdefaultvalues={this.setDefaultValues}
+                                    title={this.state.title}
+                                    exportfilename={this.state.exportFileName}
+                                    interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
+                                    themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
+                                    currenttheme={this.state.theme}
+                                    types={[{ type: "scatter", name: "Taškinė" }]}
+                                    currenttype={this.state.type}
+                                    axisxtitle={this.state.axisXTitle}
+                                    axisxlabelangle={this.state.axisXLabelAngle}
+                                    axisxgridthickness={this.state.axisXGridThickness}
+                                    axisytitle={this.state.axisYTitle}
+                                    axisylabelangle={this.state.axisYLabelAngle}
+                                    axisygridthickness={this.state.axisYGridThickness}
+                                    axisyminimum={this.state.axisYMinimum}
+                                    axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum}
+                                    axisyinterval={this.state.axisYInterval}
+                                    fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
+                                    currenttitlefont={this.state.titleFont}
+                                    currentaxisxfont={this.state.axisXFont}
+                                    currentaxisyfont={this.state.axisYFont}
+                                />
+                                <br />
+                                <br />
+                                <div style={{ position: "relative", right: "6em" }}>
+                                    <CanvasJSChart options={options} />
+                                </div>
+                            </div>}
                     </div>
                 }
             </div>

@@ -37,7 +37,7 @@ export class Export extends Component {
             "hideEasing": "linear",
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
-          };
+        };
 
         toastr["info"]("", "Diagramos duomenys nukopijuoti į iškarpinę");
     }
@@ -46,7 +46,7 @@ export class Export extends Component {
 
         return (
             <>
-                <button style={{border: "none", width: "50px", backgroundColor: "white"}} onClick={this.handleClick}>
+                <button style={{ border: "none", width: "50px", backgroundColor: "white" }} onClick={this.handleClick}>
                     <img width="75%" height="75%" src={clipboard} />
                 </button>
             </>

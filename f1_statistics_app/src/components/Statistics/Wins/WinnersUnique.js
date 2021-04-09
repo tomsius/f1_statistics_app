@@ -14,7 +14,7 @@ export class WinnersUnique extends Component {
         this.state = {
             winnersUnique: [],
             modalShow: false,
-            
+
             interactivityEnabled: true,
             exportFileName: this.props.pageTitle,
             zoomEnabled: false,
@@ -36,7 +36,7 @@ export class WinnersUnique extends Component {
             axisY2Title: "Lenktynių skaičius, vnt.",
             axisY2LabelAngle: 0,
             axisY2Interval: 2,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -57,7 +57,7 @@ export class WinnersUnique extends Component {
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval' || name === 'axisY2Interval') {
             valueToUpdate = parseInt(value);
         }
@@ -90,7 +90,7 @@ export class WinnersUnique extends Component {
             axisY2Title: "Lenktynių skaičius, vnt.",
             axisY2LabelAngle: 0,
             axisY2Interval: 2,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -186,7 +186,7 @@ export class WinnersUnique extends Component {
                             defaultMaximum2 = this.state.winnersUnique[i].racesCount;
                         }
                     }
-    
+
                     defaultMaximum2 = defaultMaximum2 % this.state.axisYInterval === 0 ? defaultMaximum2 : (defaultMaximum2 + (this.state.axisYInterval - (defaultMaximum2 % this.state.axisYInterval)));
                 }
 
@@ -208,11 +208,11 @@ export class WinnersUnique extends Component {
                 options["data"].push({ type: "line", showInLegend: true, name: "Lenktynių skaičius", axisYType: "secondary", dataPoints: racesData });
                 options["toolTip"]["shared"] = true;
                 options["toolTip"]["contentFormatter"] = function (e) {
-                        var content = "";
-                        content += "Skirtingi laimėtojai " + e.entries[0].dataPoint.label + " metais (" + e.entries[0].dataPoint.y + "): " + e.entries[0].dataPoint.winners + "<br />";
-                        content += "Lenktynių skaičius " + e.entries[1].dataPoint.label + " metais: " + e.entries[1].dataPoint.y;
-                        return content;
-                    }
+                    var content = "";
+                    content += "Skirtingi laimėtojai " + e.entries[0].dataPoint.label + " metais (" + e.entries[0].dataPoint.y + "): " + e.entries[0].dataPoint.winners + "<br />";
+                    content += "Lenktynių skaičius " + e.entries[1].dataPoint.label + " metais: " + e.entries[1].dataPoint.y;
+                    return content;
+                }
                 options["legend"] = {};
                 options["legend"]["cursor"] = "pointer";
                 options["legend"]["itemclick"] = function (e) {
@@ -248,22 +248,22 @@ export class WinnersUnique extends Component {
                 {
                     this.state.winnersUnique.length > 0 &&
                     <div>
-                        <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
+                        <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
                             Keisti grafiko parinktis
                         </Button>
-                        <ChartOptionsModal 
+                        <ChartOptionsModal
                             animation={false}
                             size="lg"
-                            show={this.state.modalShow} 
-                            onHide={() => this.setState({modalShow: false})} 
-                            handleoptionschange={this.handleOptionsChange} 
+                            show={this.state.modalShow}
+                            onHide={() => this.setState({ modalShow: false })}
+                            handleoptionschange={this.handleOptionsChange}
                             setdefaultvalues={this.setDefaultValues}
                             title={this.state.title}
                             exportfilename={this.state.exportFileName}
                             interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                            themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
+                            themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
                             currenttheme={this.state.theme}
-                            types={[{type: "column", name: "Stulpelinė"}, {type: "line", name: "Linijinė"}]}
+                            types={[{ type: "column", name: "Stulpelinė" }, { type: "line", name: "Linijinė" }]}
                             currenttype={this.state.type}
                             axisxtitle={this.state.axisXTitle}
                             axisxlabelangle={this.state.axisXLabelAngle}

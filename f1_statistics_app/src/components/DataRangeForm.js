@@ -22,7 +22,7 @@ export class DataRangeForm extends Component {
             isLoading: true
         });
 
-        fetch('http://localhost:55032/api/' + this.props.api, 
+        fetch('http://localhost:55032/api/' + this.props.api,
             {
                 method: 'POST',
                 headers: {
@@ -59,9 +59,9 @@ export class DataRangeForm extends Component {
                     "hideEasing": "linear",
                     "showMethod": "fadeIn",
                     "hideMethod": "fadeOut"
-                  };
-        
-                  toastr["error"]("", "Nepavyko pasiekti serverio");
+                };
+
+                toastr["error"]("", "Nepavyko pasiekti serverio");
             });
     }
 
@@ -72,7 +72,7 @@ export class DataRangeForm extends Component {
             isLoading: true
         });
 
-        fetch('http://localhost:55032/api/' + this.props.api, 
+        fetch('http://localhost:55032/api/' + this.props.api,
             {
                 method: 'POST',
                 headers: {
@@ -109,8 +109,8 @@ export class DataRangeForm extends Component {
                     "hideEasing": "linear",
                     "showMethod": "fadeIn",
                     "hideMethod": "fadeOut"
-                  };
-        
+                };
+
                 toastr["error"]("", "Nepavyko pasiekti serverio");
             });
     }

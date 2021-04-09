@@ -32,7 +32,7 @@ export class StandingsChanges extends Component {
             axisYGridThickness: 0,
             axisYMinimum: 1,
             axisYMaximum: '',
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -67,7 +67,7 @@ export class StandingsChanges extends Component {
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
         }
@@ -96,7 +96,7 @@ export class StandingsChanges extends Component {
             axisYMinimum: 1,
             axisYMaximum: '',
             axisYInterval: 1,
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
@@ -166,8 +166,8 @@ export class StandingsChanges extends Component {
                     titleFontFamily: this.state.axisYFont,
                     labelFontFamily: this.state.axisYFont
                 },
-                toolTip:{   
-                    content: "{name} (taškų skaičius - {points}): {y}"  
+                toolTip: {
+                    content: "{name} (taškų skaičius - {points}): {y}"
                 },
                 legend: {
                     cursor: "pointer",
@@ -177,7 +177,7 @@ export class StandingsChanges extends Component {
                         } else {
                             e.dataSeries.visible = true;
                         }
-        
+
                         e.chart.render();
                     },
                     horizontalAlign: "center",
@@ -210,46 +210,46 @@ export class StandingsChanges extends Component {
                                 </ToggleButton>
                             ))}
                         </ButtonGroup>
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
                         {this.state.selectedSeason !== 0 &&
-                        <div>
-                            <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
-                                Keisti grafiko parinktis
+                            <div>
+                                <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
+                                    Keisti grafiko parinktis
                             </Button>
-                            <ChartOptionsModal 
-                                animation={false}
-                                size="lg"
-                                show={this.state.modalShow} 
-                                onHide={() => this.setState({modalShow: false})} 
-                                handleoptionschange={this.handleOptionsChange} 
-                                setdefaultvalues={this.setDefaultValues}
-                                title={this.state.title}
-                                exportfilename={this.state.exportFileName}
-                                interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                                themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
-                                currenttheme={this.state.theme}
-                                types={[{type: "line", name: "Linijinė"}]}
-                                currenttype={this.state.type}
-                                axisxtitle={this.state.axisXTitle}
-                                axisxlabelangle={this.state.axisXLabelAngle}
-                                axisxgridthickness={this.state.axisXGridThickness}
-                                axisytitle={this.state.axisYTitle}
-                                axisylabelangle={this.state.axisYLabelAngle}
-                                axisygridthickness={this.state.axisYGridThickness}
-                                axisyminimum={this.state.axisYMinimum}
-                                axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum}
-                                fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
-                                currenttitlefont={this.state.titleFont}
-                                currentaxisxfont={this.state.axisXFont}
-                                currentaxisyfont={this.state.axisYFont}
-                            />
-                            <br />
-                            <br />
-                            <div style={{ position: "relative", right: "6em" }}>
-                                <CanvasJSChart options={options} />
-                            </div>
-                        </div>}
+                                <ChartOptionsModal
+                                    animation={false}
+                                    size="lg"
+                                    show={this.state.modalShow}
+                                    onHide={() => this.setState({ modalShow: false })}
+                                    handleoptionschange={this.handleOptionsChange}
+                                    setdefaultvalues={this.setDefaultValues}
+                                    title={this.state.title}
+                                    exportfilename={this.state.exportFileName}
+                                    interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
+                                    themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
+                                    currenttheme={this.state.theme}
+                                    types={[{ type: "line", name: "Linijinė" }]}
+                                    currenttype={this.state.type}
+                                    axisxtitle={this.state.axisXTitle}
+                                    axisxlabelangle={this.state.axisXLabelAngle}
+                                    axisxgridthickness={this.state.axisXGridThickness}
+                                    axisytitle={this.state.axisYTitle}
+                                    axisylabelangle={this.state.axisYLabelAngle}
+                                    axisygridthickness={this.state.axisYGridThickness}
+                                    axisyminimum={this.state.axisYMinimum}
+                                    axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultYMaximum}
+                                    fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
+                                    currenttitlefont={this.state.titleFont}
+                                    currentaxisxfont={this.state.axisXFont}
+                                    currentaxisyfont={this.state.axisYFont}
+                                />
+                                <br />
+                                <br />
+                                <div style={{ position: "relative", right: "6em" }}>
+                                    <CanvasJSChart options={options} />
+                                </div>
+                            </div>}
                     </div>
                 }
             </div>
