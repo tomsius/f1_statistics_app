@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
@@ -14,7 +15,8 @@ export class DriversFinishingPositions extends Component {
         this.state = {
             finishingPositions: [],
             selectedDriver: "",
-            modalShow: false,
+            chartOptionsModalShow: false,
+            dataOptionsModalShow: false,
 
             interactivityEnabled: true,
             exportFileName: this.props.pageTitle,
@@ -33,16 +35,26 @@ export class DriversFinishingPositions extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: '',
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
-            axisYFont: "Calibri"
+            axisYFont: "Calibri",
+
+            from: 0,
+            to: '',
+            finishedRace: "all",
+            selectedCircuits: []
         };
 
         this.fillData = this.fillData.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        this.handleDriverChangeClick = this.handleDriverChangeClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
+        this.filterData = this.filterData.bind(this);
+        this.filterByFinishedStatus = this.filterByFinishedStatus.bind(this);
+        this.getCircuits = this.getCircuits.bind(this);
+        this.initializeCircuits = this.initializeCircuits.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
     }
 
@@ -55,22 +67,27 @@ export class DriversFinishingPositions extends Component {
         });
     }
 
-    handleClick(event) {
+    handleDriverChangeClick(event) {
         event.preventDefault();
 
         this.setState({
             selectedDriver: event.currentTarget.value,
             title: event.currentTarget.value + " finišavimo pozicijos",
             exportFileName: event.currentTarget.value + " finišavimo pozicijos"
-        });
+        }, () => this.initializeCircuits(this.getCircuits(this.state.finishingPositions.filter(x => x.name == this.state.selectedDriver)[0])));
     }
 
     handleOptionsChange(event) {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
-        
+
         if (name === 'axisYInterval') {
             valueToUpdate = parseInt(value);
+        }
+
+        if (name === 'selectedCircuits') {
+            valueToUpdate = this.state.selectedCircuits;
+            valueToUpdate.filter(x => x.circuit === value)[0].checked = checked;
         }
 
         this.setState({
@@ -97,12 +114,113 @@ export class DriversFinishingPositions extends Component {
             axisYMinimum: 0,
             axisYMaximum: '',
             axisYInterval: '',
-            
+
             titleFont: "Calibri",
             axisXFont: "Calibri",
             axisYFont: "Calibri"
         }, () => {
             callback();
+        });
+    }
+
+    setDefaultDataFilters(callback) {
+        this.setState({
+            from: 0,
+            to: '',
+            finishedRace: "all",
+            selectedCircuits: []
+        }, () => {
+            this.initializeCircuits(this.getCircuits(this.state.finishingPositions.filter(x => x.name == this.state.selectedDriver)[0]));
+            callback();
+        });
+    }
+
+    filterData(data) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        this.state.selectedCircuits.forEach(selectedCircuit => {
+            if (selectedCircuit.checked === false) {
+                filteredData.finishingPositions.forEach(position => {
+                    var i = 0;
+
+                    while (i < position.finishingPositionInformation.length) {
+                        if (position.finishingPositionInformation[i].circuitName === selectedCircuit.circuit) {
+                            position.finishingPositionInformation.splice(i, 1);
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+
+                    position.count = position.finishingPositionInformation.length;
+                });
+            }
+        });
+
+        switch (this.state.finishedRace) {
+            case "finishedOnly":
+                filteredData = this.filterByFinishedStatus(filteredData, true);
+                break;
+            case "notFinishedOnly":
+                filteredData = this.filterByFinishedStatus(filteredData, false);
+                break;
+            default:
+                break;
+        }
+
+        filteredData.finishingPositions = filteredData.finishingPositions.filter(position => position.count >= this.state.from);
+
+        if (this.state.to !== '') {
+            filteredData.finishingPositions = filteredData.finishingPositions.filter(position => position.count <= this.state.to);
+        }
+
+        return filteredData;
+    }
+
+    filterByFinishedStatus(data, status) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        filteredData.finishingPositions.forEach(position => {
+            var i = 0;
+
+            while (i < position.finishingPositionInformation.length) {
+                if (position.finishingPositionInformation[i].finishedRace !== status) {
+                    position.finishingPositionInformation.splice(i, 1);
+                }
+                else {
+                    i++;
+                }
+            }
+            position.count = position.finishingPositionInformation.length;
+        });
+
+        return filteredData;
+    }
+
+    getCircuits(data) {
+        var uniqueCircuits = new Set();
+
+        data.finishingPositions.forEach(position => {
+            position.finishingPositionInformation.forEach(information => {
+                uniqueCircuits.add(information.circuitName);
+            });
+        });
+
+        return [...uniqueCircuits];
+    }
+
+    initializeCircuits(circuits) {
+        var circuitObjects = [];
+        circuits.forEach(x => {
+            var circuitObject = { circuit: x, checked: true };
+
+            circuitObjects.push(circuitObject);
+        });
+
+        circuitObjects.sort((a, b) => (a.circuit > b.circuit ? 1 : -1));
+
+        this.setState({
+            selectedCircuits: circuitObjects
         });
     }
 
@@ -128,7 +246,9 @@ export class DriversFinishingPositions extends Component {
 
     render() {
         if (this.state.finishingPositions.length > 0 && this.state.selectedDriver !== "") {
-            var data = this.state.finishingPositions.filter(x => x.name == this.state.selectedDriver).map(x => x.finishingPositions)[0].map((x, index) => ({ label: x.finishingPosition, x: index + 1, y: x.count }));
+            var selectedData = this.state.finishingPositions.filter(x => x.name == this.state.selectedDriver)[0];
+            var filteredData = this.filterData(selectedData);
+            var data = filteredData.finishingPositions.map(x => ({ label: x.finishingPosition, y: x.count }));
 
             if (this.state.axisYInterval === '') {
                 var maxCount = Math.max.apply(Math, data.map(data => data.y));
@@ -144,7 +264,7 @@ export class DriversFinishingPositions extends Component {
                 }
 
                 var interval = this.state.axisYInterval === '' ? defaultInterval : this.state.axisYInterval;
-    
+
                 defaultMaximum = defaultMaximum % interval === 0 ? defaultMaximum : (defaultMaximum + (interval - (defaultMaximum % interval)));
             }
 
@@ -170,7 +290,6 @@ export class DriversFinishingPositions extends Component {
                     labelAngle: this.state.axisXLabelAngle,
                     interval: 1,
                     gridThickness: this.state.axisXGridThickness,
-                    valueFormatString: " ",
                     titleFontFamily: this.state.axisXFont,
                     labelFontFamily: this.state.axisXFont
                 },
@@ -184,7 +303,7 @@ export class DriversFinishingPositions extends Component {
                     titleFontFamily: this.state.axisYFont,
                     labelFontFamily: this.state.axisYFont
                 },
-                toolTip:{   
+                toolTip: {
                     content: "Finišavimo skaičius {label}-oje pozicijoje: {y}"
                 }
             };
@@ -208,7 +327,7 @@ export class DriversFinishingPositions extends Component {
                                     name="radio"
                                     value={driver.name}
                                     checked={this.state.selectedDriver === driver.name}
-                                    onChange={this.handleClick}
+                                    onChange={this.handleDriverChangeClick}
                                 >
                                     {driver.name}
                                 </ToggleButton>
@@ -217,44 +336,62 @@ export class DriversFinishingPositions extends Component {
                         <br />
                         <br />
                         {this.state.selectedDriver !== "" &&
-                        <div>
-                            <Button variant="primary" onClick={() => this.setState({modalShow: true})}>
-                                Keisti grafiko parinktis
+                            <div>
+                                <Button variant="primary" onClick={() => this.setState({ chartOptionsModalShow: true })}>
+                                    Keisti grafiko parinktis
                             </Button>
-                            <ChartOptionsModal 
-                                animation={false}
-                                size="lg"
-                                show={this.state.modalShow} 
-                                onHide={() => this.setState({modalShow: false})} 
-                                handleoptionschange={this.handleOptionsChange} 
-                                setdefaultvalues={this.setDefaultValues}
-                                title={this.state.title}
-                                exportfilename={this.state.exportFileName}
-                                interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
-                                themes={[{value: "light1", content: "Light1"}, {value: "light2", content: "Light2"}, {value: "dark1", content: "Dark1"}, {value: "dark2", content: "Dark2"}]}
-                                currenttheme={this.state.theme}
-                                types={[{type: "column", name: "Stulpelinė"}]}
-                                currenttype={this.state.type}
-                                axisxtitle={this.state.axisXTitle}
-                                axisxlabelangle={this.state.axisXLabelAngle}
-                                axisxgridthickness={this.state.axisXGridThickness}
-                                axisytitle={this.state.axisYTitle}
-                                axisylabelangle={this.state.axisYLabelAngle}
-                                axisygridthickness={this.state.axisYGridThickness}
-                                axisyminimum={this.state.axisYMinimum}
-                                axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
-                                axisyinterval={this.state.axisYInterval !== '' ? this.state.axisYInterval : defaultInterval}
-                                fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
-                                currenttitlefont={this.state.titleFont}
-                                currentaxisxfont={this.state.axisXFont}
-                                currentaxisyfont={this.state.axisYFont}
-                            />
-                            <br />
-                            <br />
-                            <div style={{ position: "relative", right: "6em" }}>
-                                <CanvasJSChart options={options} />
-                            </div>
-                        </div>}
+                                <ChartOptionsModal
+                                    animation={false}
+                                    size="lg"
+                                    show={this.state.chartOptionsModalShow}
+                                    onHide={() => this.setState({ chartOptionsModalShow: false })}
+                                    handleoptionschange={this.handleOptionsChange}
+                                    setdefaultvalues={this.setDefaultValues}
+                                    title={this.state.title}
+                                    exportfilename={this.state.exportFileName}
+                                    interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
+                                    themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
+                                    currenttheme={this.state.theme}
+                                    types={[{ type: "column", name: "Stulpelinė" }]}
+                                    currenttype={this.state.type}
+                                    axisxtitle={this.state.axisXTitle}
+                                    axisxlabelangle={this.state.axisXLabelAngle}
+                                    axisxgridthickness={this.state.axisXGridThickness}
+                                    axisytitle={this.state.axisYTitle}
+                                    axisylabelangle={this.state.axisYLabelAngle}
+                                    axisygridthickness={this.state.axisYGridThickness}
+                                    axisyminimum={this.state.axisYMinimum}
+                                    axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
+                                    axisyinterval={this.state.axisYInterval !== '' ? this.state.axisYInterval : defaultInterval}
+                                    fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}
+                                    currenttitlefont={this.state.titleFont}
+                                    currentaxisxfont={this.state.axisXFont}
+                                    currentaxisyfont={this.state.axisYFont}
+                                />
+                                <br />
+                                <br />
+                                <Button variant="primary" onClick={() => this.setState({ dataOptionsModalShow: true })}>
+                                    Keisti duomenų parinktis
+                                </Button>
+                                <DataOptionsModal
+                                    animation={false}
+                                    size="lg"
+                                    show={this.state.dataOptionsModalShow}
+                                    onHide={() => this.setState({ dataOptionsModalShow: false })}
+                                    handleoptionschange={this.handleOptionsChange}
+                                    setdefaultdatafilters={this.setDefaultDataFilters}
+                                    from={this.state.from}
+                                    to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, selectedData.finishingPositions.map(position => position.count))}
+                                    finishedracestatuses={[{value: "all", label: "Visos"}, {value: "finishedOnly", label: "Tik baigtos"}, {value: "notFinishedOnly", label: "Tik nebaigtos"}]}
+                                    selectedstatus={this.state.finishedRace}
+                                    selectedcircuits={this.state.selectedCircuits}
+                                />
+                                <br />
+                                <br />
+                                <div style={{ position: "relative", right: "6em" }}>
+                                    <CanvasJSChart options={options} />
+                                </div>
+                            </div>}
                     </div>
                 }
             </div>
