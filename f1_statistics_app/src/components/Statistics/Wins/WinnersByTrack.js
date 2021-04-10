@@ -41,7 +41,7 @@ export class WinnersByTrack extends Component {
         };
 
         this.fillData = this.fillData.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        this.handleTrackChangeClick = this.handleTrackChangeClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
@@ -56,7 +56,7 @@ export class WinnersByTrack extends Component {
         });
     }
 
-    handleClick(event) {
+    handleTrackChangeClick(event) {
         event.preventDefault();
 
         this.setState({
@@ -227,7 +227,7 @@ export class WinnersByTrack extends Component {
                                     name="radio"
                                     value={track.name}
                                     checked={this.state.selectedTrack === track.name}
-                                    onChange={this.handleClick}
+                                    onChange={this.handleTrackChangeClick}
                                 >
                                     {track.name}
                                 </ToggleButton>
