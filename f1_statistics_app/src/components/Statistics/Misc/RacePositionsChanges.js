@@ -267,7 +267,7 @@ export class RacePositionsChanges extends Component {
                     this.state.seasons.length > 0 &&
                     <div>
                         {this.state.seasons.map(season => (
-                                <ButtonGroup style={{padding: "0px"}}>
+                                <ButtonGroup key={season.year} style={{padding: "0px"}}>
                                     <DropdownButton as={ButtonGroup} title={season.year} id="bg-nested-dropdown" onSelect={this.handleRaceChangeClick} variant="secondary" style={{padding: "10px"}}>
                                         {season.races.map((race, index) => {
                                             if (season.year === this.state.season && race.round === this.state.round && race.raceName === this.state.raceName) {

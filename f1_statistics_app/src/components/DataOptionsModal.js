@@ -196,9 +196,10 @@ export class DataOptionsModal extends Component {
                                     </Row>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                                         <Col>
-                                            {this.props.finishedracestatuses.map(x => {
+                                            {this.props.finishedracestatuses.map((x, index) => {
                                                 if (this.props.selectedstatus === x.value) {
                                                     return <Form.Check
+                                                        key={index}
                                                         type="radio"
                                                         inline
                                                         defaultChecked
@@ -211,6 +212,7 @@ export class DataOptionsModal extends Component {
                                                 }
                                                 else {
                                                     return <Form.Check
+                                                        key={index}
                                                         type="radio"
                                                         inline
                                                         value={x.value}
@@ -258,9 +260,10 @@ export class DataOptionsModal extends Component {
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                                         <Col>
                                             <div style={{ textAlign: "center", paddingLeft: 0, paddingRight: 0, display: "inline-block" }}>
-                                                {this.props.selectedcircuits.map(x =>
-                                                    <>
+                                                {this.props.selectedcircuits.map((x, index) =>
+                                                    <div key={index}>
                                                         <Form.Check
+                                                            key={index}
                                                             type="checkbox"
                                                             value={x.circuit}
                                                             label={x.circuit}
@@ -270,7 +273,7 @@ export class DataOptionsModal extends Component {
                                                             style={{ float: "left", paddingLeft: 0, paddingRight: 0 }}
                                                         />
                                                         <br />
-                                                    </>
+                                                    </div>
                                                 )}
                                             </div>
                                         </Col>
