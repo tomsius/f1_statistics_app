@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
-import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
@@ -55,13 +55,13 @@ export class PointsChanges extends Component {
         });
     }
 
-    handleSeasonChangeClick(event) {
+    handleSeasonChangeClick(eventKey, event) {
         event.preventDefault();
 
         this.setState({
-            selectedSeason: event.currentTarget.value,
-            title: this.props.pageTitle + " " + event.currentTarget.value + " metais",
-            exportFileName: this.props.pageTitle + " " + event.currentTarget.value + " metais"
+            selectedSeason: parseInt(eventKey),
+            title: this.props.pageTitle + " " + eventKey + " metais",
+            exportFileName: this.props.pageTitle + " " + eventKey + " metais"
         });
     }
 
@@ -128,7 +128,7 @@ export class PointsChanges extends Component {
 
     render() {
         if (this.state.standings.length > 0 && this.state.selectedSeason !== 0) {
-            var data = this.state.standings.filter(x => x.season == this.state.selectedSeason)[0].standings.map(x => ({ type: this.state.type, name: x.name, markerType: "none", showInLegend: true, dataPoints: x.rounds.map(round => ({ x: round.round, label: round.roundName, y: round.points, position: round.position })) }));
+            var data = this.state.standings.filter(x => x.year == this.state.selectedSeason)[0].standings.map(x => ({ type: this.state.type, name: x.name, markerType: "none", showInLegend: true, dataPoints: x.rounds.map(round => ({ x: round.round, label: round.roundName, y: round.points, position: round.position })) }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
@@ -202,20 +202,21 @@ export class PointsChanges extends Component {
                 {
                     this.state.standings.length > 0 &&
                     <div>
-                        <ButtonGroup toggle vertical>
-                            {this.state.standings.map(x => (
-                                <ToggleButton
-                                    key={x.season}
-                                    type="radio"
-                                    variant="secondary"
-                                    name="radio"
-                                    value={x.season}
-                                    checked={this.state.selectedSeason === x.season}
-                                    onChange={this.handleSeasonChangeClick}
-                                >
-                                    {x.season}
-                                </ToggleButton>
-                            ))}
+                        <ButtonGroup>
+                            <DropdownButton as={ButtonGroup} title="Sezonai" id="bg-nested-dropdown" onSelect={this.handleSeasonChangeClick} variant="secondary">
+                                {this.state.standings.map((season, index) => {
+                                    if (season.year === this.state.selectedSeason) {
+                                        return <Dropdown.Item key={index} eventKey={season.year} active>
+                                                    {season.year}
+                                                </Dropdown.Item>
+                                    }
+                                    else {
+                                        return <Dropdown.Item key={index} eventKey={season.year}>
+                                                    {season.year}
+                                                </Dropdown.Item>
+                                    }
+                                })}
+                            </DropdownButton>
                         </ButtonGroup>
                         <br />
                         <br />

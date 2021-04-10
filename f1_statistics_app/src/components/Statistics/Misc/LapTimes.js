@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
-import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 import toastr from 'toastr';
@@ -47,7 +47,7 @@ export class LapTimes extends Component {
 
         this.fillData = this.fillData.bind(this);
         this.fillSeasons = this.fillSeasons.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        this.handleRaceChangeClick = this.handleRaceChangeClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
@@ -114,12 +114,12 @@ export class LapTimes extends Component {
         });
     }
 
-    handleClick(event) {
+    handleRaceChangeClick(eventKey, event) {
         event.preventDefault();
 
-        var args = event.currentTarget.value.split("-");
-        var season = args[0];
-        var round = args[1];
+        var args = eventKey.split("-");
+        var season = parseInt(args[0]);
+        var round = parseInt(args[1]);
         var raceName = args[2];
 
         this.setState({
@@ -346,24 +346,23 @@ export class LapTimes extends Component {
                 {
                     this.state.seasons.length > 0 &&
                     <div>
-                        {this.state.seasons.map(x => (
-                            <div>
-                                <ButtonGroup vertical>
-                                    <p style={{ margin: "auto" }}>{x.season}</p>
-                                    {x.races.map(race => (
-                                        <Button
-                                            key={x.season + race.round}
-                                            variant="secondary"
-                                            value={x.season + '-' + race.round + '-' + race.raceName}
-                                            onClick={this.handleClick}
-                                            disabled={this.state.isLoading}
-
-                                        >
-                                            {race.raceName}
-                                        </Button>
-                                    ))}
-                                </ButtonGroup>
-                            </div>
+                        {this.state.seasons.map(season => (
+                            <ButtonGroup style={{padding: "0px"}}>
+                                <DropdownButton as={ButtonGroup} title={season.year} id="bg-nested-dropdown" onSelect={this.handleRaceChangeClick} variant="secondary" style={{padding: "10px"}}>
+                                    {season.races.map((race, index) => {
+                                        if (season.year === this.state.season && race.round === this.state.round && race.raceName === this.state.raceName) {
+                                            return <Dropdown.Item key={index} eventKey={season.year + '-' + race.round + '-' + race.raceName} active disabled={this.state.isLoading}>
+                                                {race.raceName}
+                                            </Dropdown.Item>
+                                        }
+                                        else {
+                                            return <Dropdown.Item key={index} eventKey={season.year + '-' + race.round + '-' + race.raceName} disabled={this.state.isLoading}>
+                                                {race.raceName}
+                                            </Dropdown.Item>
+                                        }
+                                    })}
+                                </DropdownButton>
+                            </ButtonGroup>
                         ))}
                         <br />
                         <br />

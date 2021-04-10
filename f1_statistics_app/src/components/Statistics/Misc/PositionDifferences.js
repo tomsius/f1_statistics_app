@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
-import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
 import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
@@ -67,13 +67,13 @@ export class PositionDifferences extends Component {
         });
     }
 
-    handleSeasonChangeClick(event) {
+    handleSeasonChangeClick(eventKey, event) {
         event.preventDefault();
 
         this.setState({
-            selectedSeason: event.currentTarget.value,
-            title: this.props.pageTitle + " " + event.currentTarget.value + " metais",
-            exportFileName: this.props.pageTitle + " " + event.currentTarget.value + " metais"
+            selectedSeason: parseInt(eventKey),
+            title: this.props.pageTitle + " " + eventKey + " metais",
+            exportFileName: this.props.pageTitle + " " + eventKey + " metais"
         }, () => this.initializeCircuits(this.getCircuits(this.state.seasonDifferences.filter(x => x.year == this.state.selectedSeason)[0])));
     }
 
@@ -302,20 +302,21 @@ export class PositionDifferences extends Component {
                 {
                     this.state.seasonDifferences.length > 0 &&
                     <div>
-                        <ButtonGroup toggle vertical>
-                            {this.state.seasonDifferences.map(x => (
-                                <ToggleButton
-                                    key={x.year}
-                                    type="radio"
-                                    variant="secondary"
-                                    name="radio"
-                                    value={x.year}
-                                    checked={this.state.selectedSeason === x.year}
-                                    onChange={this.handleSeasonChangeClick}
-                                >
-                                    {x.year}
-                                </ToggleButton>
-                            ))}
+                        <ButtonGroup>
+                            <DropdownButton as={ButtonGroup} title="Sezonai" id="bg-nested-dropdown" onSelect={this.handleSeasonChangeClick} variant="secondary">
+                                {this.state.seasonDifferences.map((season, index) => {
+                                    if (season.year === this.state.selectedSeason) {
+                                        return <Dropdown.Item key={index} eventKey={season.year} active>
+                                                    {season.year}
+                                                </Dropdown.Item>
+                                    }
+                                    else {
+                                        return <Dropdown.Item key={index} eventKey={season.year}>
+                                                    {season.year}
+                                                </Dropdown.Item>
+                                    }
+                                })}
+                            </DropdownButton>
                         </ButtonGroup>
                         <br />
                         <br />

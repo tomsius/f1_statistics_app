@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
-import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
 import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
@@ -67,13 +67,13 @@ export class DriversFinishingPositions extends Component {
         });
     }
 
-    handleDriverChangeClick(event) {
+    handleDriverChangeClick(eventKey, event) {
         event.preventDefault();
-
+        
         this.setState({
-            selectedDriver: event.currentTarget.value,
-            title: event.currentTarget.value + " finišavimo pozicijos",
-            exportFileName: event.currentTarget.value + " finišavimo pozicijos"
+            selectedDriver: eventKey,
+            title: eventKey + " finišavimo pozicijos",
+            exportFileName: eventKey + " finišavimo pozicijos"
         }, () => this.initializeCircuits(this.getCircuits(this.state.finishingPositions.filter(x => x.name == this.state.selectedDriver)[0])));
     }
 
@@ -318,20 +318,21 @@ export class DriversFinishingPositions extends Component {
                 {
                     this.state.finishingPositions.length > 0 &&
                     <div>
-                        <ButtonGroup toggle vertical>
-                            {this.state.finishingPositions.map((driver) => (
-                                <ToggleButton
-                                    key={driver.name}
-                                    type="radio"
-                                    variant="secondary"
-                                    name="radio"
-                                    value={driver.name}
-                                    checked={this.state.selectedDriver === driver.name}
-                                    onChange={this.handleDriverChangeClick}
-                                >
-                                    {driver.name}
-                                </ToggleButton>
-                            ))}
+                        <ButtonGroup>
+                            <DropdownButton as={ButtonGroup} title="Lenktynininkai" id="bg-nested-dropdown" onSelect={this.handleDriverChangeClick} variant="secondary">
+                                {this.state.finishingPositions.map((driver, index) => {
+                                    if (driver.name === this.state.selectedDriver) {
+                                        return <Dropdown.Item key={index} eventKey={driver.name} active>
+                                                    {driver.name}
+                                                </Dropdown.Item>
+                                    }
+                                    else {
+                                        return <Dropdown.Item key={index} eventKey={driver.name}>
+                                                    {driver.name}
+                                                </Dropdown.Item>
+                                    }
+                                })}
+                            </DropdownButton>
                         </ButtonGroup>
                         <br />
                         <br />

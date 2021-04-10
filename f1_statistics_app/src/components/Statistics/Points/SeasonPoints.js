@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
-import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
@@ -24,7 +24,7 @@ export class SeasonPoints extends Component {
             type: "column",
 
             axisXTitle: this.props.axisName,
-            axisXLabelAngle: -90,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Taškų skaičius, vnt.",
@@ -55,13 +55,13 @@ export class SeasonPoints extends Component {
         });
     }
 
-    handleSeasonChangeClick(event) {
+    handleSeasonChangeClick(eventKey, event) {
         event.preventDefault();
 
         this.setState({
-            selectedSeason: event.currentTarget.value,
-            title: this.props.pageTitle + " " + event.currentTarget.value + " metais",
-            exportFileName: this.props.pageTitle + " " + event.currentTarget.value + " metais"
+            selectedSeason: parseInt(eventKey),
+            title: this.props.pageTitle + " " + eventKey + " metais",
+            exportFileName: this.props.pageTitle + " " + eventKey + " metais"
         });
     }
 
@@ -88,7 +88,7 @@ export class SeasonPoints extends Component {
             type: "column",
 
             axisXTitle: this.props.axisName,
-            axisXLabelAngle: -90,
+            axisXLabelAngle: 0,
             axisXGridThickness: 0,
 
             axisYTitle: "Taškų skaičius, vnt.",
@@ -128,8 +128,8 @@ export class SeasonPoints extends Component {
 
     render() {
         if (this.state.seasonPoints.length > 0 && this.state.selectedSeason !== 0) {
-            var data = this.state.seasonPoints.filter(x => x.season == this.state.selectedSeason).map(x => x.scoredPoints)[0].map((x, index) => ({ label: x.name, x: index + 1, y: x.points }));
-            data = data.map(x => ({ label: x.label, y: x.y, percentage: Math.round((x.y / this.state.seasonPoints.filter(x => x.season == this.state.selectedSeason)[0].totalPoints * 100) * 100) / 100 }));
+            var data = this.state.seasonPoints.filter(x => x.year == this.state.selectedSeason).map(x => x.scoredPoints)[0].map((x, index) => ({ label: x.name, x: index + 1, y: x.points }));
+            data = data.map(x => ({ label: x.label, y: x.y, percentage: Math.round((x.y / this.state.seasonPoints.filter(x => x.year == this.state.selectedSeason)[0].totalPoints * 100) * 100) / 100 }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
@@ -196,20 +196,21 @@ export class SeasonPoints extends Component {
                 {
                     this.state.seasonPoints.length > 0 &&
                     <div>
-                        <ButtonGroup toggle vertical>
-                            {this.state.seasonPoints.map(x => (
-                                <ToggleButton
-                                    key={x.season}
-                                    type="radio"
-                                    variant="secondary"
-                                    name="radio"
-                                    value={x.season}
-                                    checked={this.state.selectedSeason === x.season}
-                                    onChange={this.handleSeasonChangeClick}
-                                >
-                                    {x.season}
-                                </ToggleButton>
-                            ))}
+                        <ButtonGroup>
+                            <DropdownButton as={ButtonGroup} title="Sezonai" id="bg-nested-dropdown" onSelect={this.handleSeasonChangeClick} variant="secondary">
+                                {this.state.seasonPoints.map((season, index) => {
+                                    if (season.year === this.state.selectedSeason) {
+                                        return <Dropdown.Item key={index} eventKey={season.year} active>
+                                                    {season.year}
+                                                </Dropdown.Item>
+                                    }
+                                    else {
+                                        return <Dropdown.Item key={index} eventKey={season.year}>
+                                                    {season.year}
+                                                </Dropdown.Item>
+                                    }
+                                })}
+                            </DropdownButton>
                         </ButtonGroup>
                         <br />
                         <br />

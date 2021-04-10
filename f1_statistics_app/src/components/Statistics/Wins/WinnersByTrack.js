@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
-import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 
@@ -56,13 +56,13 @@ export class WinnersByTrack extends Component {
         });
     }
 
-    handleTrackChangeClick(event) {
+    handleTrackChangeClick(eventKey, event) {
         event.preventDefault();
 
         this.setState({
-            selectedTrack: event.currentTarget.value,
-            title: "„" + event.currentTarget.value + "“ trasoje laimėję lenktynininkai",
-            exportFileName: "„" + event.currentTarget.value + "“ trasoje laimėję lenktynininkai"
+            selectedTrack: eventKey,
+            title: "„" + eventKey + "“ trasoje laimėję lenktynininkai",
+            exportFileName: "„" + eventKey + "“ trasoje laimėję lenktynininkai"
         });
     }
 
@@ -218,20 +218,21 @@ export class WinnersByTrack extends Component {
                 {
                     this.state.winnersByTrack.length > 0 &&
                     <div>
-                        <ButtonGroup toggle vertical>
-                            {this.state.winnersByTrack.map((track) => (
-                                <ToggleButton
-                                    key={track.name}
-                                    type="radio"
-                                    variant="secondary"
-                                    name="radio"
-                                    value={track.name}
-                                    checked={this.state.selectedTrack === track.name}
-                                    onChange={this.handleTrackChangeClick}
-                                >
-                                    {track.name}
-                                </ToggleButton>
-                            ))}
+                        <ButtonGroup>
+                            <DropdownButton as={ButtonGroup} title="Lenktynių trasos" id="bg-nested-dropdown" onSelect={this.handleTrackChangeClick} variant="secondary">
+                                {this.state.winnersByTrack.map((track, index) => {
+                                    if (track.name === this.state.selectedTrack) {
+                                        return <Dropdown.Item key={index} eventKey={track.name} active>
+                                                    {track.name}
+                                                </Dropdown.Item>
+                                    }
+                                    else {
+                                        return <Dropdown.Item key={index} eventKey={track.name}>
+                                                    {track.name}
+                                                </Dropdown.Item>
+                                    }
+                                })}
+                            </DropdownButton>
                         </ButtonGroup>
                         <br />
                         <br />
