@@ -121,7 +121,7 @@ export class WinnerPoints extends Component {
 
     render() {
         if (this.state.winnerPoints.length > 0) {
-            var data = this.state.winnerPoints.map(x => ({ label: x.season, x: x.season, y: x.points, winner: x.winner }));
+            var data = this.state.winnerPoints.map(x => ({ label: x.year, x: x.year, y: x.points, winner: x.winner }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
@@ -177,7 +177,7 @@ export class WinnerPoints extends Component {
             };
 
             if (this.state.type === "line") {
-                var racesData = this.state.winnerPoints.map(x => ({ label: x.season, x: x.season, y: x.racesCount }));
+                var racesData = this.state.winnerPoints.map(x => ({ label: x.year, x: x.year, y: x.racesCount }));
 
                 if (this.state.axisY2Maximum === '') {
                     var defaultMaximum2 = -1;
