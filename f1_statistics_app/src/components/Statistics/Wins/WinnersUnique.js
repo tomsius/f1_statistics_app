@@ -121,7 +121,7 @@ export class WinnersUnique extends Component {
 
     render() {
         if (this.state.winnersUnique.length > 0) {
-            var data = this.state.winnersUnique.map(x => ({ label: x.season, x: x.season, y: x.uniqueWinnersCount, winners: x.winners.join(", ") }));
+            var data = this.state.winnersUnique.map(x => ({ label: x.season, x: x.season, y: x.uniqueWinnersCount, winners: x.winners }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
@@ -172,7 +172,25 @@ export class WinnersUnique extends Component {
                 },
                 toolTip: {
                     contentFormatter: "",
-                    content: "Skirtingi laimėtojai {label} metais ({y}): {winners}"
+                    content: function (e) {
+                        var content = "Skirtingi laimėtojai " + e.entries[0].dataPoint.label + " metais (" + e.entries[0].dataPoint.y + "):<br />";
+
+                        for (let i = 0; i < e.entries[0].dataPoint.winners.length; i++) {
+                            content += e.entries[0].dataPoint.winners[i];
+                            if ((i + 1) % 5 === 0) {
+                                content += "<br />";
+                            }
+                            else {
+                                content += ", ";
+                            }
+                        }
+
+                        if (content.charAt(content.length - 2) === ",") {
+                            content = content.substring(0, content.length - 2);
+                        }
+
+                        return content;
+                    }
                 }
             };
 

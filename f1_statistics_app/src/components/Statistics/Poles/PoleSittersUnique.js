@@ -121,7 +121,7 @@ export class PoleSittersUnique extends Component {
 
     render() {
         if (this.state.poleSittersUnique.length > 0) {
-            var data = this.state.poleSittersUnique.map(x => ({ label: x.season, x: x.season, y: x.uniquePoleSittersCount, poleSitters: x.poleSitters.join(", ") }));
+            var data = this.state.poleSittersUnique.map(x => ({ label: x.season, x: x.season, y: x.uniquePoleSittersCount, poleSitters: x.poleSitters }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
@@ -171,7 +171,25 @@ export class PoleSittersUnique extends Component {
                     labelFontFamily: this.state.axisYFont
                 },
                 toolTip: {
-                    content: "Skirtingi „pole“ pozicijos laimėtojai ({y}): {poleSitters}"
+                    content: function (e) {
+                        var content = "Skirtingi „pole“ pozicijos laimėtojai (" + e.entries[0].dataPoint.y + "):<br />";
+
+                        for (let i = 0; i < e.entries[0].dataPoint.poleSitters.length; i++) {
+                            content += e.entries[0].dataPoint.poleSitters[i];
+                            if ((i + 1) % 5 === 0) {
+                                content += "<br />";
+                            }
+                            else {
+                                content += ", ";
+                            }
+                        }
+
+                        if (content.charAt(content.length - 2) === ",") {
+                            content = content.substring(0, content.length - 2);
+                        }
+                        
+                        return content;
+                    }
                 }
             };
 

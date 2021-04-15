@@ -121,7 +121,7 @@ export class FastestLappersUnique extends Component {
 
     render() {
         if (this.state.fastestLappersUnique.length > 0) {
-            var data = this.state.fastestLappersUnique.map(x => ({ label: x.season, x: x.season, y: x.uniqueFastestLapsCount, fastest: x.fastestLapAchievers.join(", ") }));
+            var data = this.state.fastestLappersUnique.map(x => ({ label: x.season, x: x.season, y: x.uniqueFastestLapsCount, fastest: x.fastestLapAchievers }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
@@ -174,7 +174,25 @@ export class FastestLappersUnique extends Component {
                 },
                 toolTip: {
                     contentFormatter: "",
-                    content: "Skirtingi greičiausiai apvažiavę lenktynių ratą ({y}): {fastest}"
+                    content: function (e) {
+                        var content = "Skirtingi greičiausiai apvažiavę lenktynių ratą (" + e.entries[0].dataPoint.y + "):<br />";
+
+                        for (let i = 0; i < e.entries[0].dataPoint.fastest.length; i++) {
+                            content += e.entries[0].dataPoint.fastest[i];
+                            if ((i + 1) % 5 === 0) {
+                                content += "<br />";
+                            }
+                            else {
+                                content += ", ";
+                            }
+                        }
+
+                        if (content.charAt(content.length - 2) === ",") {
+                            content = content.substring(0, content.length - 2);
+                        }
+                        
+                        return content;
+                    }
                 }
             };
 

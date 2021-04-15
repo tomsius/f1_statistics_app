@@ -198,7 +198,7 @@ export class WinnersByGrid extends Component {
     render() {
         if (this.state.winnersByGrid.length > 0) {
             var filteredData = this.filterData(this.state.winnersByGrid);
-            var data = filteredData.map(x => ({ label: x.gridPosition, x: x.gridPosition, y: x.winCount, winnersFromGrid: x.winInformation.map(winner => winner.winnerName).filter((value, index, elements) => elements.indexOf(value) === index).join(", ") }));
+            var data = filteredData.map(x => ({ label: x.gridPosition, x: x.gridPosition, y: x.winCount, winnersFromGrid: x.winInformation.map(winner => winner.winnerName).filter((value, index, elements) => elements.indexOf(value) === index) }));
 
             var defaultInterval = Math.max.apply(Math, data.map(d => d.y)) <= 20 ? 1 : Math.max.apply(Math, data.map(d => d.y)) <= 100 ? 5 : 20;
 
@@ -250,7 +250,26 @@ export class WinnersByGrid extends Component {
                     labelFontFamily: this.state.axisYFont
                 },
                 toolTip: {
-                    content: "Laimėtojai iš {label}-os starto pozicijos (laimėjimų skaičius: {y}): {winnersFromGrid}"
+                    content: "Laimėtojai iš {label}-os starto pozicijos (laimėjimų skaičius: {y}): {winnersFromGrid}",
+                    content: function (e) {
+                        var content = "Laimėtojai iš " + e.entries[0].dataPoint.label + "-os starto pozicijos (laimėjimų skaičius: " + e.entries[0].dataPoint.y + "):<br />";
+
+                        for (let i = 0; i < e.entries[0].dataPoint.winnersFromGrid.length; i++) {
+                            content += e.entries[0].dataPoint.winnersFromGrid[i];
+                            if ((i + 1) % 5 === 0) {
+                                content += "<br />";
+                            }
+                            else {
+                                content += ", ";
+                            }
+                        }
+
+                        if (content.charAt(content.length - 2) === ",") {
+                            content = content.substring(0, content.length - 2);
+                        }
+                        
+                        return content;
+                    }
                 }
             };
         }

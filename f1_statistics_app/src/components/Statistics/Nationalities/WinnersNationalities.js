@@ -125,7 +125,7 @@ export class WinnersNationalities extends Component {
     render() {
         if (this.state.winnersNationalities.length > 0) {
             var totalWinners = this.calculateTotalWinners(this.state.winnersNationalities);
-            var data = this.state.winnersNationalities.map((x, index) => ({ label: x.nationality, x: index + 1, y: x.winnersCount, percentage: Math.round((x.winnersCount / totalWinners * 100) * 100) / 100, drivers: x.winners.filter((value, index, element) => element.indexOf(value) === index).join(", ") }));
+            var data = this.state.winnersNationalities.map((x, index) => ({ label: x.nationality, x: index + 1, y: x.winnersCount, percentage: Math.round((x.winnersCount / totalWinners * 100) * 100) / 100, drivers: x.winners.filter((value, index, element) => element.indexOf(value) === index) }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
@@ -178,7 +178,43 @@ export class WinnersNationalities extends Component {
                     labelFontFamily: this.state.axisYFont
                 },
                 toolTip: {
-                    content: this.state.type === 'column' ? "{label} ({y}): {drivers}" : "{label} ({percentage}%): {drivers}"
+                    content: this.state.type === 'column' ? function (e) {
+                        var content = e.entries[0].dataPoint.label + " (" + e.entries[0].dataPoint.y + "):<br />";
+
+                        for (let i = 0; i < e.entries[0].dataPoint.drivers.length; i++) {
+                            content += e.entries[0].dataPoint.drivers[i];
+                            if ((i + 1) % 5 === 0) {
+                                content += "<br />";
+                            }
+                            else {
+                                content += ", ";
+                            }
+                        }
+
+                        if (content.charAt(content.length - 2) === ",") {
+                            content = content.substring(0, content.length - 2);
+                        }
+                        
+                        return content;
+                    } : function (e) {
+                        var content = e.entries[0].dataPoint.label + " (" + e.entries[0].dataPoint.percentage + "%):<br />";
+
+                        for (let i = 0; i < e.entries[0].dataPoint.drivers.length; i++) {
+                            content += e.entries[0].dataPoint.drivers[i];
+                            if ((i + 1) % 5 === 0) {
+                                content += "<br />";
+                            }
+                            else {
+                                content += ", ";
+                            }
+                        }
+
+                        if (content.charAt(content.length - 2) === ",") {
+                            content = content.substring(0, content.length - 2);
+                        }
+                        
+                        return content;
+                    }
                 }
             };
         }

@@ -121,7 +121,7 @@ export class WinnersFromPole extends Component {
 
     render() {
         if (this.state.winnersFromPole.length > 0) {
-            var data = this.state.winnersFromPole.map(x => ({ label: x.season, x: x.season, y: x.winsFromPoleCount, winnersWithPole: x.winnersFromPole.filter((value, index, element) => element.indexOf(value) === index).join(", ") }));
+            var data = this.state.winnersFromPole.map(x => ({ label: x.season, x: x.season, y: x.winsFromPoleCount, winnersWithPole: x.winnersFromPole.filter((value, index, element) => element.indexOf(value) === index) }));
 
             if (this.state.axisYMaximum === '') {
                 var defaultMaximum = -1;
@@ -172,7 +172,25 @@ export class WinnersFromPole extends Component {
                 },
                 toolTip: {
                     contentFormatter: "",
-                    content: "Laimėtojai iš „pole“ pozicijos {label} metais (laimėjimų skaičius: {y}): {winnersWithPole}"
+                    content: function (e) {
+                        var content = "Laimėtojai iš „pole“ pozicijos " + e.entries[0].dataPoint.label + " metais (laimėjimų skaičius: " + e.entries[0].dataPoint.y + "):<br />";
+
+                        for (let i = 0; i < e.entries[0].dataPoint.winnersWithPole.length; i++) {
+                            content += e.entries[0].dataPoint.winnersWithPole[i];
+                            if ((i + 1) % 5 === 0) {
+                                content += "<br />";
+                            }
+                            else {
+                                content += ", ";
+                            }
+                        }
+
+                        if (content.charAt(content.length - 2) === ",") {
+                            content = content.substring(0, content.length - 2);
+                        }
+
+                        return content;
+                    }
                 }
             };
 
