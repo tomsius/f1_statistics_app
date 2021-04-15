@@ -141,16 +141,7 @@ export class FastestLappers extends Component {
             if (selectedCircuit.checked === false) {
                 filteredData.forEach(fastestLapper => {
                     fastestLapper.fastestLapsByYear.forEach(year => {
-                        var i = 0;
-
-                        while (i < year.fastestLapInformation.length) {
-                            if (year.fastestLapInformation[i].circuitName === selectedCircuit.circuit) {
-                                year.fastestLapInformation.splice(i, 1);
-                            }
-                            else {
-                                i++;
-                            }
-                        }
+                        year.fastestLapInformation = year.fastestLapInformation.filter(information => information.circuitName !== selectedCircuit.circuit);
 
                         year.yearFastestLapCount = year.fastestLapInformation.length;
                     });
@@ -162,16 +153,7 @@ export class FastestLappers extends Component {
 
         filteredData.forEach(fastestLapper => {
             fastestLapper.fastestLapsByYear.forEach(year => {
-                var i = 0;
-
-                while (i < year.fastestLapInformation.length) {
-                    if (year.fastestLapInformation[i].gridPosition < this.state.gridFrom) {
-                        year.fastestLapInformation.splice(i, 1);
-                    }
-                    else {
-                        i++;
-                    }
-                }
+                year.fastestLapInformation = year.winIfastestLapInformationformation.filter(information => information.gridPosition >= this.state.gridFrom);
 
                 year.yearFastestLapCount = year.fastestLapInformation.length;
             });
@@ -182,16 +164,7 @@ export class FastestLappers extends Component {
         if (this.state.gridTo !== '') {
             filteredData.forEach(fastestLapper => {
                 fastestLapper.fastestLapsByYear.forEach(year => {
-                    var i = 0;
-
-                    while (i < year.fastestLapInformation.length) {
-                        if (year.fastestLapInformation[i].gridPosition > this.state.gridTo) {
-                            year.fastestLapInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    year.fastestLapInformation = year.winIfastestLapInformationformation.filter(information => information.gridPosition <= this.state.gridTo);
 
                     year.yearFastestLapCount = year.fastestLapInformation.length;
                 });

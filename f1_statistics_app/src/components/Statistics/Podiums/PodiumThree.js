@@ -147,16 +147,7 @@ export class PodiumThree extends Component {
         this.state.selectedCircuits.forEach(selectedCircuit => {
             if (selectedCircuit.checked === false) {
                 filteredData.forEach(podiumThree => {
-                    var i = 0;
-
-                    while (i < podiumThree.circuits.length) {
-                        if (podiumThree.circuits[i] === selectedCircuit.circuit) {
-                            podiumThree.circuits.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    podiumThree.circuits = podiumThree.circuits.filter(circuit => circuit !== selectedCircuit.circuit);
 
                     podiumThree.samePodiumCount = podiumThree.circuits.length;
                 });

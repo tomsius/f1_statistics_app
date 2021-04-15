@@ -145,16 +145,7 @@ export class Winners extends Component {
             if (selectedCircuit.checked === false) {
                 filteredData.forEach(winner => {
                     winner.winsByYear.forEach(year => {
-                        var i = 0;
-
-                        while (i < year.winInformation.length) {
-                            if (year.winInformation[i].circuitName === selectedCircuit.circuit) {
-                                year.winInformation.splice(i, 1);
-                            }
-                            else {
-                                i++;
-                            }
-                        }
+                        year.winInformation = year.winInformation.filter(information => information.circuitName !== selectedCircuit.circuit);
 
                         year.yearWinCount = year.winInformation.length;
                     });
@@ -166,16 +157,7 @@ export class Winners extends Component {
 
         filteredData.forEach(winner => {
             winner.winsByYear.forEach(year => {
-                var i = 0;
-
-                while (i < year.winInformation.length) {
-                    if (year.winInformation[i].gapToSecond < this.state.gapFrom) {
-                        year.winInformation.splice(i, 1);
-                    }
-                    else {
-                        i++;
-                    }
-                }
+                year.winInformation = year.winInformation.filter(information => information.gapToSecond >= this.state.gapFrom);
 
                 year.yearWinCount = year.winInformation.length;
             });
@@ -186,16 +168,7 @@ export class Winners extends Component {
         if (this.state.gapTo !== '') {
             filteredData.forEach(winner => {
                 winner.winsByYear.forEach(year => {
-                    var i = 0;
-
-                    while (i < year.winInformation.length) {
-                        if (year.winInformation[i].gapToSecond > this.state.gapTo) {
-                            year.winInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    year.winInformation = year.winInformation.filter(information => information.gapToSecond <= this.state.gapTo);
 
                     year.yearWinCount = year.winInformation.length;
                 });
@@ -206,16 +179,7 @@ export class Winners extends Component {
 
         filteredData.forEach(winner => {
             winner.winsByYear.forEach(year => {
-                var i = 0;
-
-                while (i < year.winInformation.length) {
-                    if (year.winInformation[i].gridPosition < this.state.gridFrom) {
-                        year.winInformation.splice(i, 1);
-                    }
-                    else {
-                        i++;
-                    }
-                }
+                year.winInformation = year.winInformation.filter(information => information.gridPosition >= this.state.gridFrom);
 
                 year.yearWinCount = year.winInformation.length;
             });
@@ -226,16 +190,7 @@ export class Winners extends Component {
         if (this.state.gridTo !== '') {
             filteredData.forEach(winner => {
                 winner.winsByYear.forEach(year => {
-                    var i = 0;
-
-                    while (i < year.winInformation.length) {
-                        if (year.winInformation[i].gridPosition > this.state.gridTo) {
-                            year.winInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    year.winInformation = year.winInformation.filter(information => information.gridPosition <= this.state.gridTo);
 
                     year.yearWinCount = year.winInformation.length;
                 });

@@ -123,16 +123,7 @@ export class WinnersByGrid extends Component {
         this.state.selectedCircuits.forEach(selectedCircuit => {
             if (selectedCircuit.checked === false) {
                 filteredData.forEach(x => {
-                    var i = 0;
-
-                    while (i < x.winInformation.length) {
-                        if (x.winInformation[i].circuitName === selectedCircuit.circuit) {
-                            x.winInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    x.winInformation = x.winInformation.filter(information => information.circuitName !== selectedCircuit.circuit);
 
                     x.winCount = x.winInformation.length;
                 });

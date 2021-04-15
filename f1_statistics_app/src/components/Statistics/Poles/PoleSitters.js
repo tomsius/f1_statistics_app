@@ -141,16 +141,7 @@ export class PoleSitters extends Component {
             if (selectedCircuit.checked === false) {
                 filteredData.forEach(poleSitter => {
                     poleSitter.polesByYear.forEach(year => {
-                        var i = 0;
-
-                        while (i < year.poleInformation.length) {
-                            if (year.poleInformation[i].circuitName === selectedCircuit.circuit) {
-                                year.poleInformation.splice(i, 1);
-                            }
-                            else {
-                                i++;
-                            }
-                        }
+                        year.poleInformation = year.poleInformation.filter(information => information.circuitName !== selectedCircuit.circuit);
 
                         year.yearPoleCount = year.poleInformation.length;
                     });
@@ -162,16 +153,7 @@ export class PoleSitters extends Component {
 
         filteredData.forEach(poleSitter => {
             poleSitter.polesByYear.forEach(year => {
-                var i = 0;
-
-                while (i < year.poleInformation.length) {
-                    if (year.poleInformation[i].gapToSecond < this.state.gapFrom) {
-                        year.poleInformation.splice(i, 1);
-                    }
-                    else {
-                        i++;
-                    }
-                }
+                year.poleInformation = year.poleInformation.filter(information => information.gapToSecond >= this.state.gapFrom);
 
                 year.yearPoleCount = year.poleInformation.length;
             });
@@ -182,16 +164,7 @@ export class PoleSitters extends Component {
         if (this.state.gapTo !== '') {
             filteredData.forEach(poleSitter => {
                 poleSitter.polesByYear.forEach(year => {
-                    var i = 0;
-
-                    while (i < year.poleInformation.length) {
-                        if (year.poleInformation[i].gapToSecond > this.state.gapTo) {
-                            year.poleInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    year.poleInformation = year.poleInformation.filter(information => information.gapToSecond <= this.state.gapTo);
 
                     year.yearPoleCount = year.poleInformation.length;
                 });

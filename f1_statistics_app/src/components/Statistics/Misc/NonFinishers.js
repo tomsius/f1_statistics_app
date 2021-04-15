@@ -141,16 +141,7 @@ export class NonFinishers extends Component {
             if (selectedCircuit.checked === false) {
                 filteredData.forEach(nonFinisher => {
                     nonFinisher.didNotFinishByYear.forEach(year => {
-                        var i = 0;
-
-                        while (i < year.didNotFinishInformation.length) {
-                            if (year.didNotFinishInformation[i].circuitName === selectedCircuit.circuit) {
-                                year.didNotFinishInformation.splice(i, 1);
-                            }
-                            else {
-                                i++;
-                            }
-                        }
+                        year.didNotFinishInformation = year.didNotFinishInformation.filter(information => information.circuitName !== selectedCircuit.circuit);
 
                         year.yearDidNotFinishCount = year.didNotFinishInformation.length;
                     });
@@ -162,16 +153,7 @@ export class NonFinishers extends Component {
 
         filteredData.forEach(nonFinisher => {
             nonFinisher.didNotFinishByYear.forEach(year => {
-                var i = 0;
-
-                while (i < year.didNotFinishInformation.length) {
-                    if (year.didNotFinishInformation[i].lapsCompleted < this.state.lapsCompletedFrom) {
-                        year.didNotFinishInformation.splice(i, 1);
-                    }
-                    else {
-                        i++;
-                    }
-                }
+                year.didNotFinishInformation = year.didNotFinishInformation.filter(information => information.lapsCompleted >= this.state.lapsCompletedFrom);
 
                 year.yearDidNotFinishCount = year.didNotFinishInformation.length;
             });
@@ -182,16 +164,7 @@ export class NonFinishers extends Component {
         if (this.state.lapsCompletedTo !== '') {
             filteredData.forEach(nonFinisher => {
                 nonFinisher.didNotFinishByYear.forEach(year => {
-                    var i = 0;
-
-                    while (i < year.didNotFinishInformation.length) {
-                        if (year.didNotFinishInformation[i].lapsCompleted > this.state.lapsCompletedTo) {
-                            year.didNotFinishInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    year.didNotFinishInformation = year.didNotFinishInformation.filter(information => information.lapsCompleted <= this.state.lapsCompletedTo);
 
                     year.yearDidNotFinishCount = year.didNotFinishInformation.length;
                 });

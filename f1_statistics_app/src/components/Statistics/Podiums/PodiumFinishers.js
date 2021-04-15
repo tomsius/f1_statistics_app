@@ -145,16 +145,7 @@ export class PodiumFinishers extends Component {
             if (selectedCircuit.checked === false) {
                 filteredData.forEach(podiumFinisher => {
                     podiumFinisher.podiumsByYear.forEach(year => {
-                        var i = 0;
-
-                        while (i < year.podiumInformation.length) {
-                            if (year.podiumInformation[i].circuitName === selectedCircuit.circuit) {
-                                year.podiumInformation.splice(i, 1);
-                            }
-                            else {
-                                i++;
-                            }
-                        }
+                        year.podiumInformation = year.podiumInformation.filter(information => information.circuitName !== selectedCircuit.circuit);
 
                         year.yearPodiumCount = year.podiumInformation.length;
                     });
@@ -166,16 +157,7 @@ export class PodiumFinishers extends Component {
 
         filteredData.forEach(podiumFinisher => {
             podiumFinisher.podiumsByYear.forEach(year => {
-                var i = 0;
-
-                while (i < year.podiumInformation.length) {
-                    if (year.podiumInformation[i].podiumPosition < this.state.podiumFrom) {
-                        year.podiumInformation.splice(i, 1);
-                    }
-                    else {
-                        i++;
-                    }
-                }
+                year.podiumInformation = year.podiumInformation.filter(information => information.podiumPosition >= this.state.podiumFrom);
 
                 year.yearPodiumCount = year.podiumInformation.length;
             });
@@ -186,16 +168,7 @@ export class PodiumFinishers extends Component {
         if (this.state.gapTo !== '') {
             filteredData.forEach(podiumFinisher => {
                 podiumFinisher.podiumsByYear.forEach(year => {
-                    var i = 0;
-
-                    while (i < year.podiumInformation.length) {
-                        if (year.podiumInformation[i].podiumPosition > this.state.podiumTo) {
-                            year.podiumInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    year.podiumInformation = year.podiumInformation.filter(information => information.podiumPosition <= this.state.podiumTo);
 
                     year.yearPodiumCount = year.podiumInformation.length;
                 });
@@ -206,16 +179,7 @@ export class PodiumFinishers extends Component {
 
         filteredData.forEach(podiumFinisher => {
             podiumFinisher.podiumsByYear.forEach(year => {
-                var i = 0;
-
-                while (i < year.podiumInformation.length) {
-                    if (year.podiumInformation[i].gridPosition < this.state.gridFrom) {
-                        year.podiumInformation.splice(i, 1);
-                    }
-                    else {
-                        i++;
-                    }
-                }
+                year.podiumInformation = year.podiumInformation.filter(information => information.gridPosition >= this.state.gridFrom);
 
                 year.yearPodiumCount = year.podiumInformation.length;
             });
@@ -226,16 +190,7 @@ export class PodiumFinishers extends Component {
         if (this.state.gridTo !== '') {
             filteredData.forEach(podiumFinisher => {
                 podiumFinisher.podiumsByYear.forEach(year => {
-                    var i = 0;
-
-                    while (i < year.podiumInformation.length) {
-                        if (year.podiumInformation[i].gridPosition > this.state.gridTo) {
-                            year.podiumInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    year.podiumInformation = year.podiumInformation.filter(information => information.gridPosition <= this.state.gridTo);
 
                     year.yearPodiumCount = year.podiumInformation.length;
                 });

@@ -133,12 +133,7 @@ export class GrandSlams extends Component {
 
         this.state.selectedNationalities.forEach(selectedNationality => {
             if (selectedNationality.checked === false) {
-                for (let i = 0; i < filteredData.length; i++) {
-                    if (filteredData[i].nationality === selectedNationality.nationality) {
-                        filteredData.splice(i, 1);
-                        i--;
-                    }
-                }
+                filteredData = filteredData.filter(data => data.nationality !== selectedNationality.nationality);
             }
         });
 

@@ -141,16 +141,7 @@ export class DriversFinishingPositions extends Component {
         this.state.selectedCircuits.forEach(selectedCircuit => {
             if (selectedCircuit.checked === false) {
                 filteredData.finishingPositions.forEach(position => {
-                    var i = 0;
-
-                    while (i < position.finishingPositionInformation.length) {
-                        if (position.finishingPositionInformation[i].circuitName === selectedCircuit.circuit) {
-                            position.finishingPositionInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    position.finishingPositionInformation = position.finishingPositionInformation.filter(information => information.circuitName !== selectedCircuit.circuit);
 
                     position.count = position.finishingPositionInformation.length;
                 });
@@ -181,16 +172,8 @@ export class DriversFinishingPositions extends Component {
         var filteredData = JSON.parse(JSON.stringify(data));
 
         filteredData.finishingPositions.forEach(position => {
-            var i = 0;
+            position.finishingPositionInformation = position.finishingPositionInformation.filter(information => information.finishedRace === status);
 
-            while (i < position.finishingPositionInformation.length) {
-                if (position.finishingPositionInformation[i].finishedRace !== status) {
-                    position.finishingPositionInformation.splice(i, 1);
-                }
-                else {
-                    i++;
-                }
-            }
             position.count = position.finishingPositionInformation.length;
         });
 

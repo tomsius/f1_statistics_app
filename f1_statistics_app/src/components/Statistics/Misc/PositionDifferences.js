@@ -142,36 +142,17 @@ export class PositionDifferences extends Component {
         this.state.selectedCircuits.forEach(selectedCircuit => {
             if (selectedCircuit.checked === false) {
                 filteredData.positionChanges.forEach(driver => {
-                    var i = 0;
-
-                    while (i < driver.driverPositionChangeInformation.length) {
-                        if (driver.driverPositionChangeInformation[i].circuitName === selectedCircuit.circuit) {
-                            driver.driverPositionChangeInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    driver.driverPositionChangeInformation = driver.driverPositionChangeInformation.filter(information => information.circuitName !== selectedCircuit.circuit);
 
                     driver.totalPositionChange = driver.driverPositionChangeInformation.map(information => information.racePositionChange).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
                 });
             }
         });
 
-        for (let i = 0; i < filteredData.positionChanges.length; i++) {
-            if (filteredData.positionChanges[i].championshipPosition < this.state.championshipFrom) {
-                filteredData.positionChanges.splice(i, 1);
-                i--;
-            }
-        }
+        filteredData = { year: filteredData.year, positionChanges: filteredData.positionChanges.filter(driver => driver.championshipPosition >= this.state.championshipFrom) };
 
         if (this.state.championshipTo !== '') {
-            for (let i = 0; i < filteredData.positionChanges.length; i++) {
-                if (filteredData.positionChanges[i].championshipPosition > this.state.championshipTo) {
-                    filteredData.positionChanges.splice(i, 1);
-                    i--;
-                }
-            }
+            filteredData = { year: filteredData.year, positionChanges: filteredData.positionChanges.filter(driver => driver.championshipPosition <= this.state.championshipTo) };
         }
 
         if (this.state.from !== '') {
@@ -239,15 +220,15 @@ export class PositionDifferences extends Component {
             var data = filteredData.positionChanges.map((x, index) => ({ label: x.name, x: index + 1, y: x.totalPositionChange, position: x.championshipPosition }));
 
             if (this.state.axisYMaximum === '') {
-                var defaultMaximum = -999;
-                for (let i = 0; i < data.length; i++) {
-                    if (defaultMaximum < data[i].y) {
-                        defaultMaximum = data[i].y;
-                    }
-                }
-
-                defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
+                var defaultMaximum = Math.max.apply(Math, data.map(d => d.y));
             }
+
+            if (this.state.axisYMinimum === '') {
+                var defaultMinimum = Math.min.apply(Math, data.map(d => d.y));
+            }
+
+            defaultMaximum = defaultMaximum % this.state.axisYInterval === 0 ? defaultMaximum : (defaultMaximum + (this.state.axisYInterval - (defaultMaximum % this.state.axisYInterval)));
+            defaultMinimum = defaultMinimum % this.state.axisYInterval === 0 ? defaultMinimum : (defaultMinimum - (this.state.axisYInterval + (defaultMinimum % this.state.axisYInterval)));
 
             var options = {
                 interactivityEnabled: this.state.interactivityEnabled,
@@ -279,7 +260,7 @@ export class PositionDifferences extends Component {
                 },
                 axisY: {
                     title: this.state.axisYTitle,
-                    minimum: this.state.axisYMinimum !== '' ? this.state.axisYMinimum : -defaultMaximum,
+                    minimum: this.state.axisYMinimum !== '' ? this.state.axisYMinimum : defaultMinimum,
                     maximum: this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum,
                     interval: this.state.axisYInterval,
                     labelAngle: this.state.axisYLabelAngle,
@@ -346,7 +327,7 @@ export class PositionDifferences extends Component {
                                     axisytitle={this.state.axisYTitle}
                                     axisylabelangle={this.state.axisYLabelAngle}
                                     axisygridthickness={this.state.axisYGridThickness}
-                                    axisyminimum={this.state.axisYMinimum !== '' ? this.state.axisYMinimum : -defaultMaximum}
+                                    axisyminimum={this.state.axisYMinimum !== '' ? this.state.axisYMinimum : defaultMinimum}
                                     axisymaximum={this.state.axisYMaximum !== '' ? this.state.axisYMaximum : defaultMaximum}
                                     axisyinterval={this.state.axisYInterval}
                                     fonts={["Calibri", "Optima", "Candara", "Verdana", "Geneva"]}

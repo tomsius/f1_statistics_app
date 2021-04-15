@@ -134,16 +134,7 @@ export class FrontRows extends Component {
         this.state.selectedCircuits.forEach(selectedCircuit => {
             if (selectedCircuit.checked === false) {
                 filteredData.forEach(frontRow => {
-                    var i = 0;
-
-                    while (i < frontRow.frontRowInformation.length) {
-                        if (frontRow.frontRowInformation[i].circuitName === selectedCircuit.circuit) {
-                            frontRow.frontRowInformation.splice(i, 1);
-                        }
-                        else {
-                            i++;
-                        }
-                    }
+                    frontRow.frontRowInformation = frontRow.frontRowInformation.filter(information => information.circuitName !== selectedCircuit.circuit);
 
                     frontRow.totalFrontRowCount = frontRow.frontRowInformation.length;
                 });
