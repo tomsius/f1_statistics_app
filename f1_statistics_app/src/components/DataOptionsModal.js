@@ -55,6 +55,16 @@ export class DataOptionsModal extends Component {
         if (inputelement) {
             inputelement.value = this.props.championshipto;
         }
+
+        inputelement = document.getElementsByName("lapsCompletedFrom")[0];
+        if (inputelement) {
+            inputelement.value = this.props.lapscompletedfrom;
+        }
+
+        inputelement = document.getElementsByName("lapsCompletedTo")[0];
+        if (inputelement) {
+            inputelement.value = this.props.lapscompletedto;
+        }
     }
 
     render() {
@@ -187,6 +197,30 @@ export class DataOptionsModal extends Component {
                                         </Col>
                                     </Row>
                                 </>}
+                                {this.props.lapscompletedfrom !== undefined &&
+                                <>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Apvažiuotų ratų skaičius</Form.Label>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Nuo</Form.Label>
+                                        </Col>
+                                        <Col>
+                                            <Form.Control type="number" name="lapsCompletedFrom" placeholder="Nuo..." defaultValue={this.props.lapscompletedfrom} onChange={this.props.handleoptionschange} />
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Iki</Form.Label>
+                                        </Col>
+                                        <Col>
+                                            <Form.Control type="number" name="lapsCompletedTo" placeholder="Iki..." defaultValue={this.props.lapscompletedto} onChange={this.props.handleoptionschange} />
+                                        </Col>
+                                    </Row>
+                                </>}
                             {this.props.finishedracestatuses !== undefined &&
                                 <>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
@@ -235,8 +269,9 @@ export class DataOptionsModal extends Component {
                                     </Row>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                                         <Col>
-                                            {this.props.selectedpodiumfinishers.map(x =>
+                                            {this.props.selectedpodiumfinishers.map((x, index) =>
                                                 <Form.Check
+                                                    key={index}
                                                     type="checkbox"
                                                     inline
                                                     value={x.podiumFinisher}
@@ -289,9 +324,10 @@ export class DataOptionsModal extends Component {
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                                         <Col>
                                             <div style={{ textAlign: "center", paddingLeft: 0, paddingRight: 0, display: "inline-block" }}>
-                                                {this.props.selectednationalities.map(x =>
-                                                    <>
+                                                {this.props.selectednationalities.map((x, index) =>
+                                                    <div key={index}>
                                                         <Form.Check
+                                                            key={index}
                                                             type="checkbox"
                                                             value={x.nationality}
                                                             label={x.nationality}
@@ -301,7 +337,7 @@ export class DataOptionsModal extends Component {
                                                             style={{ float: "left", paddingLeft: 0, paddingRight: 0 }}
                                                         />
                                                         <br />
-                                                    </>
+                                                    </div>
                                                 )}
                                             </div>
                                         </Col>

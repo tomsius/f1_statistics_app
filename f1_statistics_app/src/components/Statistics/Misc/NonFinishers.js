@@ -397,7 +397,7 @@ export class NonFinishers extends Component {
                             from={this.state.from}
                             to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.nonFinishers.map(nonFinisher => nonFinisher.totalDidNotFinishCount))}
                             lapscompletedfrom={this.state.lapsCompletedFrom}
-                            lapscompletedto={this.state.lapsCompletedTo !== '' ? this.state.lapsCompletedTo : Math.max.apply(Math, this.state.nonFinishers.map(nonFinisher => nonFinisher.didNotFinishByYear.map(year => Math.max.apply(Math, year.didNotFinishInformation.map(information => information.lapsCompleted)))))}
+                            lapscompletedto={this.state.lapsCompletedTo !== '' ? this.state.lapsCompletedTo : Math.max.apply(Math, this.state.nonFinishers.map(nonFinisher => Math.max.apply(Math, nonFinisher.didNotFinishByYear.map(year => Math.max.apply(Math, year.didNotFinishInformation.map(information => information.lapsCompleted))))))}
                             selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />

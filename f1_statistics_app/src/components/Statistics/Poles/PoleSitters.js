@@ -397,7 +397,7 @@ export class PoleSitters extends Component {
                             from={this.state.from}
                             to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.poleSitters.map(poleSitter => poleSitter.totalPoleCount))}
                             gapfrom={this.state.gapFrom}
-                            gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.poleSitters.map(poleSitter => poleSitter.polesByYear.map(year => Math.max.apply(Math, year.poleInformation.map(information => information.gapToSecond)))))}
+                            gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.poleSitters.map(poleSitter => Math.max.apply(Math, poleSitter.polesByYear.map(year => Math.max.apply(Math, year.poleInformation.map(information => information.gapToSecond))))))}
                             selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />

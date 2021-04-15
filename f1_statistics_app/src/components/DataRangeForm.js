@@ -13,6 +13,7 @@ export class DataRangeForm extends Component {
 
         this.handleSubmitByDate = this.handleSubmitByDate.bind(this);
         this.handleSubmitBySeason = this.handleSubmitBySeason.bind(this);
+        this.numberRange = this.numberRange.bind(this);
     }
 
     handleSubmitByDate(event) {
@@ -35,7 +36,33 @@ export class DataRangeForm extends Component {
                     'season': 0
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                else {
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "positionClass": "toast-bottom-full-width",
+                        "preventDuplicates": true,
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    
+                    response.json().then(message => toastr["error"]("", message));
+
+                    const error = new Error();
+                    error.name = "InputError";
+    
+                    throw error;
+                }
+            })
             .then(result => {
                 this.setState({
                     isLoading: false
@@ -61,7 +88,9 @@ export class DataRangeForm extends Component {
                     "hideMethod": "fadeOut"
                 };
 
-                toastr["error"]("", "Nepavyko pasiekti serverio");
+                if (error.name !== "InputError") {
+                    toastr["error"]("", "Nepavyko pasiekti serverio");
+                }
             });
     }
 
@@ -85,7 +114,33 @@ export class DataRangeForm extends Component {
                     'season': event.target.Season.value
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                else {
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "positionClass": "toast-bottom-full-width",
+                        "preventDuplicates": true,
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    
+                    response.json().then(message => toastr["error"]("", message));
+
+                    const error = new Error();
+                    error.name = "InputError";
+    
+                    throw error;
+                }
+            })
             .then(result => {
                 this.setState({
                     isLoading: false
@@ -111,8 +166,14 @@ export class DataRangeForm extends Component {
                     "hideMethod": "fadeOut"
                 };
 
-                toastr["error"]("", "Nepavyko pasiekti serverio");
+                if (error.name !== "InputError") {
+                    toastr["error"]("", "Nepavyko pasiekti serverio");
+                }
             });
+    }
+
+    numberRange(start, end) {
+        return new Array(end - start + 1).fill().map((_, index) => index + start);
     }
 
     render() {
@@ -124,11 +185,21 @@ export class DataRangeForm extends Component {
                         <Form onSubmit={this.handleSubmitByDate}>
                             <Form.Group controlId="From">
                                 <Form.Label>Nuo</Form.Label>
-                                <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="From" required placeholder="Nuo..." defaultValue="2014" />
+                                {/*<Form.Control type="number" min={1950} max={new Date().getFullYear()} name="From" required placeholder="Nuo..." defaultValue="2014" />*/}
+                                <Form.Control as="select" defaultValue="2014">
+                                    {this.numberRange(1950, new Date().getFullYear()).map(year =>
+                                        <option key={year}>{year}</option>
+                                    )}
+                                </Form.Control>
                             </Form.Group>
                             <Form.Group controlId="To">
                                 <Form.Label>Iki</Form.Label>
-                                <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="To" required placeholder="Iki..." defaultValue="2020" />
+                                {/*<Form.Control type="number" min={1950} max={new Date().getFullYear()} name="To" required placeholder="Iki..." defaultValue="2020" />*/}
+                                <Form.Control as="select" defaultValue="2020">
+                                    {this.numberRange(1950, new Date().getFullYear()).map(year =>
+                                        <option key={year}>{year}</option>
+                                    )}
+                                </Form.Control>
                             </Form.Group>
                             <Form.Group>
                                 <Button variant="primary" type="submit" disabled={this.state.isLoading}>
@@ -141,7 +212,12 @@ export class DataRangeForm extends Component {
                         <Form onSubmit={this.handleSubmitBySeason}>
                             <Form.Group controlId="Season">
                                 <Form.Label>Sezonas</Form.Label>
-                                <Form.Control type="number" min={1950} max={new Date().getFullYear()} name="Season" required placeholder="Sezonas..." defaultValue="2020" />
+                                {/*<Form.Control type="number" min={1950} max={new Date().getFullYear()} name="Season" required placeholder="Sezonas..." defaultValue="2020" />*/}
+                                <Form.Control as="select" defaultValue="2020">
+                                    {this.numberRange(1950, new Date().getFullYear()).map(year =>
+                                        <option key={year}>{year}</option>
+                                    )}
+                                </Form.Control>
                             </Form.Group>
                             <Form.Group>
                                 <Button variant="primary" type="submit" disabled={this.state.isLoading}>

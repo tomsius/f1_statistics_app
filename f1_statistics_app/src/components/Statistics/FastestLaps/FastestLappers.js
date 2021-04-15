@@ -399,7 +399,7 @@ export class FastestLappers extends Component {
                             from={this.state.from}
                             to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.fastestLappers.map(fastestLapper => fastestLapper.totalFastestLapsCount))}
                             gridfrom={this.state.gridFrom}
-                            gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.fastestLappers.map(fastestLapper => fastestLapper.fastestLapsByYear.map(year => Math.max.apply(Math, year.fastestLapInformation.map(information => information.gridPosition)))))}
+                            gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.fastestLappers.map(fastestLapper => Math.max.apply(Math, fastestLapper.fastestLapsByYear.map(year => Math.max.apply(Math, year.fastestLapInformation.map(information => information.gridPosition))))))}
                             selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />

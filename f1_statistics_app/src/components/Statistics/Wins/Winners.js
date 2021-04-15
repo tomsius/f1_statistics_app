@@ -439,9 +439,9 @@ export class Winners extends Component {
                             from={this.state.from}
                             to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.winners.map(winner => winner.totalWinCount))}
                             gapfrom={this.state.gapFrom}
-                            gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.winners.map(winner => winner.winsByYear.map(year => Math.max.apply(Math, year.winInformation.map(information => information.gapToSecond)))))}
+                            gapto={this.state.gapTo !== '' ? this.state.gapTo : Math.max.apply(Math, this.state.winners.map(winner => Math.max.apply(Math, winner.winsByYear.map(year => Math.max.apply(Math, year.winInformation.map(information => information.gapToSecond))))))}
                             gridfrom={this.state.gridFrom}
-                            gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.winners.map(winner => winner.winsByYear.map(year => Math.max.apply(Math, year.winInformation.map(information => information.gridPosition)))))}
+                            gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.winners.map(winner => Math.max.apply(Math, winner.winsByYear.map(year => Math.max.apply(Math, year.winInformation.map(information => information.gridPosition))))))}
                             selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />

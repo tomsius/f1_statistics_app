@@ -441,9 +441,9 @@ export class PodiumFinishers extends Component {
                             from={this.state.from}
                             to={this.state.to !== '' ? this.state.to : Math.max.apply(Math, this.state.podiumFinishers.map(podiumFinisher => podiumFinisher.totalPodiumCount))}
                             podiumfrom={this.state.podiumFrom}
-                            podiumto={this.state.podiumTo !== '' ? this.state.podiumTo : Math.max.apply(Math, this.state.podiumFinishers.map(podiumFinisher => podiumFinisher.podiumsByYear.map(year => Math.max.apply(Math, year.podiumInformation.map(information => information.podiumPosition)))))}
+                            podiumto={this.state.podiumTo !== '' ? this.state.podiumTo : Math.max.apply(Math, this.state.podiumFinishers.map(podiumFinisher => Math.max.apply(Math, podiumFinisher.podiumsByYear.map(year => Math.max.apply(Math, year.podiumInformation.map(information => information.podiumPosition))))))}
                             gridfrom={this.state.gridFrom}
-                            gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.podiumFinishers.map(podiumFinisher => podiumFinisher.podiumsByYear.map(year => Math.max.apply(Math, year.podiumInformation.map(information => information.gridPosition)))))}
+                            gridto={this.state.gridTo !== '' ? this.state.gridTo : Math.max.apply(Math, this.state.podiumFinishers.map(podiumFinisher => Math.max.apply(Math, podiumFinisher.podiumsByYear.map(year => Math.max.apply(Math, year.podiumInformation.map(information => information.gridPosition))))))}
                             selectedcircuits={this.state.selectedCircuits}
                         />
                         <br />
