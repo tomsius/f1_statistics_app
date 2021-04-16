@@ -3,6 +3,7 @@ import { DataRangeForm } from '../../DataRangeForm';
 import CanvasJSReact from '../../../canvasjs.react';
 import { Button, ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
+import { DataOptionsModal } from '../../DataOptionsModal';
 import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
@@ -20,7 +21,8 @@ export class LapTimes extends Component {
             round: 0,
             raceName: "",
             isLoading: false,
-            modalShow: false,
+            chartOptionsModalShow: false,
+            dataOptionsModalShow: false,
 
             interactivityEnabled: true,
             exportFileName: this.props.pageTitle,
@@ -42,7 +44,9 @@ export class LapTimes extends Component {
 
             titleFont: "Calibri",
             axisXFont: "Calibri",
-            axisYFont: "Calibri"
+            axisYFont: "Calibri",
+
+            medianAnomalyExclusion: ''
         };
 
         this.fillData = this.fillData.bind(this);
@@ -50,11 +54,14 @@ export class LapTimes extends Component {
         this.handleRaceChangeClick = this.handleRaceChangeClick.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.setDefaultValues = this.setDefaultValues.bind(this);
+        this.setDefaultDataFilters = this.setDefaultDataFilters.bind(this);
+        this.filterData = this.filterData.bind(this);
         this.updateWindowSize = this.updateWindowSize.bind(this);
         this.formatTime = this.formatTime.bind(this);
         this.findQuartile = this.findQuartile.bind(this);
         this.findMinimum = this.findMinimum.bind(this);
         this.findMaximum = this.findMaximum.bind(this);
+        this.findDefaultMaximumDifference = this.findDefaultMaximumDifference.bind(this);
     }
 
     fillData() {
@@ -135,7 +142,7 @@ export class LapTimes extends Component {
         const { name, value, checked, type } = event.target;
         var valueToUpdate = type === 'checkbox' ? checked : value;
 
-        if (name === 'axisYInterval' || name === 'axisXInterval') {
+        if (name === 'axisYInterval' || name === 'medianAnomalyExclusion') {
             valueToUpdate = parseInt(value);
         }
 
@@ -170,6 +177,27 @@ export class LapTimes extends Component {
         }, () => {
             callback();
         });
+    }
+
+    setDefaultDataFilters(callback) {
+        this.setState({
+            medianAnomalyExclusion: ''
+        }, () => callback());
+    }
+
+    filterData(data) {
+        var filteredData = JSON.parse(JSON.stringify(data));
+
+        if (this.state.medianAnomalyExclusion !== '') {
+            filteredData.forEach(driver => {
+                var median = this.findQuartile(driver.timings, 0.5);
+                var maximumTiming = median + this.state.medianAnomalyExclusion;
+
+                driver.timings = driver.timings.filter(timing => timing <= maximumTiming);
+            });
+        }
+
+        return filteredData;
     }
 
     updateWindowSize() {
@@ -218,7 +246,7 @@ export class LapTimes extends Component {
 
     findQuartile(data, q) {
         var medianIndex = Math.floor(data.length / 2);
-
+        
         switch (q) {
             case 0.25:
                 if (data.length % 2 === 0) {
@@ -242,7 +270,7 @@ export class LapTimes extends Component {
     }
 
     findMedian(data, startIndex, endIndex) {
-        var index = Math.floor((endIndex - startIndex + 1) / 2);
+        var index = Math.floor((endIndex - startIndex + 1) / 2) + startIndex;
 
         if (index % 2 === 0) {
             var result = (data[index - 1] + data[index]) / 2;
@@ -250,7 +278,7 @@ export class LapTimes extends Component {
         else {
             var result = data[index];
         }
-
+        
         return result;
     }
 
@@ -278,17 +306,52 @@ export class LapTimes extends Component {
         return maximum;
     }
 
+    findDefaultMaximumDifference(data) {
+        var maximum = -1;
+
+        data.forEach(driver => {
+            var median = this.findQuartile(driver.timings, 0.5);
+            var timingsMaximum = this.findMaximum(driver.timings);
+
+            var difference = timingsMaximum - median;
+
+            if (maximum < difference) {
+                maximum = difference;
+            }
+        });
+
+        return maximum;
+    }
+
     render() {
         if (this.state.lapTimes.length > 0) {
-            var data = this.state.lapTimes.map((x, index) => ({ type: "scatter", dataPoints: x.timings.map(timing => ({ label: x.name, x: index + 1, y: timing, laptime: this.formatTime(timing) })) }));
-            //var boxData = this.state.lapTimes.map((x, index) => ({ type: "boxAndWhisker", dataPoints: [({ label: x.name, x: index + 1, y: [this.findMinimum(x.timings), this.findQuartile(x.timings, 0.25), this.findQuartile(x.timings, 0.75), this.findMaximum(x.timings), this.findQuartile(x.timings, 0.5) ] })] } ));
+            var filteredData = this.filterData(this.state.lapTimes);
 
-            if (this.state.axisYMaximum === '') {
-                var defaultYMaximum = -1;
-                for (let i = 0; i < data.length; i++) {
-                    for (let j = 0; j < data[i].dataPoints.length; j++) {
-                        if (defaultYMaximum < data[i].dataPoints[j].y) {
-                            defaultYMaximum = data[i].dataPoints[j].y
+            if (this.state.type === "scatter") {
+                var data = filteredData.map((x, index) => ({ type: "scatter", dataPoints: x.timings.map(timing => ({ label: x.name, x: index + 1, y: timing, laptime: this.formatTime(timing) })) }));
+
+                if (this.state.axisYMaximum === '') {
+                    var defaultYMaximum = -1;
+                    for (let i = 0; i < data.length; i++) {
+                        for (let j = 0; j < data[i].dataPoints.length; j++) {
+                            if (defaultYMaximum < data[i].dataPoints[j].y) {
+                                defaultYMaximum = data[i].dataPoints[j].y;
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                var data = filteredData.map((x, index) => ({ type: "boxAndWhisker", dataPoints: [({ label: x.name, x: index + 1, y: [this.findMinimum(x.timings), this.findQuartile(x.timings, 0.25), this.findQuartile(x.timings, 0.75), this.findMaximum(x.timings), this.findQuartile(x.timings, 0.5)] })] }));
+               
+                if (this.state.axisYMaximum === '') {
+                    var defaultYMaximum = -1;
+                    for (let i = 0; i < data.length; i++) {
+                        for (let j = 0; j < data[i].dataPoints.length; j++) {
+                            var maximumTiming = Math.max.apply(Math, data[i].dataPoints[j].y);
+                            if (defaultYMaximum < maximumTiming) {
+                                defaultYMaximum = maximumTiming;
+                            }
                         }
                     }
                 }
@@ -300,7 +363,7 @@ export class LapTimes extends Component {
                 interactivityEnabled: this.state.interactivityEnabled,
                 exportFileName: this.state.exportFileName,
                 exportEnabled: true,
-                zoomEnabled: true,
+                zoomEnabled: this.state.zoomEnabled,
                 zoomType: "xy",
                 theme: this.state.theme,
                 title: {
@@ -332,7 +395,7 @@ export class LapTimes extends Component {
                     labelFontFamily: this.state.axisYFont
                 },
                 toolTip: {
-                    content: "{label}: {laptime}"
+                    content: this.state.type === "scatter" ? "{label}: {laptime}" : "{label}<br />Minimum: {y[0]}s<br />Q1: {y[1]}s<br />Q2: {y[4]}s<br />Q3: {y[2]}s<br />Maximum: {y[3]}s<br />"
                 }
             };
         }
@@ -347,8 +410,8 @@ export class LapTimes extends Component {
                     this.state.seasons.length > 0 &&
                     <div>
                         {this.state.seasons.map(season => (
-                            <ButtonGroup key={season.year} style={{padding: "0px"}}>
-                                <DropdownButton as={ButtonGroup} title={season.year} id="bg-nested-dropdown" onSelect={this.handleRaceChangeClick} variant="secondary" style={{padding: "10px"}}>
+                            <ButtonGroup key={season.year} style={{ padding: "0px" }}>
+                                <DropdownButton as={ButtonGroup} title={season.year} id="bg-nested-dropdown" onSelect={this.handleRaceChangeClick} variant="secondary" style={{ padding: "10px" }}>
                                     {season.races.map((race, index) => {
                                         if (season.year === this.state.season && race.round === this.state.round && race.raceName === this.state.raceName) {
                                             return <Dropdown.Item key={index} eventKey={season.year + '-' + race.round + '-' + race.raceName} active disabled={this.state.isLoading}>
@@ -368,22 +431,23 @@ export class LapTimes extends Component {
                         <br />
                         {this.state.lapTimes.length > 0 &&
                             <div>
-                                <Button variant="primary" onClick={() => this.setState({ modalShow: true })}>
+                                <Button variant="primary" onClick={() => this.setState({ chartOptionsModalShow: true })}>
                                     Keisti grafiko parinktis
                             </Button>
                                 <ChartOptionsModal
                                     animation={false}
                                     size="lg"
-                                    show={this.state.modalShow}
-                                    onHide={() => this.setState({ modalShow: false })}
+                                    show={this.state.chartOptionsModalShow}
+                                    onHide={() => this.setState({ chartOptionsModalShow: false })}
                                     handleoptionschange={this.handleOptionsChange}
                                     setdefaultvalues={this.setDefaultValues}
                                     title={this.state.title}
                                     exportfilename={this.state.exportFileName}
                                     interactivityenabled={this.state.interactivityEnabled ? 1 : 0}
+                                    zoomenabled={this.state.zoomEnabled ? 1 : 0}
                                     themes={[{ value: "light1", content: "Light1" }, { value: "light2", content: "Light2" }, { value: "dark1", content: "Dark1" }, { value: "dark2", content: "Dark2" }]}
                                     currenttheme={this.state.theme}
-                                    types={[{ type: "scatter", name: "Taškinė" }]}
+                                    types={[{ type: "scatter", name: "Taškinė" }, { type: "boxAndWhisker", name: "Pasikliautinasis intervalas" }]}
                                     currenttype={this.state.type}
                                     axisxtitle={this.state.axisXTitle}
                                     axisxlabelangle={this.state.axisXLabelAngle}
@@ -398,6 +462,20 @@ export class LapTimes extends Component {
                                     currenttitlefont={this.state.titleFont}
                                     currentaxisxfont={this.state.axisXFont}
                                     currentaxisyfont={this.state.axisYFont}
+                                />
+                                <br />
+                                <br />
+                                <Button variant="primary" onClick={() => this.setState({ dataOptionsModalShow: true })}>
+                                    Keisti duomenų parinktis
+                                </Button>
+                                <DataOptionsModal
+                                    animation={false}
+                                    size="lg"
+                                    show={this.state.dataOptionsModalShow}
+                                    onHide={() => this.setState({ dataOptionsModalShow: false })}
+                                    handleoptionschange={this.handleOptionsChange}
+                                    setdefaultdatafilters={this.setDefaultDataFilters}
+                                    mediananomalyexclusion={this.state.medianAnomalyExclusion !== '' ? this.state.medianAnomalyExclusion : this.findDefaultMaximumDifference(filteredData)}
                                 />
                                 <br />
                                 <br />

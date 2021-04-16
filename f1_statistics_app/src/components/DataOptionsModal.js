@@ -11,10 +11,14 @@ export class DataOptionsModal extends Component {
 
     resetValues() {
         var inputelement = document.getElementsByName("from")[0];
-        inputelement.value = this.props.from;
+        if (inputelement) {
+            inputelement.value = this.props.from;
+        }
 
         inputelement = document.getElementsByName("to")[0];
-        inputelement.value = this.props.to;
+        if (inputelement) {
+            inputelement.value = this.props.to;
+        }
 
         inputelement = document.getElementsByName("gapFrom")[0];
         if (inputelement) {
@@ -65,6 +69,11 @@ export class DataOptionsModal extends Component {
         if (inputelement) {
             inputelement.value = this.props.lapscompletedto;
         }
+
+        inputelement = document.getElementsByName("medianAnomalyExclusion")[0];
+        if (inputelement) {
+            inputelement.value = this.props.mediananomalyexclusion;
+        }
     }
 
     render() {
@@ -80,27 +89,30 @@ export class DataOptionsModal extends Component {
                 <Modal.Body>
                     <Form>
                         <Container fluid style={{ paddingLeft: 0, paddingRight: 0 }}>
-                            <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
-                                <Col>
-                                    <Form.Label>Reikšmių sritis</Form.Label>
-                                </Col>
-                            </Row>
-                            <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
-                                <Col>
-                                    <Form.Label>Nuo</Form.Label>
-                                </Col>
-                                <Col>
-                                    <Form.Control type="number" name="from" placeholder="Nuo..." defaultValue={this.props.from} onChange={this.props.handleoptionschange} />
-                                </Col>
-                            </Row>
-                            <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
-                                <Col>
-                                    <Form.Label>Iki</Form.Label>
-                                </Col>
-                                <Col>
-                                    <Form.Control type="number" name="to" placeholder="Iki..." defaultValue={this.props.to} onChange={this.props.handleoptionschange} />
-                                </Col>
-                            </Row>
+                            {this.props.from !== undefined &&
+                                <>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Reikšmių sritis</Form.Label>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Nuo</Form.Label>
+                                        </Col>
+                                        <Col>
+                                            <Form.Control type="number" name="from" placeholder="Nuo..." defaultValue={this.props.from} onChange={this.props.handleoptionschange} />
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Iki</Form.Label>
+                                        </Col>
+                                        <Col>
+                                            <Form.Control type="number" name="to" placeholder="Iki..." defaultValue={this.props.to} onChange={this.props.handleoptionschange} />
+                                        </Col>
+                                    </Row>
+                                </>}
                             {this.props.gapfrom !== undefined &&
                                 <>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
@@ -197,7 +209,7 @@ export class DataOptionsModal extends Component {
                                         </Col>
                                     </Row>
                                 </>}
-                                {this.props.lapscompletedfrom !== undefined &&
+                            {this.props.lapscompletedfrom !== undefined &&
                                 <>
                                     <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                                         <Col>
@@ -218,6 +230,22 @@ export class DataOptionsModal extends Component {
                                         </Col>
                                         <Col>
                                             <Form.Control type="number" name="lapsCompletedTo" placeholder="Iki..." defaultValue={this.props.lapscompletedto} onChange={this.props.handleoptionschange} />
+                                        </Col>
+                                    </Row>
+                                </>}
+                                {this.props.mediananomalyexclusion !== undefined &&
+                                <>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Anomalijos</Form.Label>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+                                        <Col>
+                                            <Form.Label>Neįtraukti duomenų, kurie nuo medianos nutolę per (s)</Form.Label>
+                                        </Col>
+                                        <Col>
+                                            <Form.Control type="number" name="medianAnomalyExclusion" placeholder="Sekundės..." defaultValue={this.props.mediananomalyexclusion} onChange={this.props.handleoptionschange} />
                                         </Col>
                                     </Row>
                                 </>}
