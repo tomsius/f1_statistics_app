@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import { getApi } from '../js/utils';
 
 export class DataRangeForm extends Component {
     constructor(props) {
@@ -23,7 +24,7 @@ export class DataRangeForm extends Component {
             isLoading: true
         });
 
-        fetch('http://localhost:55032/api/' + this.props.api,
+        fetch(getApi() + this.props.api,
             {
                 method: 'POST',
                 headers: {
@@ -101,7 +102,7 @@ export class DataRangeForm extends Component {
             isLoading: true
         });
 
-        fetch('http://localhost:55032/api/' + this.props.api,
+        fetch(getApi() + this.props.api,
             {
                 method: 'POST',
                 headers: {

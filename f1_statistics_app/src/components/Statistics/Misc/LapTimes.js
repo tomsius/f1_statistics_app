@@ -4,7 +4,7 @@ import CanvasJSReact from '../../../canvasjs.react';
 import { Button, ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { ChartOptionsModal } from '../../ChartOptionsModal';
 import { DataOptionsModal } from '../../DataOptionsModal';
-import { addWatermark, changeExportButtonsLanguage } from '../../../js/utils';
+import { addWatermark, changeExportButtonsLanguage, getApi } from '../../../js/utils';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 
@@ -69,7 +69,7 @@ export class LapTimes extends Component {
             isLoading: true
         });
 
-        fetch('http://localhost:55032/api/misc/' + this.state.season + '/' + this.state.round + '/laptimes',
+        fetch(getApi() + 'misc/' + this.state.season + '/' + this.state.round + '/laptimes',
             {
                 method: 'POST',
                 headers: {

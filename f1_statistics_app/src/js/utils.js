@@ -21,3 +21,7 @@ export function changeExportButtonsLanguage() {
         toolbar.children[2].textContent = "Atsisiųsti (PNG)";
     }
 }
+
+export function getApi() {
+    return 'http://localhost:55032/api/';
+}
