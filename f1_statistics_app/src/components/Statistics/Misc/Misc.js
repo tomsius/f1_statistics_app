@@ -53,7 +53,7 @@ export class Misc extends Component {
                 <Link to="/misc/positiondifferences" style={{ marginBottom: "15px" }}>
                     <Card style={{ display: "flex", height: "100%" }}>
                         <Card.Body>
-                            <Card.Title style={{ fontWeight: "bold" }}>Pozicijų pokytis</Card.Title>
+                            <Card.Title style={{ fontWeight: "bold" }}>Gautos pozicijos</Card.Title>
                             <Card.Text>
                                 Atvaizduojama, kiek pozicijų koks lenktynininkas pelnė viso sezono metu. Iš lenktynininko starto pozicijos atimama jo finišavimo pozicija. Jei pokytis teigiamas, tai lenktynininkas finišavo aukštesnėje pozicijoje nei startavo. Jei pokytis neigiamas, tai lenktynininkas prarado daugiau pozicijų nei jų pelnė per lenktynes viso sezono metu.
                         </Card.Text>
