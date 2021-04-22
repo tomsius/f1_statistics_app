@@ -45,7 +45,7 @@ export class FastestLaps extends Component {
                         <Card.Body>
                             <Card.Title style={{ fontWeight: "bold" }}>Skirtingų komandų, greičiausiai apvažiavusių ratą, skaičius</Card.Title>
                             <Card.Text>
-                                Atvaizduojama, kiek skirtingų komandų komandų lenktynininkų yra greičiausiai apvažiavę lenktynių ratą tam tikrą sezoną. Užvedus ant grafiko, galima pamatyti komandas, kurios lenktynininkai greičiausiai apvažiavo ratą.
+                                Atvaizduojama, kiek skirtingų komandų lenktynininkų yra greičiausiai apvažiavę lenktynių ratą tam tikrą sezoną. Užvedus ant grafiko, galima pamatyti komandas, kurios lenktynininkai greičiausiai apvažiavo ratą.
                         </Card.Text>
                         </Card.Body>
                     </Card>

@@ -360,7 +360,7 @@ export class ChartOptionsModal extends Component {
                     <Container fluid style={{ paddingLeft: 0, paddingRight: 0 }}>
                         <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
                             <Col>
-                                Kopijuoti diagramos duomenis <Export />
+                                Kopijuoti grafiko duomenis <Export />
                             </Col>
                         </Row>
                     </Container>
