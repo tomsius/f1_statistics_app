@@ -23,5 +23,5 @@ export function changeExportButtonsLanguage() {
 }
 
 export function getApi() {
-    return 'http://localhost:55032/api/';
+    return 'https://racing4you.azurewebsites.net/api/';
 }
