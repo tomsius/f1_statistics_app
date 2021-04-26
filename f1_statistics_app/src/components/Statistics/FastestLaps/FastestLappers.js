@@ -153,7 +153,7 @@ export class FastestLappers extends Component {
 
         filteredData.forEach(fastestLapper => {
             fastestLapper.fastestLapsByYear.forEach(year => {
-                year.fastestLapInformation = year.winIfastestLapInformationformation.filter(information => information.gridPosition >= this.state.gridFrom);
+                year.fastestLapInformation = year.fastestLapInformation.filter(information => information.gridPosition >= this.state.gridFrom);
 
                 year.yearFastestLapCount = year.fastestLapInformation.length;
             });
