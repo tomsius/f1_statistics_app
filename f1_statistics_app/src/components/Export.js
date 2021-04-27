@@ -39,7 +39,7 @@ export class Export extends Component {
             "hideMethod": "fadeOut"
         };
 
-        toastr["info"]("", "Diagramos duomenys nukopijuoti į iškarpinę");
+        toastr["info"]("", "Grafiko duomenys nukopijuoti į iškarpinę");
     }
 
     render() {
