@@ -9,6 +9,8 @@ export class Podiums extends Component {
 
     render() {
         return (
+            <>
+            <h1>Podiumų statistikos</h1>
             <CardDeck className="flex-container">
                 <Link to="/podiums/drivers" style={{ marginBottom: "15px" }}>
                     <Card style={{ display: "flex", height: "100%" }}>
@@ -51,6 +53,7 @@ export class Podiums extends Component {
                     </Card>
                 </Link>
             </CardDeck>
+            </>
         );
     }
 }

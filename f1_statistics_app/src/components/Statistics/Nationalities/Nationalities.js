@@ -9,6 +9,8 @@ export class Nationalities extends Component {
 
     render() {
         return (
+            <>
+            <h1>Pilietybių statistikos</h1>
             <CardDeck className="flex-container">
                 <Link to="/nationalities/drivers" style={{ marginBottom: "15px" }}>
                     <Card style={{ display: "flex", height: "100%" }}>
@@ -41,6 +43,7 @@ export class Nationalities extends Component {
                     </Card>
                 </Link>
             </CardDeck>
+            </>
         );
     }
 }

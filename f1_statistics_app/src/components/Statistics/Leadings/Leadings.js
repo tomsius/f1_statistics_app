@@ -9,6 +9,8 @@ export class Leadings extends Component {
 
     render() {
         return (
+            <>
+            <h1>Pirmavimų statistikos</h1>
             <CardDeck className="flex-container">
                 <Link to="/leadings/drivers" style={{ marginBottom: "15px" }}>
                     <Card style={{ display: "flex", height: "100%" }}>
@@ -31,6 +33,7 @@ export class Leadings extends Component {
                     </Card>
                 </Link>
             </CardDeck>
+            </>
         );
     }
 }

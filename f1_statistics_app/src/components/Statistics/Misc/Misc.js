@@ -9,6 +9,8 @@ export class Misc extends Component {
 
     render() {
         return (
+            <>
+            <h1>Įvairios statistikos</h1>
             <CardDeck className="flex-container">
                 <Link to="/misc/racecount" style={{ marginBottom: "15px" }}>
                     <Card style={{ display: "flex", height: "100%" }}>
@@ -121,6 +123,7 @@ export class Misc extends Component {
                     </Card>
                 </Link>
             </CardDeck>
+            </>
         );
     }
 }

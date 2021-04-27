@@ -9,6 +9,8 @@ export class FastestLaps extends Component {
 
     render() {
         return (
+            <>
+            <h1>Greičiausių ratų statistikos</h1>
             <CardDeck className="flex-container">
                 <Link to="/fastestlaps/drivers" style={{ marginBottom: "15px" }}>
                     <Card style={{ display: "flex", height: "100%" }}>
@@ -51,6 +53,7 @@ export class FastestLaps extends Component {
                     </Card>
                 </Link>
             </CardDeck>
+            </>
         );
     }
 }

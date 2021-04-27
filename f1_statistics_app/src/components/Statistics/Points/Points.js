@@ -9,6 +9,8 @@ export class Points extends Component {
 
     render() {
         return (
+            <>
+            <h1>Taškų statistikos</h1>
             <CardDeck className="flex-container">
                 <Link to="/points/drivers" style={{ marginBottom: "15px" }}>
                     <Card style={{ display: "flex", height: "100%" }}>
@@ -71,6 +73,7 @@ export class Points extends Component {
                     </Card>
                 </Link>
             </CardDeck>
+            </>
         );
     }
 }

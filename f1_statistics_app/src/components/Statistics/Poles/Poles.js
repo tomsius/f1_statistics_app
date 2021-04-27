@@ -9,6 +9,8 @@ export class Poles extends Component {
 
     render() {
         return (
+            <>
+            <h1>„Pole“ pozicijų statistikos</h1>
             <CardDeck className="flex-container">
                 <Link to="/poles/drivers" style={{ marginBottom: "15px" }}>
                     <Card style={{ display: "flex", height: "100%" }}>
@@ -51,6 +53,7 @@ export class Poles extends Component {
                     </Card>
                 </Link>
             </CardDeck>
+            </>
         );
     }
 }
