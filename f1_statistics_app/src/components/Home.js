@@ -25,7 +25,7 @@ export class Home extends Component {
                     <li><a href="https://reactrouter.com/web/guides/quick-start" target="_blank"><i>React Router.</i></a> Maršrutizavimui.</li>
                     <li><a href="https://react-bootstrap.github.io" target="_blank"><i>Bootstrap.</i></a> Naudotojo sąsajos išvaizdos keitimui.</li>
                     <li><a href="https://codeseven.github.io/toastr" target="_blank"><i>Toastr.</i></a> Informacinių pranešimų rodymui.</li>
-                    <li><a href="" target="_blank"><i style={{ color: "red", fontWeight: "bold" }}>TODO: Pridėti testavimo įrankį</i></a> Portalo testavimui.</li>
+                    <li><a href="https://www.selenium.dev/selenium-ide/" target="_blank"><i>Selenium IDE.</i></a> Portalo testavimui.</li>
                 </ol>
                 <p>
                     Back-end technologijos:
