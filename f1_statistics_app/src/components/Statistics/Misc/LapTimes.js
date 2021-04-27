@@ -77,7 +77,33 @@ export class LapTimes extends Component {
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                else {
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "positionClass": "toast-bottom-full-width",
+                        "preventDuplicates": true,
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    
+                    response.json().then(message => toastr["error"]("", message));
+
+                    const error = new Error();
+                    error.name = "InputError";
+    
+                    throw error;
+                }
+            })
             .then(result => {
                 this.setState({
                     lapTimes: result,
@@ -105,7 +131,9 @@ export class LapTimes extends Component {
                     "hideMethod": "fadeOut"
                 };
 
-                toastr["error"]("", "Nepavyko pasiekti serverio");
+                if (error.name !== "InputError") {
+                    toastr["error"]("", "Nepavyko pasiekti serverio");
+                }
             });
     }
 
