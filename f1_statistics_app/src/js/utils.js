@@ -5,7 +5,7 @@ export function addWatermark() {
         var context = canvas.getContext("2d");
         context.fillStyle = "grey";
         context.font = "10px verdana";
-        var text = "Lenktynių rezultatų portalas";
+        var text = "F-1 lenktynių rezultatų portalas";
         context.fillText(text, 0, canvas.height - 25);
     }
 }
@@ -15,13 +15,16 @@ export function changeExportButtonsLanguage() {
 
     if (container) {
         var toolbar = container.getElementsByTagName("div")[0];
+
+        if (toolbar.children[0].textContent === "Print") {
+            toolbar.removeChild(toolbar.childNodes[0]);
+        }
         
-        toolbar.children[0].textContent = "Atspausdinti";
-        toolbar.children[1].textContent = "Atsisiųsti (JPEG)";
-        toolbar.children[2].textContent = "Atsisiųsti (PNG)";
+        toolbar.children[0].textContent = "Atsisiųsti (JPEG)";
+        toolbar.children[1].textContent = "Atsisiųsti (PNG)";
     }
 }
 
 export function getApi() {
-    return 'https://racing4you.azurewebsites.net/api/';
+    return process.env.REACT_APP_SERVER_URL;
 }
