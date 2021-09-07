@@ -18,7 +18,7 @@ export class Footer extends Component {
                         <span><a href="mailto:tomas.kaselynas@ktu.edu"><i>tomas.kaselynas@ktu.edu</i></a></span>
                     </div>
                     <div className="ml-auto">
-                        <a href="https://github.com/tomsius/f1_statistics" target="_blank">Back-end</a> | <a href="https://github.com/tomsius/f1_statistics_app" target="_blank">Front-end</a>
+                        <a href="https://github.com/tomsius/racing4you" target="_blank">Back-end</a> | <a href="https://github.com/tomsius/racing4you_app" target="_blank">Front-end</a>
                     </div>
                 </footer>
             </div>

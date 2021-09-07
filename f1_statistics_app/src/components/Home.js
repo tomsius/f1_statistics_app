@@ -8,14 +8,14 @@ export class Home extends Component {
     render() {
         return (
             <div className="container">
-                <br />
-                <h1>F-1 lenktynių rezultatų portalas</h1>
-                <h2>Bakalaurinis darbas</h2>
-                <br />
+                <h1>Racing4You</h1>
+                <h2>F-1 lenktynių rezultatų portalas</h2>
                 <p>
-                    Bakalaurinio darbo tikslas - agreguoti įvairias „Formula 1“ statistikas ir pateikti jas vizualiai.
-                    <br />
                     Duomenys imami iš <a href="https://ergast.com/mrd/" target="_blank"><i>Ergast Developer API</i></a>.
+                    <br />
+                    Serverio ir naudotojo pusės patalpintos <a href="https://azure.microsoft.com/en-us/" target="_blank"><i>Microsoft Azure</i></a> debesyje.
+                    <br />
+                    CI/CD naudojamas <a href="https://azure.microsoft.com/en-us/services/devops/" target="_blank"><i>Azure DevOps</i></a>.
                     <br />
                     Front-end technologijos:
                 </p>
